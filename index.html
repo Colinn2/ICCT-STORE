@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICCT Essentials - Campus Store Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <!-- Main Navigation -->
+        <!-- Main Navigation -->
+<nav class="main-nav">
+    <div class="container">
+        <div class="nav-content">
+            <div class="nav-branding">
+                <img src="image-removebg-preview (5).png" alt="ICCT Logo" class="nav-logo">
+                <span class="nav-campus-name">ICCT Antipolo Campus</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" class="active">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Shop</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">All Products</a></li>
+                        <li><a href="#">Uniforms</a></li>
+                        <li><a href="#">Documents</a></li>
+                        <li><a href="#">Supplies</a></li>
+                        <li><a href="#">Fees</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Payment</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <!-- Search Bar -->
+                <div class="nav-search">
+                    <input type="text" placeholder="Search essentials...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <!-- Icons Group -->
+                <div class="nav-icons">
+                    <!-- Cart Button -->
+                    <button class="cart-icon" id="cartToggle">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </button>
+                    <!-- Wishlist Button -->
+                    <button class="wishlist-icon" id="wishlistToggle">
+                        <i class="fas fa-heart"></i>
+                        <span class="wishlist-count">0</span>
+                    </button>
+                    <!-- User Profile -->
+                    <button class="profile-icon" id="profileToggle">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+        <!-- Promo Banner -->
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-slider">
+            <div class="slide active">
+                <div class="slide-content">
+                    <h1>Your Campus Store Hub — Everything ICCT Students Need in One Place</h1>
+                    <p>Shop smarter and faster with ICCT Essentials.</p>
+                    <button class="cta-button">Shop Now</button>
+                </div>
+                <div class="slide-image">
+                    <img src="Gemini_Generated_Image_ydr8fgydr8fgydr8.png" alt="ICCT Campus Store" class="slide-image">
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <h1>Quality Uniforms for Every Program</h1>
+                    <p>Official ICCT attire designed for comfort and style.</p>
+                    <button class="cta-button">Browse Uniforms</button>
+                </div>
+                <div class="slide-image">
+                    <img src="Gemini_Generated_Image_rydomsrydomsrydo.png" alt="ICCT Campus Store" class="slide-image">
+                </div>
+            </div>
+            <div class="slide">
+                <div class="slide-content">
+                    <h1>Easy Document Processing</h1>
+                    <p>Get your IDs, forms, and official papers hassle-free.</p>
+                    <button class="cta-button">View Documents</button>
+                </div>
+                <div class="slide-image">
+                    <img src="Gemini_Generated_Image_jkmomtjkmomtjkmo.png" alt="ICCT Campus Store" class="slide-image">
+                </div>
+            </div>
+        </div>
+        <div class="hero-indicators">
+            <span class="indicator active"></span>
+            <span class="indicator"></span>
+            <span class="indicator"></span>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section class="product-showcase">
+        <div class="container">
+            <div class="showcase-header">
+                <h2 class="section-title">Popular Uniforms</h2>
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="carousel">
+                <div class="carousel-track">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <div class="image-placeholder">PE Uniform</div>
+                        </div>
+                        <div class="product-info">
+                            <h3>ICCT PE Uniform</h3>
+                            <p class="price">₱850.00</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <div class="image-placeholder">Corporate Attire</div>
+                        </div>
+                        <div class="product-info">
+                            <h3>ICCT Corporate Attire</h3>
+                            <p class="price">₱1,200.00</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <div class="image-placeholder">Lab Coat</div>
+                        </div>
+                        <div class="product-info">
+                            <h3>ICCT Lab Coat</h3>
+                            <p class="price">₱950.00</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <div class="image-placeholder">Polo Shirt</div>
+                        </div>
+                        <div class="product-info">
+                            <h3>ICCT Polo Shirt</h3>
+                            <p class="price">₱650.00</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <div class="image-placeholder">Hoodie</div>
+                        </div>
+                        <div class="product-info">
+                            <h3>ICCT Hoodie</h3>
+                            <p class="price">₱1,100.00</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Sections -->
+    <section id="all-products" class="category-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">All Products</h2>
+            <div class="products-grid">
+                <!-- Products will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <section id="uniforms" class="category-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Uniforms</h2>
+            <div class="products-grid">
+                <!-- Uniforms will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <section id="documents" class="category-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Documents</h2>
+            <div class="products-grid">
+                <!-- Documents will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <section id="supplies" class="category-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Supplies</h2>
+            <div class="products-grid">
+                <!-- Supplies will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <section id="fees" class="category-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Fees</h2>
+            <div class="products-grid">
+                <!-- Fees will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to School Section -->
+    <section class="back-to-school">
+        <div class="container">
+            <div class="split-layout">
+                <div class="image-section">
+                    <div class="image-placeholder">New PE Uniform Design</div>
+                </div>
+                <div class="content-section">
+                    <h2>New ICCT PE Uniforms Now Available!</h2>
+                    <p>Our latest PE uniforms feature improved moisture-wicking fabric and a modern design that represents ICCT pride. Perfect for all your physical education activities and sports events.</p>
+                    <button class="cta-button">View Collection</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-cart" id="closeCart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-content">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Your cart is empty</p>
+                <button class="continue-shopping">Continue Shopping</button>
+            </div>
+            <div class="cart-items">
+                <!-- Cart items will be added dynamically -->
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <p>Total: <span>₱0.00</span></p>
+            </div>
+            <button class="checkout-btn">Checkout</button>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ICCT Essentials</h3>
+                    <p>Your one-stop shop for all ICCT student needs. Quality essentials for academic success.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Shop</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Policies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> ICCT Colleges Main Campus</li>
+                        <li><i class="fas fa-phone"></i> (02) 1234-5678</li>
+                        <li><i class="fas fa-envelope"></i> essentials@icct.edu.ph</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 ICCT Essentials. Designed for ICCT Students.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
