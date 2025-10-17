@@ -24,6 +24,125 @@ let currentSlide = 0;
 let carouselPosition = 0;
 const carouselItemWidth = 280; // Width + gap
 
+// ===== CATEGORY NAVIGATION =====
+// Initialize after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const categoryLinks = document.querySelectorAll('.category-link');
+    const categorySections = document.querySelectorAll('.category-section');
+    const backButtons = document.querySelectorAll('.back-btn');
+    const productShowcase = document.querySelector('.product-showcase');
+    const backToSchoolSection = document.querySelector('.back-to-school');
+
+    console.log('Category Links found:', categoryLinks.length);
+    console.log('Category Sections found:', categorySections.length);
+
+    // Show Category Section
+    function showCategory(categoryId) {
+        console.log('showCategory called with:', categoryId);
+        
+        // Hide all sections
+        categorySections.forEach(section => {
+            section.classList.add('hidden');
+            section.style.display = 'none';
+        });
+        
+        if (productShowcase) productShowcase.style.display = 'none';
+        if (backToSchoolSection) backToSchoolSection.style.display = 'none';
+        
+        // Show selected category
+        const selectedSection = document.getElementById(categoryId);
+        console.log('Selected section:', selectedSection);
+        
+        if (selectedSection) {
+            selectedSection.classList.remove('hidden');
+            selectedSection.style.display = 'block';
+            
+            // Scroll to the section with navbar visible
+            setTimeout(() => {
+                const navbar = document.querySelector('.header');
+                const navbarHeight = navbar ? navbar.offsetHeight : 0;
+                const sectionTop = selectedSection.offsetTop - navbarHeight - 20; // 20px extra padding
+                
+                window.scrollTo({
+                    top: sectionTop,
+                    behavior: 'smooth'
+                });
+            }, 100); // Small delay to ensure display change is applied
+        }
+    }
+
+    // Show Home (hide category sections)
+    function showHome() {
+        console.log('showHome called');
+        categorySections.forEach(section => {
+            section.classList.add('hidden');
+            section.style.display = 'none';
+        });
+        if (productShowcase) productShowcase.style.display = 'block';
+        if (backToSchoolSection) backToSchoolSection.style.display = 'block';
+        
+        // Scroll to hero section (just below navbar)
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            const navbar = document.querySelector('.header');
+            const navbarHeight = navbar ? navbar.offsetHeight : 0;
+            const heroTop = hero.offsetTop - navbarHeight;
+            
+            window.scrollTo({
+                top: heroTop,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    // Category Link Click Events
+    categoryLinks.forEach((link, index) => {
+        console.log('Setting up listener for link', index, link.href);
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Category link clicked!', e.target);
+            const categoryId = link.getAttribute('href').substring(1); // Remove '#'
+            showCategory(categoryId);
+            
+            // Close dropdown menu
+            const dropdownParent = link.closest('.dropdown');
+            if (dropdownParent) {
+                dropdownParent.classList.remove('active');
+            }
+        });
+    });
+
+    // Back Button Click Events
+    backButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+    });
+
+    // Home Link Navigation
+    const homeLink = document.querySelector('a[href="#home"]');
+    if (homeLink) {
+        homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+    }
+
+    // Payment Link Navigation
+    const paymentLink = document.querySelector('a[href="#payment"]');
+    if (paymentLink) {
+        paymentLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Payment link clicked!');
+            showCategory('payment');
+        });
+    }
+});
+
+// ===== END CATEGORY NAVIGATION =====
+
 // Handle Shop Dropdown
 const dropdownToggle = document.querySelector('.dropdown-toggle');
 const dropdown = document.querySelector('.dropdown');
@@ -74,25 +193,28 @@ continueShopping.addEventListener('click', () => {
 });
 
 // Carousel Navigation
-prevBtn.addEventListener('click', () => {
-    if (carouselPosition < 0) {
-        carouselPosition += carouselItemWidth;
-        carouselTrack.style.transform = `translateX(${carouselPosition}px)`;
-    }
-});
+if (prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+        if (carouselPosition < 0) {
+            carouselPosition += carouselItemWidth;
+            carouselTrack.style.transform = `translateX(${carouselPosition}px)`;
+        }
+    });
 
-nextBtn.addEventListener('click', () => {
-    const maxPosition = -carouselItemWidth * (carouselTrack.children.length - 4);
-    if (carouselPosition > maxPosition) {
-        carouselPosition -= carouselItemWidth;
-        carouselTrack.style.transform = `translateX(${carouselPosition}px)`;
-    }
-});
+    nextBtn.addEventListener('click', () => {
+        const maxPosition = -carouselItemWidth * (carouselTrack.children.length - 4);
+        if (carouselPosition > maxPosition) {
+            carouselPosition -= carouselItemWidth;
+            carouselTrack.style.transform = `translateX(${carouselPosition}px)`;
+        }
+    });
+}
 
-// Add to Cart Functionality
-addToCartButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const productCard = e.target.closest('.product-card');
+// Add to Cart Functionality - Delegate to dynamic elements
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.add-to-cart')) {
+        const button = e.target.closest('.add-to-cart');
+        const productCard = button.closest('.product-card');
         const productName = productCard.querySelector('h3').textContent;
         const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('₱', '').replace(',', ''));
         
@@ -105,7 +227,7 @@ addToCartButtons.forEach(button => {
             button.textContent = 'Add to Cart';
             button.style.background = '';
         }, 1500);
-    });
+    }
 });
 
 // Add to Cart Function
@@ -180,23 +302,27 @@ function removeFromCart(name) {
 }
 
 // Checkout Button
-checkoutBtn.addEventListener('click', () => {
-    if (cart.length > 0) {
-        alert('Thank you for your purchase! Your order has been placed.');
-        cart = [];
-        updateCart();
-        cartSidebar.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    } else {
-        alert('Your cart is empty. Add some items before checking out.');
-    }
-});
+if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+        if (cart.length > 0) {
+            alert('Thank you for your purchase! Your order has been placed.');
+            cart = [];
+            updateCart();
+            cartSidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        } else {
+            alert('Your cart is empty. Add some items before checking out.');
+        }
+    });
+}
 
 // Hero Slider
 function showSlide(index) {
     const slides = document.querySelectorAll('.slide');
     const indicators = document.querySelectorAll('.indicator');
+    
+    if (slides.length === 0) return;
     
     slides.forEach(slide => slide.classList.remove('active'));
     indicators.forEach(indicator => indicator.classList.remove('active'));
@@ -215,10 +341,12 @@ heroIndicators.forEach((indicator, index) => {
 });
 
 // Auto Slide Change
-setInterval(() => {
-    const nextSlide = (currentSlide + 1) % heroIndicators.length;
-    showSlide(nextSlide);
-}, 5000);
+if (heroIndicators.length > 0) {
+    setInterval(() => {
+        const nextSlide = (currentSlide + 1) % heroIndicators.length;
+        showSlide(nextSlide);
+    }, 5000);
+}
 
 // Scroll Animations
 function checkScroll() {
@@ -247,21 +375,25 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.addEventListener('scroll', checkScroll);
     checkScroll(); // Check on load
+    
+    updateCart();
 });
 
 // Search Functionality
-const searchInput = document.querySelector('.search-bar input');
-const searchButton = document.querySelector('.search-bar button');
+const searchInput = document.querySelector('.nav-search input');
+const searchButton = document.querySelector('.nav-search button');
 
-searchButton.addEventListener('click', () => {
-    performSearch();
-});
-
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+if (searchInput && searchButton) {
+    searchButton.addEventListener('click', () => {
         performSearch();
-    }
-});
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+}
 
 function performSearch() {
     const query = searchInput.value.trim();
@@ -298,5 +430,3 @@ dropdowns.forEach(dropdown => {
     });
 });
 
-// Initialize
-updateCart();

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Category Navigation</title>
+    <style>
+        .hidden { display: none !important; }
+        .category-section { padding: 20px; border: 2px solid blue; margin: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <button class="category-link" data-target="uniforms">Show Uniforms</button>
+    <button class="category-link" data-target="documents">Show Documents</button>
+    
+    <div id="uniforms" class="category-section hidden">
+        <h2>Uniforms Section</h2>
+        <p>This is the uniforms section</p>
+    </div>
+    
+    <div id="documents" class="category-section hidden">
+        <h2>Documents Section</h2>
+        <p>This is the documents section</p>
+    </div>
+    
+    <script>
+        const links = document.querySelectorAll('.category-link');
+        console.log('Links found:', links.length);
+        
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                const target = link.getAttribute('data-target');
+                console.log('Clicked:', target);
+                
+                const section = document.getElementById(target);
+                console.log('Section:', section);
+                
+                // Hide all
+                document.querySelectorAll('.category-section').forEach(s => {
+                    s.classList.add('hidden');
+                });
+                
+                // Show target
+                if (section) {
+                    section.classList.remove('hidden');
+                    section.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

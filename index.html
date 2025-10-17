@@ -21,20 +21,20 @@
                 <span class="nav-campus-name">ICCT Antipolo Campus</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#home" class="active nav-link">Home</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle">Shop</a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">All Products</a></li>
-                        <li><a href="#">Uniforms</a></li>
-                        <li><a href="#">Documents</a></li>
-                        <li><a href="#">Supplies</a></li>
-                        <li><a href="#">Fees</a></li>
+                        <li><a href="#all-products" class="category-link">All Products</a></li>
+                        <li><a href="#uniforms" class="category-link">Uniforms</a></li>
+                        <li><a href="#documents" class="category-link">Documents</a></li>
+                        <li><a href="#supplies" class="category-link">Supplies</a></li>
+                        <li><a href="#fees" class="category-link">Fees</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Payment</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#payment" class="nav-link">Payment</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="nav-actions">
                 <!-- Search Bar -->
@@ -72,7 +72,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="hero-slider">
             <div class="slide active">
                 <div class="slide-content">
@@ -180,47 +180,321 @@
     </section>
 
     <!-- Category Sections -->
-    <section id="all-products" class="category-section" style="display: none;">
+    <section id="all-products" class="category-section hidden">
         <div class="container">
-            <h2 class="section-title">All Products</h2>
+            <div class="category-header">
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="section-title">All Products</h2>
+            </div>
             <div class="products-grid">
-                <!-- Products will be added here -->
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Product 1</div></div>
+                    <div class="product-info">
+                        <h3>All Product Item 1</h3>
+                        <p class="price">₱500.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Product 2</div></div>
+                    <div class="product-info">
+                        <h3>All Product Item 2</h3>
+                        <p class="price">₱750.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="uniforms" class="category-section" style="display: none;">
+    <section id="uniforms" class="category-section hidden">
         <div class="container">
-            <h2 class="section-title">Uniforms</h2>
+            <div class="category-header">
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="section-title">Uniforms</h2>
+            </div>
             <div class="products-grid">
-                <!-- Uniforms will be added here -->
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">PE Uniform</div></div>
+                    <div class="product-info">
+                        <h3>ICCT PE Uniform</h3>
+                        <p class="price">₱850.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Corporate Attire</div></div>
+                    <div class="product-info">
+                        <h3>ICCT Corporate Attire</h3>
+                        <p class="price">₱1,200.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Lab Coat</div></div>
+                    <div class="product-info">
+                        <h3>ICCT Lab Coat</h3>
+                        <p class="price">₱950.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="documents" class="category-section" style="display: none;">
+    <section id="documents" class="category-section hidden">
         <div class="container">
-            <h2 class="section-title">Documents</h2>
+            <div class="category-header">
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="section-title">Documents</h2>
+            </div>
             <div class="products-grid">
-                <!-- Documents will be added here -->
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Student ID</div></div>
+                    <div class="product-info">
+                        <h3>Student ID</h3>
+                        <p class="price">₱150.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Registration Form</div></div>
+                    <div class="product-info">
+                        <h3>Registration Form</h3>
+                        <p class="price">₱50.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Certificate</div></div>
+                    <div class="product-info">
+                        <h3>Official Certificate</h3>
+                        <p class="price">₱200.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="supplies" class="category-section" style="display: none;">
+    <section id="supplies" class="category-section hidden">
         <div class="container">
-            <h2 class="section-title">Supplies</h2>
+            <div class="category-header">
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="section-title">Supplies</h2>
+            </div>
             <div class="products-grid">
-                <!-- Supplies will be added here -->
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Notebooks</div></div>
+                    <div class="product-info">
+                        <h3>ICCT Notebooks (Pack of 5)</h3>
+                        <p class="price">₱250.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Pens</div></div>
+                    <div class="product-info">
+                        <h3>ICCT Pen Set (12 pcs)</h3>
+                        <p class="price">₱180.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Backpack</div></div>
+                    <div class="product-info">
+                        <h3>ICCT School Backpack</h3>
+                        <p class="price">₱800.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="fees" class="category-section" style="display: none;">
+    <section id="fees" class="category-section hidden">
         <div class="container">
-            <h2 class="section-title">Fees</h2>
+            <div class="category-header">
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="section-title">Fees</h2>
+            </div>
             <div class="products-grid">
-                <!-- Fees will be added here -->
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Tuition</div></div>
+                    <div class="product-info">
+                        <h3>Tuition Fee (Per Semester)</h3>
+                        <p class="price">₱50,000.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Library Fee</div></div>
+                    <div class="product-info">
+                        <h3>Library Fee</h3>
+                        <p class="price">₱1,500.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><div class="image-placeholder">Lab Fee</div></div>
+                    <div class="product-info">
+                        <h3>Laboratory Fee</h3>
+                        <p class="price">₱2,500.00</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section id="payment" class="category-section payment-section hidden">
+        <div class="container">
+            <div class="category-header">
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="section-title">Payment Methods</h2>
+            </div>
+            
+            <div class="payment-intro">
+                <p>Choose from our secure and convenient payment methods. Follow the instructions below for each payment option.</p>
+            </div>
+
+            <div class="payment-methods-grid">
+                <!-- GCash -->
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>GCash</h3>
+                    <p class="payment-description">Fast and secure mobile payment</p>
+                    <div class="payment-instructions">
+                        <h4>How to Pay:</h4>
+                        <ol>
+                            <li>Open your GCash app</li>
+                            <li>Select "Send Money" or "Pay QR"</li>
+                            <li>Enter our GCash number: <strong>0917-123-4567</strong></li>
+                            <li>Enter the amount and send</li>
+                            <li>Take a screenshot of the receipt</li>
+                            <li>Email the receipt to: <strong>payment@icct.edu.ph</strong></li>
+                        </ol>
+                    </div>
+                    <button class="payment-btn">Use GCash</button>
+                </div>
+
+                <!-- PayMaya -->
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Maya (PayMaya)</h3>
+                    <p class="payment-description">Digital wallet payment</p>
+                    <div class="payment-instructions">
+                        <h4>How to Pay:</h4>
+                        <ol>
+                            <li>Open Maya app</li>
+                            <li>Tap "Send Money"</li>
+                            <li>Select "To Mobile Number"</li>
+                            <li>Enter: <strong>0918-765-4321</strong></li>
+                            <li>Enter amount and confirm</li>
+                            <li>Save the transaction receipt</li>
+                            <li>Send receipt to: <strong>payment@icct.edu.ph</strong></li>
+                        </ol>
+                    </div>
+                    <button class="payment-btn">Use Maya</button>
+                </div>
+
+                <!-- Bank Transfer -->
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3>Bank Transfer</h3>
+                    <p class="payment-description">Direct bank deposit or online transfer</p>
+                    <div class="payment-instructions">
+                        <h4>How to Pay:</h4>
+                        <ol>
+                            <li>Go to your bank or use online banking</li>
+                            <li>Transfer to: <strong>BDO - ICCT Colleges</strong></li>
+                            <li>Account Number: <strong>0012-3456-7890</strong></li>
+                            <li>Enter the amount</li>
+                            <li>Keep the deposit slip or confirmation</li>
+                            <li>Email to: <strong>payment@icct.edu.ph</strong></li>
+                            <li>Include your name and student number</li>
+                        </ol>
+                    </div>
+                    <button class="payment-btn">Bank Details</button>
+                </div>
+
+                <!-- Over the Counter -->
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3>Over the Counter</h3>
+                    <p class="payment-description">Pay at the campus cashier</p>
+                    <div class="payment-instructions">
+                        <h4>How to Pay:</h4>
+                        <ol>
+                            <li>Visit ICCT Antipolo Campus Cashier</li>
+                            <li>Office Hours: Mon-Fri, 8:00 AM - 5:00 PM</li>
+                            <li>Bring your student ID</li>
+                            <li>Present your order details</li>
+                            <li>Pay in cash or card</li>
+                            <li>Get your official receipt</li>
+                            <li>Items can be claimed after payment</li>
+                        </ol>
+                    </div>
+                    <button class="payment-btn">Visit Cashier</button>
+                </div>
+
+                <!-- Credit/Debit Card -->
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3>Credit/Debit Card</h3>
+                    <p class="payment-description">Visa, Mastercard, JCB accepted</p>
+                    <div class="payment-instructions">
+                        <h4>How to Pay:</h4>
+                        <ol>
+                            <li>Click "Pay with Card" button</li>
+                            <li>Enter your card details</li>
+                            <li>Card Number, Expiry, CVV</li>
+                            <li>Enter billing information</li>
+                            <li>Review your order</li>
+                            <li>Click "Complete Payment"</li>
+                            <li>Save the confirmation email</li>
+                        </ol>
+                    </div>
+                    <button class="payment-btn">Pay with Card</button>
+                </div>
+
+                <!-- Installment -->
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Installment Plan</h3>
+                    <p class="payment-description">Pay in flexible installments</p>
+                    <div class="payment-instructions">
+                        <h4>How to Apply:</h4>
+                        <ol>
+                            <li>Visit the Cashier's Office</li>
+                            <li>Bring valid ID and student ID</li>
+                            <li>Fill out installment form</li>
+                            <li>Choose payment schedule (2-6 months)</li>
+                            <li>Submit required documents</li>
+                            <li>Wait for approval (1-2 days)</li>
+                            <li>Start paying monthly installments</li>
+                        </ol>
+                    </div>
+                    <button class="payment-btn">Apply Now</button>
+                </div>
+            </div>
+
+            <div class="payment-note">
+                <i class="fas fa-info-circle"></i>
+                <p><strong>Important:</strong> Please keep all payment receipts and transaction confirmations. For any payment concerns, contact us at <strong>payment@icct.edu.ph</strong> or call <strong>(02) 1234-5678</strong>.</p>
             </div>
         </div>
     </section>
