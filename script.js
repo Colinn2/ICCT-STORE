@@ -1,4 +1,5 @@
 // script.js
+console.log('🚀 Script loaded!');
 
 // DOM Elements
 const hamburger = document.getElementById('hamburger');
@@ -25,20 +26,128 @@ let carouselPosition = 0;
 const carouselItemWidth = 280; // Width + gap
 
 // ===== CATEGORY NAVIGATION =====
+// API Configuration
+// Dynamically determine API URL based on current host
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8080' 
+    : window.location.origin.replace('-8000.', '-8080.');
+
+console.log('🔗 API URL:', API_BASE_URL);
+
 // Initialize after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ DOM Content Loaded!');
     const categoryLinks = document.querySelectorAll('.category-link');
     const categorySections = document.querySelectorAll('.category-section');
     const backButtons = document.querySelectorAll('.back-btn');
     const productShowcase = document.querySelector('.product-showcase');
     const backToSchoolSection = document.querySelector('.back-to-school');
 
-    console.log('Category Links found:', categoryLinks.length);
-    console.log('Category Sections found:', categorySections.length);
+    console.log('📋 Category Links found:', categoryLinks.length);
+    console.log('📋 Category Sections found:', categorySections.length);
+
+    // Fetch and display products from database
+    async function loadProducts(categorySlug) {
+        try {
+            const url = `${API_BASE_URL}/?action=products&category=${categorySlug}`;
+            console.log('🔄 Loading products from:', url);
+            console.log('⏳ Fetching data...');
+            
+            const response = await fetch(url);
+            console.log('📡 Response received:', response.status, response.statusText);
+            console.log('📡 Response OK?', response.ok);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            console.log('✅ API Response received');
+            console.log('📊 Response data:', result);
+            console.log('✅ Success?', result.success);
+            console.log('📦 Products count:', result.data ? result.data.length : 0);
+            
+            if (result.success && result.data) {
+                console.log('✅ Returning', result.data.length, 'products');
+                if (result.data.length > 0) {
+                    console.log('📋 First product:', result.data[0].name);
+                }
+                return result.data;
+            } else {
+                console.error('❌ Error fetching products:', result.error);
+                alert(`API Error: ${result.error || 'Unknown error'}`);
+                return [];
+            }
+        } catch (error) {
+            console.error('❌ Error loading products:', error);
+            alert(`Failed to load products: ${error.message}`);
+            return [];
+        }
+    }
+
+    // Render products in the grid
+    function renderProducts(products, containerId) {
+        console.log('🎨 ===== RENDER PRODUCTS START =====');
+        console.log('🎨 Rendering products for:', containerId);
+        console.log('🎨 Number of products:', products.length);
+        
+        const selector = `#${containerId} .products-grid`;
+        console.log('🎨 Looking for container with selector:', selector);
+        
+        const container = document.querySelector(selector);
+        console.log('📦 Container element:', container);
+        console.log('📦 Container found:', container ? 'YES ✅' : 'NO ❌');
+        
+        if (!container) {
+            console.error('❌ Container not found for selector:', selector);
+            alert(`ERROR: Cannot find container for ${containerId}`);
+            return;
+        }
+        
+        console.log('🗑️ Clearing existing products...');
+        console.log('🗑️ Current HTML length:', container.innerHTML.length);
+        container.innerHTML = ''; // Clear existing products
+        console.log('✅ Container cleared');
+        
+        if (products.length === 0) {
+            console.warn('⚠️ No products to display');
+            container.innerHTML = '<p class="no-products">No products available in this category.</p>';
+            return;
+        }
+        
+        console.log('🔨 Creating product cards...');
+        products.forEach((product, index) => {
+            console.log(`  ${index + 1}. Creating card for: ${product.name}`);
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <div class="product-image">
+                    <div class="image-placeholder">${product.name}</div>
+                </div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    ${product.description ? `<p class="product-desc">${product.description}</p>` : ''}
+                    <p class="price">₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                    ${product.stock_quantity > 0 ? 
+                        `<button class="add-to-cart">Add to Cart</button>` : 
+                        `<button class="out-of-stock" disabled>Out of Stock</button>`
+                    }
+                </div>
+            `;
+            container.appendChild(productCard);
+        });
+        
+        console.log('✅ Rendered', products.length, 'products to container');
+        console.log('✅ Final HTML length:', container.innerHTML.length);
+        console.log('✅ Product cards in DOM:', container.querySelectorAll('.product-card').length);
+        console.log('🎨 ===== RENDER PRODUCTS END =====');
+    }
 
     // Show Category Section
-    function showCategory(categoryId) {
-        console.log('showCategory called with:', categoryId);
+    async function showCategory(categoryId) {
+        console.log('🎯 ===== SHOW CATEGORY START =====');
+        console.log('🎯 Category ID:', categoryId);
         
         // Hide all sections
         categorySections.forEach(section => {
@@ -51,11 +160,32 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show selected category
         const selectedSection = document.getElementById(categoryId);
-        console.log('Selected section:', selectedSection);
+        console.log('📄 Looking for section with ID:', categoryId);
+        console.log('📄 Selected section:', selectedSection);
+        console.log('📄 Section found:', selectedSection ? 'YES ✅' : 'NO ❌');
         
         if (selectedSection) {
+            console.log('👁️ Making section visible...');
             selectedSection.classList.remove('hidden');
             selectedSection.style.display = 'block';
+            console.log('✅ Section displayed:', categoryId);
+            
+            // Load products from database
+            console.log('🔄 ===== LOADING PRODUCTS =====');
+            console.log('🔄 Category slug:', categoryId);
+            const products = await loadProducts(categoryId);
+            console.log('📦 Products received:', products.length);
+            
+            if (products.length > 0) {
+                console.log('📋 Sample products:');
+                products.slice(0, 3).forEach((p, i) => {
+                    console.log(`  ${i+1}. ${p.name} - ₱${p.price}`);
+                });
+            }
+            
+            console.log('🔄 ===== CALLING RENDER =====');
+            renderProducts(products, categoryId);
+            console.log('🔄 ===== RENDER COMPLETE =====');
             
             // Scroll to the section with navbar visible
             setTimeout(() => {
@@ -63,11 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const navbarHeight = navbar ? navbar.offsetHeight : 0;
                 const sectionTop = selectedSection.offsetTop - navbarHeight - 20; // 20px extra padding
                 
+                console.log('📜 Scrolling to section...');
                 window.scrollTo({
                     top: sectionTop,
                     behavior: 'smooth'
                 });
             }, 100); // Small delay to ensure display change is applied
+            
+            console.log('🎯 ===== SHOW CATEGORY END =====');
+        } else {
+            console.error('❌ Section not found:', categoryId);
+            alert(`ERROR: Cannot find section with ID: ${categoryId}`);
         }
     }
 
@@ -147,53 +283,65 @@ document.addEventListener('DOMContentLoaded', () => {
 const dropdownToggle = document.querySelector('.dropdown-toggle');
 const dropdown = document.querySelector('.dropdown');
 
-// Close dropdown when clicking outside
-document.addEventListener('click', (e) => {
-    if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('active');
-    }
-});
+if (dropdown && dropdownToggle) {
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
 
-// Toggle dropdown on click
-dropdownToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    dropdown.classList.toggle('active');
-});
+    // Toggle dropdown on click
+    dropdownToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        dropdown.classList.toggle('active');
+    });
+}
 
 // Toggle Mobile Menu
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+}
 
 // Toggle Cart Sidebar
-cartToggle.addEventListener('click', () => {
-    cartSidebar.classList.add('active');
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-});
+if (cartToggle && cartSidebar && overlay) {
+    cartToggle.addEventListener('click', () => {
+        cartSidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+}
 
-closeCart.addEventListener('click', () => {
-    cartSidebar.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.style.overflow = 'auto';
-});
+if (closeCart && cartSidebar && overlay) {
+    closeCart.addEventListener('click', () => {
+        cartSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
 
-overlay.addEventListener('click', () => {
-    cartSidebar.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.style.overflow = 'auto';
-});
+if (overlay && cartSidebar) {
+    overlay.addEventListener('click', () => {
+        cartSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
 
 // Continue Shopping Button
-continueShopping.addEventListener('click', () => {
-    cartSidebar.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.style.overflow = 'auto';
-});
+if (continueShopping && cartSidebar && overlay) {
+    continueShopping.addEventListener('click', () => {
+        cartSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
 
 // Carousel Navigation
-if (prevBtn && nextBtn) {
+if (prevBtn && nextBtn && carouselTrack) {
     prevBtn.addEventListener('click', () => {
         if (carouselPosition < 0) {
             carouselPosition += carouselItemWidth;

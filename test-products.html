@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Products API</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .product { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+        .error { color: red; padding: 10px; background: #fee; }
+        .success { color: green; padding: 10px; background: #efe; }
+    </style>
+</head>
+<body>
+    <h1>Product API Test</h1>
+    <button onclick="testUniforms()">Test Uniforms</button>
+    <button onclick="testAllProducts()">Test All Products</button>
+    <button onclick="testDocuments()">Test Documents</button>
+    <div id="output"></div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080';
+
+        async function testCategory(category, name) {
+            const output = document.getElementById('output');
+            output.innerHTML = `<p>Loading ${name}...</p>`;
+            
+            try {
+                const url = `${API_BASE_URL}/?action=products&category=${category}`;
+                console.log('Fetching:', url);
+                
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                console.log('Response:', result);
+                
+                if (result.success && result.data) {
+                    output.innerHTML = `
+                        <div class="success">
+                            <h2>✅ ${name}: ${result.data.length} products found</h2>
+                        </div>
+                        ${result.data.map(p => `
+                            <div class="product">
+                                <strong>${p.name}</strong> - ₱${p.price}<br>
+                                <small>${p.description || 'No description'}</small><br>
+                                <small>Stock: ${p.stock_quantity}</small>
+                            </div>
+                        `).join('')}
+                    `;
+                } else {
+                    output.innerHTML = `<div class="error">❌ Error: ${result.error || 'Unknown error'}</div>`;
+                }
+            } catch (error) {
+                output.innerHTML = `<div class="error">❌ Fetch Error: ${error.message}</div>`;
+                console.error('Error:', error);
+            }
+        }
+
+        function testUniforms() {
+            testCategory('uniforms', 'Uniforms');
+        }
+
+        function testAllProducts() {
+            testCategory('all-products', 'All Products');
+        }
+
+        function testDocuments() {
+            testCategory('documents', 'Documents');
+        }
+    </script>
+</body>
+</html>

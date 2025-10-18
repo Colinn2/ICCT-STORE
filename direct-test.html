@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>DIRECT TEST - ICCT Products</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        h1 { color: #003366; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+        .card { background: white; padding: 15px; border: 2px solid #ddd; border-radius: 8px; }
+        .card h3 { margin: 0 0 10px 0; color: #003366; }
+        .price { color: #00a651; font-size: 1.2em; font-weight: bold; }
+        #status { padding: 15px; margin: 15px 0; border-radius: 8px; font-weight: bold; }
+        .loading { background: #fff3cd; color: #856404; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🔍 DIRECT DATABASE TEST</h1>
+    <div id="status" class="loading">⏳ Loading products from MySQL...</div>
+    <div id="products" class="grid"></div>
+
+    <script>
+        console.log('🚀 TEST PAGE LOADED');
+        
+        const API_URL = 'http://localhost:8080';
+        const status = document.getElementById('status');
+        const container = document.getElementById('products');
+        
+        fetch(`${API_URL}/?action=products&category=uniforms`)
+            .then(response => {
+                console.log('📡 Response:', response.status, response.statusText);
+                return response.json();
+            })
+            .then(data => {
+                console.log('📦 Data received:', data);
+                
+                if (data.success && data.data) {
+                    const count = data.data.length;
+                    console.log('✅ Products:', count);
+                    
+                    status.className = 'success';
+                    status.innerHTML = `✅ SUCCESS! Loaded ${count} products from MySQL database`;
+                    
+                    // Create cards
+                    data.data.forEach(product => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.innerHTML = `
+                            <h3>${product.name}</h3>
+                            <p>${product.description || 'No description'}</p>
+                            <div class="price">₱${parseFloat(product.price).toFixed(2)}</div>
+                            <small>Stock: ${product.stock_quantity} | ID: ${product.id}</small>
+                        `;
+                        container.appendChild(card);
+                    });
+                    
+                    console.log('✅ Rendered', count, 'cards to page');
+                    
+                } else {
+                    throw new Error(data.error || 'Unknown error');
+                }
+            })
+            .catch(error => {
+                console.error('❌ Error:', error);
+                status.className = 'error';
+                status.innerHTML = `❌ ERROR: ${error.message}`;
+            });
+    </script>
+</body>
+</html>

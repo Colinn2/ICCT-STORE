@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Test</title></head><body>
+<h1>Products from API:</h1>
+<div id="products" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;"></div>
+<script>
+fetch('http://localhost:8080/?action=products&category=uniforms')
+  .then(r => r.json())
+  .then(d => {
+    const container = document.getElementById('products');
+    d.data.forEach(p => {
+      const card = document.createElement('div');
+      card.style.border = '1px solid #ddd';
+      card.style.padding = '15px';
+      card.style.background = 'white';
+      card.innerHTML = `<h3>${p.name}</h3><p>₱${p.price}</p>`;
+      container.appendChild(card);
+    });
+    document.body.insertAdjacentHTML('afterbegin', `<p style="color:green; font-weight:bold;">✅ Loaded ${d.data.length} products!</p>`);
+  });
+</script>
+</body></html>
