@@ -233,11 +233,11 @@
         <div class="container">
             <div class="category-header">
                 <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
-                <h2 class="section-title">Payment Methods</h2>
+                <h2 class="section-title">Payment Guide</h2>
             </div>
             
             <div class="payment-intro">
-                <p>Choose from our secure and convenient payment methods. Follow the instructions below for each payment option.</p>
+                <p>Follow these simple steps to complete your payment. Choose the method that works best for you.</p>
             </div>
 
             <div class="payment-methods-grid">
@@ -256,16 +256,15 @@
                             <li>Enter our GCash number: <strong>0917-123-4567</strong></li>
                             <li>Enter the amount and send</li>
                             <li>Take a screenshot of the receipt</li>
-                            <li>Email the receipt to: <strong>payment@icct.edu.ph</strong></li>
+                            <li>Show the receipt at the cashier or upload on your account</li>
                         </ol>
                     </div>
-                    <button class="payment-btn">Use GCash</button>
                 </div>
 
                 <!-- PayMaya -->
                 <div class="payment-card">
                     <div class="payment-icon">
-                        <i class="fas fa-credit-card"></i>
+                        <i class="fas fa-wallet"></i>
                     </div>
                     <h3>Maya (PayMaya)</h3>
                     <p class="payment-description">Digital wallet payment</p>
@@ -278,10 +277,9 @@
                             <li>Enter: <strong>0918-765-4321</strong></li>
                             <li>Enter amount and confirm</li>
                             <li>Save the transaction receipt</li>
-                            <li>Send receipt to: <strong>payment@icct.edu.ph</strong></li>
+                            <li>Present at cashier for verification</li>
                         </ol>
                     </div>
-                    <button class="payment-btn">Use Maya</button>
                 </div>
 
                 <!-- Bank Transfer -->
@@ -299,11 +297,10 @@
                             <li>Account Number: <strong>0012-3456-7890</strong></li>
                             <li>Enter the amount</li>
                             <li>Keep the deposit slip or confirmation</li>
-                            <li>Email to: <strong>payment@icct.edu.ph</strong></li>
+                            <li>Bring receipt to cashier</li>
                             <li>Include your name and student number</li>
                         </ol>
                     </div>
-                    <button class="payment-btn">Bank Details</button>
                 </div>
 
                 <!-- Over the Counter -->
@@ -322,10 +319,9 @@
                             <li>Present your order details</li>
                             <li>Pay in cash or card</li>
                             <li>Get your official receipt</li>
-                            <li>Items can be claimed after payment</li>
+                            <li>Items can be claimed immediately</li>
                         </ol>
                     </div>
-                    <button class="payment-btn">Visit Cashier</button>
                 </div>
 
                 <!-- Credit/Debit Card -->
@@ -338,16 +334,15 @@
                     <div class="payment-instructions">
                         <h4>How to Pay:</h4>
                         <ol>
-                            <li>Click "Pay with Card" button</li>
-                            <li>Enter your card details</li>
-                            <li>Card Number, Expiry, CVV</li>
-                            <li>Enter billing information</li>
-                            <li>Review your order</li>
-                            <li>Click "Complete Payment"</li>
-                            <li>Save the confirmation email</li>
+                            <li>Visit the cashier with your card</li>
+                            <li>Present your order details</li>
+                            <li>Swipe or insert your card</li>
+                            <li>Enter your PIN</li>
+                            <li>Wait for approval</li>
+                            <li>Get your receipt</li>
+                            <li>Claim your items</li>
                         </ol>
                     </div>
-                    <button class="payment-btn">Pay with Card</button>
                 </div>
 
                 <!-- Installment -->
@@ -362,20 +357,19 @@
                         <ol>
                             <li>Visit the Cashier's Office</li>
                             <li>Bring valid ID and student ID</li>
-                            <li>Fill out installment form</li>
+                            <li>Fill out installment application form</li>
                             <li>Choose payment schedule (2-6 months)</li>
                             <li>Submit required documents</li>
-                            <li>Wait for approval (1-2 days)</li>
+                            <li>Wait for approval (1-2 business days)</li>
                             <li>Start paying monthly installments</li>
                         </ol>
                     </div>
-                    <button class="payment-btn">Apply Now</button>
                 </div>
             </div>
 
             <div class="payment-note">
                 <i class="fas fa-info-circle"></i>
-                <p><strong>Important:</strong> Please keep all payment receipts and transaction confirmations. For any payment concerns, contact us at <strong>payment@icct.edu.ph</strong> or call <strong>(02) 1234-5678</strong>.</p>
+                <p><strong>Important:</strong> Always keep your payment receipts and transaction confirmations. For payment inquiries, visit the cashier's office or call <strong>(02) 1234-5678</strong> during office hours.</p>
             </div>
         </div>
     </section>
@@ -561,6 +555,18 @@
                     <p>Don't have an account? <a href="#" class="register-link">Register here</a></p>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="successTitle">Success!</h2>
+            <p id="successMessage">Operation completed successfully.</p>
+            <button class="success-btn" id="successBtn">OK</button>
         </div>
     </div>
     

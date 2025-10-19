@@ -39,6 +39,10 @@ const transactionCount = document.getElementById('transactionCount');
 const accountUserName = document.getElementById('accountUserName');
 const accountUserEmail = document.getElementById('accountUserEmail');
 const accountStudentNumber = document.getElementById('accountStudentNumber');
+const successModal = document.getElementById('successModal');
+const successTitle = document.getElementById('successTitle');
+const successMessage = document.getElementById('successMessage');
+const successBtn = document.getElementById('successBtn');
 
 // Cart State
 let cart = [];
@@ -48,6 +52,30 @@ let isLoggedIn = false;
 let currentUser = null;
 let transactionHistory = [];
 let carouselPosition = 0;
+
+// Success Modal Functions
+function showSuccessModal(title, message) {
+    if (successModal && successTitle && successMessage) {
+        successTitle.textContent = title;
+        successMessage.textContent = message;
+        successModal.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeSuccessModal() {
+    if (successModal) {
+        successModal.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Success Modal Close Button
+if (successBtn) {
+    successBtn.addEventListener('click', closeSuccessModal);
+}
 const carouselItemWidth = 280; // Width + gap
 
 // ===== CATEGORY NAVIGATION =====
@@ -527,6 +555,11 @@ if (closeCart && cartSidebar && overlay) {
 
 if (overlay && cartSidebar) {
     overlay.addEventListener('click', () => {
+        // Close success modal if open
+        if (successModal && successModal.classList.contains('active')) {
+            closeSuccessModal();
+            return;
+        }
         // Close login modal if open
         if (loginModal && loginModal.classList.contains('active')) {
             loginModal.classList.remove('active');
@@ -603,9 +636,11 @@ if (logoutBtn) {
             transactionHistory = [];
             updateAccountDisplay();
             accountSidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            alert('You have been signed out successfully.');
+            
+            // Show success modal instead of alert
+            setTimeout(() => {
+                showSuccessModal('Signed Out Successfully', 'You have been logged out. See you next time!');
+            }, 300);
         }
     });
 }
@@ -1105,10 +1140,15 @@ if (loginForm) {
             // Close modal
             closeLoginModalFunc();
             
-            // Proceed to checkout
+            // Show success modal
+            setTimeout(() => {
+                showSuccessModal('Login Successful!', `Welcome back, ${studentNumber}! You can now proceed with your order.`);
+            }, 300);
+            
+            // Proceed to checkout after modal is closed
             setTimeout(() => {
                 proceedToCheckout();
-            }, 300);
+            }, 2500);
         }
     });
 }

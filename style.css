@@ -1377,23 +1377,66 @@ body {
 .account-sidebar {
     position: fixed;
     top: 0;
-    right: -450px;
-    width: 450px;
+    right: -100%;
+    width: 100%;
+    max-width: 420px;
     height: 100vh;
     background: white;
     box-shadow: -5px 0 15px rgba(0,0,0,0.1);
     z-index: 1052;
     transition: right 0.3s ease;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .account-sidebar.active {
     right: 0;
 }
 
+/* Sidebar Header */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-sidebar {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-sidebar:hover {
+    background: #f5f5f5;
+    color: var(--icct-blue);
+}
+
 /* Account Login Prompt */
 .account-not-logged-in {
-    padding: 40px 30px;
+    padding: 30px 20px;
     text-align: center;
 }
 
@@ -1401,18 +1444,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding: 40px 20px;
+    gap: 12px;
+    padding: 25px 15px;
 }
 
 .account-login-prompt i {
-    font-size: 80px;
+    font-size: 60px;
     color: var(--icct-blue);
     opacity: 0.8;
 }
 
 .account-login-prompt h3 {
-    font-size: 24px;
+    font-size: 20px;
     color: var(--navy);
     margin: 0;
 }
@@ -1421,21 +1464,24 @@ body {
     color: #666;
     line-height: 1.6;
     margin: 0;
+    font-size: 14px;
 }
 
 .account-login-btn {
     background: var(--icct-blue);
     color: white;
     border: none;
-    padding: 12px 30px;
+    padding: 10px 24px;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 6px;
     transition: all 0.3s ease;
+    margin-top: 5px;
 }
 
 .account-login-btn:hover {
@@ -1447,105 +1493,130 @@ body {
 /* Account Logged In */
 .account-logged-in {
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 61px); /* Account for header */
 }
 
 .account-info {
     background: linear-gradient(135deg, var(--icct-blue), var(--navy));
     color: white;
-    padding: 30px;
+    padding: 25px 20px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
+    flex-shrink: 0;
 }
 
 .user-avatar {
-    font-size: 60px;
+    font-size: 50px;
     color: white;
     opacity: 0.9;
+    flex-shrink: 0;
+}
+
+.user-details {
+    flex: 1;
+    min-width: 0; /* Allow text truncation */
 }
 
 .user-details h3 {
     margin: 0 0 5px 0;
-    font-size: 20px;
+    font-size: 18px;
     color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .user-details p {
-    margin: 0 0 10px 0;
-    font-size: 14px;
+    margin: 0 0 8px 0;
+    font-size: 13px;
     color: rgba(255, 255, 255, 0.9);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .student-badge {
     display: inline-block;
     background: rgba(255, 255, 255, 0.2);
-    padding: 4px 12px;
+    padding: 4px 10px;
     border-radius: 15px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
 }
 
 /* Account Sections */
 .account-sections {
     padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 .account-section {
-    padding: 25px;
+    padding: 20px;
     border-bottom: 1px solid #eee;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .section-header h3 {
     margin: 0;
-    font-size: 18px;
+    font-size: 17px;
     color: var(--navy);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .transaction-count {
-    font-size: 13px;
+    font-size: 12px;
     color: #666;
     background: #f5f5f5;
     padding: 4px 10px;
     border-radius: 12px;
+    white-space: nowrap;
 }
 
 /* Transaction List */
 .transaction-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .empty-transactions {
     text-align: center;
-    padding: 40px 20px;
+    padding: 40px 15px;
     color: #999;
 }
 
 .empty-transactions i {
-    font-size: 50px;
-    margin-bottom: 15px;
+    font-size: 45px;
+    margin-bottom: 12px;
     opacity: 0.5;
 }
 
 .empty-transactions p {
-    margin: 10px 0 5px 0;
-    font-size: 16px;
+    margin: 8px 0 5px 0;
+    font-size: 15px;
     color: #666;
 }
 
 .empty-transactions small {
-    font-size: 13px;
+    font-size: 12px;
     color: #999;
 }
 
@@ -1553,33 +1624,37 @@ body {
 .transaction-item {
     background: #f9f9f9;
     border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 15px;
+    border-radius: 8px;
+    padding: 12px;
     transition: all 0.3s ease;
 }
 
 .transaction-item:hover {
     background: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .transaction-header {
     display: flex;
     justify-content: space-between;
     align-items: start;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .transaction-id {
-    font-size: 12px;
+    font-size: 11px;
     color: #666;
     font-weight: 500;
+    word-break: break-all;
 }
 
 .transaction-date {
-    font-size: 11px;
+    font-size: 10px;
     color: #999;
+    white-space: nowrap;
 }
 
 .transaction-details {
@@ -1589,33 +1664,38 @@ body {
 }
 
 .transaction-items {
-    font-size: 13px;
+    font-size: 12px;
     color: #444;
     line-height: 1.5;
+    word-break: break-word;
 }
 
 .transaction-items strong {
     color: var(--navy);
+    display: block;
+    margin-bottom: 3px;
 }
 
 .transaction-total {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--icct-blue);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid #eee;
+    gap: 10px;
 }
 
 .transaction-status {
     display: inline-block;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .status-completed {
@@ -1635,7 +1715,10 @@ body {
 
 /* Account Actions */
 .account-actions {
-    padding: 20px 25px;
+    padding: 15px 20px;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
 }
 
 .logout-btn {
@@ -1645,13 +1728,13 @@ body {
     border: none;
     padding: 12px 20px;
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     transition: all 0.3s ease;
 }
 
@@ -1842,6 +1925,93 @@ body {
 .register-link:hover {
     text-decoration: underline;
     color: var(--navy);
+}
+
+/* Success Modal */
+.success-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 1500;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.success-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.success-icon i {
+    font-size: 45px;
+    color: white;
+}
+
+.success-modal h2 {
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.success-modal p {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.success-btn {
+    background: var(--icct-blue);
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.success-btn:hover {
+    background: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
 }
 
 .overlay.active {
@@ -2191,29 +2361,54 @@ body {
         left: 0;
     }
     
+    /* Hero Mobile Improvements */
     .hero {
-        height: 500px;
+        height: auto;
+        min-height: 500px;
+        padding: 20px 0;
     }
     
     .slide {
         flex-direction: column;
         text-align: center;
+        position: relative;
+        height: auto;
+        min-height: 500px;
     }
     
     .slide-content {
-        padding: 40px 20px 20px;
-    }
-    
-    .slide-content h1 {
-        font-size: 2rem;
-    }
-    
-    .slide-image {
-        padding: 20px;
+        padding: 30px 20px 20px;
+        max-width: 100%;
     }
     
     .badge {
         align-self: center;
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .slide-content h1 {
+        font-size: 1.8rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+    
+    .slide-content p {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+    
+    .slide-image {
+        padding: 15px;
+        height: 300px;
+        margin-top: 10px;
+    }
+    
+    .slide-image img {
+        max-height: 100%;
+        width: auto;
     }
     
     .section-title {
@@ -2236,6 +2431,7 @@ body {
     
     .cta-container {
         justify-content: center;
+        gap: 0.75rem;
     }
     
     .floating-card {
@@ -2247,34 +2443,50 @@ body {
         display: none;
     }
     
-    /* Alternative: Expandable search on mobile */
-    /*
-    .nav-search {
-        width: 40px;
-        overflow: hidden;
-        transition: all 0.3s ease;
+    /* Navigation Mobile Adjustments */
+    .nav-branding {
+        margin-left: 15px;
+        padding-right: 20px;
     }
     
-    .nav-search.active {
-        width: 200px;
-        background: rgba(255, 255, 255, 0.15);
+    .nav-campus-name {
+        font-size: 0.85rem;
     }
     
-    .nav-search input {
-        width: 0;
-        padding: 8px 0;
-        transition: all 0.3s ease;
+    .nav-logo {
+        width: 38px;
+        height: 38px;
     }
     
-    .nav-search.active input {
-        width: 150px;
-        padding: 8px 15px;
+    .nav-icons {
+        gap: 15px;
+        right: 15px;
     }
     
-    .nav-search button {
-        min-width: 30px;
+    .nav-icons .icon-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
     }
-    */
+    
+    .badge-count {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+    
+    .stats-container {
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .stat-number {
+        font-size: 1.3rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -2290,47 +2502,107 @@ body {
         max-width: 100%;
     }
     
+    /* Hero Extra Small Mobile */
     .hero {
-        height: 450px;
+        height: auto;
+        min-height: 450px;
+        padding: 15px 0;
+    }
+    
+    .slide {
+        min-height: 450px;
+    }
+    
+    .slide-content {
+        padding: 25px 15px 15px;
+    }
+    
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.35rem 0.7rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .slide-content h1 {
+        font-size: 1.5rem;
+        line-height: 1.2;
+        margin-bottom: 0.8rem;
+    }
+    
+    .slide-content p {
+        font-size: 0.9rem;
+        margin-bottom: 1.2rem;
+        line-height: 1.4;
     }
     
     .carousel-track {
         gap: 15px;
     }
     
-    .slide-content h1 {
-        font-size: 1.75rem;
-    }
-    
-    .slide-content p {
-        font-size: 1rem;
+    .slide-image {
+        height: 250px;
+        padding: 10px;
     }
     
     .stats-container {
         justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+    }
+    
+    .cta-container {
+        gap: 0.6rem;
+        flex-direction: column;
+        width: 100%;
     }
     
     .cta-button, .secondary-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.85rem;
+        width: 100%;
+        justify-content: center;
     }
     
     /* Login Modal Mobile */
     .login-modal {
         width: 95%;
         max-width: 100%;
+        margin: 20px;
     }
     
     .login-modal-content {
-        padding: 30px 20px 20px;
+        padding: 25px 15px 15px;
+    }
+    
+    .login-header {
+        margin-bottom: 20px;
     }
     
     .login-header h2 {
-        font-size: 22px;
+        font-size: 20px;
+        margin-bottom: 8px;
     }
     
     .login-header i {
-        font-size: 50px;
+        font-size: 45px;
+        margin-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 5px;
     }
     
     .form-group input {
@@ -2339,8 +2611,163 @@ body {
     }
     
     .login-btn {
-        padding: 12px 18px;
-        font-size: 15px;
+        padding: 11px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Extra Small Devices (≤ 400px) */
+@media (max-width: 400px) {
+    /* Hero Ultra Compact */
+    .hero {
+        min-height: 420px;
+        padding: 10px 0;
+    }
+    
+    .slide {
+        min-height: 420px;
+    }
+    
+    .slide-content {
+        padding: 20px 12px 12px;
+    }
+    
+    .badge {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.6rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .slide-content h1 {
+        font-size: 1.3rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .slide-content p {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+    
+    .slide-image {
+        height: 220px;
+        padding: 8px;
+    }
+    
+    .stats-container {
+        gap: 0.8rem;
+        margin-top: 0.8rem;
+    }
+    
+    .stat-number {
+        font-size: 1.1rem;
+    }
+    
+    .stat-label {
+        font-size: 0.65rem;
+    }
+    
+    .cta-button, .secondary-button {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.8rem;
+    }
+    
+    /* Nav branding */
+    .nav-branding {
+        margin-left: 10px;
+        padding-right: 15px;
+        gap: 10px;
+    }
+    
+    .nav-campus-name {
+        font-size: 0.75rem;
+    }
+    
+    .nav-logo {
+        width: 34px;
+        height: 34px;
+    }
+    
+    .nav-icons {
+        gap: 12px;
+        right: 10px;
+    }
+    
+    .nav-icons .icon-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    .badge-count {
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+    }
+    
+    .hamburger {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .hamburger span {
+        width: 20px;
+    }
+    
+    /* Account Login Prompt Ultra Small */
+    .account-not-logged-in {
+        padding: 20px 12px;
+    }
+    
+    .account-login-prompt {
+        padding: 20px 10px;
+        gap: 10px;
+    }
+    
+    .account-login-prompt i {
+        font-size: 45px;
+    }
+    
+    .account-login-prompt h3 {
+        font-size: 16px;
+        margin: 8px 0 5px;
+    }
+    
+    .account-login-prompt p {
+        font-size: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .account-login-btn {
+        padding: 8px 16px;
+        font-size: 11px;
+        gap: 4px;
+    }
+    
+    .account-login-btn i {
+        font-size: 11px;
+    }
+    
+    /* Login Modal Ultra Small */
+    .login-modal-content {
+        padding: 20px 12px 12px;
+    }
+    
+    .login-header h2 {
+        font-size: 18px;
+    }
+    
+    .login-header i {
+        font-size: 40px;
+    }
+    
+    .form-group input {
+        padding: 9px 10px;
+        font-size: 13px;
+    }
+    
+    .login-btn {
+        padding: 10px 14px;
+        font-size: 13px;
     }
 }
 
@@ -2657,21 +3084,7 @@ body {
 }
 
 .payment-btn {
-    width: 100%;
-    padding: 14px 20px;
-    background: var(--icct-blue);
-    color: var(--white);
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.payment-btn:hover {
-    background: var(--navy);
-    transform: scale(1.02);
+    display: none; /* Hidden - this is now a guide only */
 }
 
 .payment-note {
@@ -2814,6 +3227,59 @@ body {
     background: rgba(255, 255, 255, 0.3);
 }
 
+/* Tablet responsive */
+@media (max-width: 992px) {
+    .account-sidebar {
+        max-width: 380px;
+    }
+    
+    .sidebar-header h3 {
+        font-size: 20px;
+    }
+    
+    .account-login-prompt i {
+        font-size: 65px;
+    }
+    
+    .account-login-prompt h3 {
+        font-size: 21px;
+    }
+    
+    .user-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 19px;
+    }
+    
+    .user-details h3 {
+        font-size: 17px;
+    }
+    
+    .user-details p {
+        font-size: 13px;
+    }
+    
+    .section-header h4 {
+        font-size: 16px;
+    }
+    
+    .transaction-item {
+        padding: 12px;
+    }
+    
+    .transaction-id {
+        font-size: 11px;
+    }
+    
+    .transaction-items {
+        font-size: 12px;
+    }
+    
+    .transaction-total {
+        font-size: 14px;
+    }
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     .static-mode-notice {
@@ -2833,6 +3299,7 @@ body {
     /* Account Sidebar Mobile */
     .account-sidebar {
         width: 100%;
+        max-width: 100%;
         right: -100%;
     }
     
@@ -2840,12 +3307,398 @@ body {
         right: 0;
     }
     
+    .sidebar-header {
+        padding: 15px 20px;
+        min-height: 55px;
+    }
+    
+    .sidebar-header h3 {
+        font-size: 18px;
+    }
+    
+    .close-sidebar {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
+    
+    /* Account Not Logged In - Mobile */
+    .account-not-logged-in {
+        padding: 25px 20px;
+    }
+    
+    .account-login-prompt i {
+        font-size: 60px;
+    }
+    
+    .account-login-prompt h3 {
+        font-size: 20px;
+        margin: 15px 0 10px;
+    }
+    
+    .account-login-prompt p {
+        font-size: 12px;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+    
+    .account-login-btn {
+        padding: 9px 20px;
+        font-size: 13px;
+        gap: 6px;
+    }
+    
+    .account-login-btn i {
+        font-size: 14px;
+    }
+    
+    /* Account Logged In - Mobile */
+    .account-logged-in {
+        padding: 20px 15px 0;
+        height: calc(100vh - 55px);
+    }
+    
     .account-info {
         flex-direction: column;
         text-align: center;
+        padding: 20px 15px;
+        margin-bottom: 15px;
+    }
+    
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .user-details h3 {
+        font-size: 16px;
+        margin-bottom: 3px;
+    }
+    
+    .user-details p {
+        font-size: 12px;
+    }
+    
+    /* Sections Mobile */
+    .account-sections {
+        padding: 0 15px;
+    }
+    
+    .section-header {
+        padding: 12px 0;
+        margin-bottom: 12px;
+    }
+    
+    .section-header i {
+        font-size: 18px;
+    }
+    
+    .section-header h4 {
+        font-size: 15px;
+    }
+    
+    /* Transaction Item Mobile */
+    .transaction-item {
+        padding: 12px 10px;
+        border-radius: 6px;
+    }
+    
+    .transaction-header {
+        margin-bottom: 8px;
+        gap: 8px;
+    }
+    
+    .transaction-id {
+        font-size: 10px;
+        flex: 1;
+    }
+    
+    .transaction-date {
+        font-size: 9px;
+    }
+    
+    .transaction-items {
+        font-size: 11px;
+    }
+    
+    .transaction-total {
+        font-size: 14px;
+        padding-top: 6px;
+        gap: 8px;
+    }
+    
+    .transaction-status {
+        padding: 3px 6px;
+        font-size: 9px;
+        border-radius: 8px;
+    }
+    
+    /* Empty Transactions Mobile */
+    .empty-transactions {
+        padding: 30px 15px;
+    }
+    
+    .empty-transactions i {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+    
+    .empty-transactions p {
+        font-size: 14px;
+        margin: 6px 0 4px 0;
+    }
+    
+    .empty-transactions small {
+        font-size: 11px;
+    }
+    
+    /* Account Actions Mobile */
+    .account-actions {
+        padding: 12px 15px;
+    }
+    
+    .logout-btn {
+        padding: 11px 18px;
+        font-size: 13px;
+        gap: 6px;
+    }
+    
+    .logout-btn i {
+        font-size: 14px;
+    }
+    
+    /* Success Modal Mobile */
+    .success-modal {
+        width: 90%;
+        max-width: 350px;
+        padding: 35px 25px 25px;
+    }
+    
+    .success-icon {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 15px;
+    }
+    
+    .success-icon i {
+        font-size: 38px;
+    }
+    
+    .success-modal h2 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+    
+    .success-modal p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .success-btn {
+        padding: 11px 35px;
+        font-size: 14px;
+    }
+}
+
+/* Extra Small Mobile (phones < 480px) */
+@media (max-width: 480px) {
+    .sidebar-header {
+        padding: 12px 15px;
+        min-height: 50px;
+    }
+    
+    .sidebar-header h3 {
+        font-size: 16px;
+    }
+    
+    .close-sidebar {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+    
+    /* Account Not Logged In - Extra Small */
+    .account-not-logged-in {
+        padding: 20px 15px;
+    }
+    
+    .account-login-prompt i {
+        font-size: 50px;
+    }
+    
+    .account-login-prompt h3 {
+        font-size: 17px;
+        margin: 10px 0 6px;
+    }
+    
+    .account-login-prompt p {
+        font-size: 11px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+    
+    .account-login-btn {
+        padding: 8px 18px;
+        font-size: 12px;
+        gap: 5px;
+    }
+    
+    .account-login-btn i {
+        font-size: 12px;
+    }
+    
+    /* Account Logged In - Extra Small */
+    .account-logged-in {
+        padding: 15px 12px 0;
+        height: calc(100vh - 50px);
+    }
+    
+    .account-info {
+        padding: 15px 12px;
+        margin-bottom: 12px;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    .user-details h3 {
+        font-size: 15px;
+    }
+    
+    .user-details p {
+        font-size: 11px;
+    }
+    
+    /* Sections Extra Small */
+    .account-sections {
+        padding: 0 12px;
+    }
+    
+    .section-header {
+        padding: 10px 0;
+        margin-bottom: 10px;
+    }
+    
+    .section-header i {
+        font-size: 16px;
+    }
+    
+    .section-header h4 {
+        font-size: 14px;
+    }
+    
+    /* Transaction Item Extra Small */
+    .transaction-list {
+        gap: 10px;
     }
     
     .transaction-item {
-        padding: 12px;
+        padding: 10px 8px;
+    }
+    
+    .transaction-header {
+        margin-bottom: 6px;
+        gap: 6px;
+    }
+    
+    .transaction-id {
+        font-size: 9px;
+    }
+    
+    .transaction-date {
+        font-size: 8px;
+    }
+    
+    .transaction-details {
+        gap: 6px;
+    }
+    
+    .transaction-items {
+        font-size: 10px;
+        line-height: 1.4;
+    }
+    
+    .transaction-total {
+        font-size: 13px;
+        padding-top: 5px;
+        gap: 6px;
+    }
+    
+    .transaction-status {
+        padding: 2px 5px;
+        font-size: 8px;
+    }
+    
+    /* Empty Transactions Extra Small */
+    .empty-transactions {
+        padding: 25px 12px;
+    }
+    
+    .empty-transactions i {
+        font-size: 35px;
+        margin-bottom: 8px;
+    }
+    
+    .empty-transactions p {
+        font-size: 13px;
+        margin: 5px 0 3px 0;
+    }
+    
+    .empty-transactions small {
+        font-size: 10px;
+    }
+    
+    /* Account Actions Extra Small */
+    .account-actions {
+        padding: 10px 12px;
+    }
+    
+    .logout-btn {
+        padding: 10px 16px;
+        font-size: 12px;
+        gap: 5px;
+    }
+    
+    .logout-btn i {
+        font-size: 13px;
+    }
+    
+    /* Success Modal Extra Small */
+    .success-modal {
+        width: 92%;
+        max-width: 320px;
+        padding: 30px 20px 20px;
+    }
+    
+    .success-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 12px;
+    }
+    
+    .success-icon i {
+        font-size: 32px;
+    }
+    
+    .success-modal h2 {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+    
+    .success-modal p {
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+    
+    .success-btn {
+        padding: 10px 30px;
+        font-size: 13px;
     }
 }
+
