@@ -28,11 +28,22 @@ const carouselItemWidth = 280; // Width + gap
 // ===== CATEGORY NAVIGATION =====
 // API Configuration
 // Dynamically determine API URL based on current host
-const API_BASE_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:8080' 
-    : window.location.origin.replace('-8000.', '-8080.');
+let API_BASE_URL;
+if (window.location.hostname === 'localhost') {
+    // Local development
+    API_BASE_URL = 'http://localhost:8080';
+} else if (window.location.hostname.includes('app.github.dev')) {
+    // GitHub Codespaces
+    API_BASE_URL = window.location.origin.replace('-8000.', '-8080.');
+} else {
+    // GitHub Pages or other - use relative path (won't work without backend)
+    API_BASE_URL = 'http://localhost:8080'; // Fallback
+    console.warn('⚠️ Running on GitHub Pages - API server not available!');
+    console.warn('⚠️ Please use GitHub Codespaces to test the full functionality');
+}
 
 console.log('🔗 API URL:', API_BASE_URL);
+console.log('🌐 Current hostname:', window.location.hostname);
 
 // Initialize after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -48,6 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch and display products from database
     async function loadProducts(categorySlug) {
+        // Check if we're on GitHub Pages (no API available)
+        if (!window.location.hostname.includes('app.github.dev') && window.location.hostname !== 'localhost') {
+            console.error('❌ API server not available on GitHub Pages');
+            alert('⚠️ This website requires a backend server!\n\nPlease open this project in GitHub Codespaces to see the full functionality with MySQL database.\n\nGitHub Pages only shows static content.');
+            return [];
+        }
+        
         try {
             const url = `${API_BASE_URL}/?action=products&category=${categorySlug}`;
             console.log('🔄 Loading products from:', url);
