@@ -145,14 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
             productCard.innerHTML = `
                 <div class="product-image">
                     <div class="image-placeholder">${product.name}</div>
-                    <div class="product-overlay">
-                        <button class="action-btn love-btn" title="Add to Wishlist">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                        <button class="action-btn quick-view-btn" title="Quick View">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
                 </div>
                 <div class="product-info">
                     <h3>${product.name}</h3>
@@ -160,8 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="price">₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                     <div class="product-actions">
                         ${product.stock_quantity > 0 ? 
-                            `<button class="buy-now-btn"><i class="fas fa-shopping-bag"></i> Buy Now</button>
-                             <button class="add-to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>` : 
+                            `<button class="buy-now-btn" title="Buy Now">
+                                <i class="fas fa-shopping-bag"></i>
+                             </button>
+                             <button class="add-to-cart" title="Add to Cart">
+                                <i class="fas fa-cart-plus"></i>
+                             </button>
+                             <button class="love-btn" title="Add to Wishlist">
+                                <i class="fas fa-heart"></i>
+                             </button>` : 
                             `<button class="out-of-stock" disabled>Out of Stock</button>`
                         }
                     </div>
