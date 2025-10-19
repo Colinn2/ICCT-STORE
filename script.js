@@ -169,6 +169,27 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(productCard);
         });
         
+        // Add event listeners for Add to Cart buttons
+        const addToCartButtons = container.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Change icon to checkmark
+                const icon = this.querySelector('i');
+                icon.className = 'fas fa-check';
+                
+                // Change button color to indicate success
+                this.style.background = '#4caf50';
+                this.title = 'Added to Cart';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    icon.className = 'fas fa-cart-plus';
+                    this.style.background = '';
+                    this.title = 'Add to Cart';
+                }, 2000);
+            });
+        });
+        
         console.log('✅ Rendered', products.length, 'products to container');
         console.log('✅ Final HTML length:', container.innerHTML.length);
         console.log('✅ Product cards in DOM:', container.querySelectorAll('.product-card').length);
