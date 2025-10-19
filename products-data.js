@@ -54,7 +54,7 @@ const STATIC_PRODUCTS = {
             description: "Official school patches",
             price: 30.00,
             stock_quantity: 150,
-            image_url: "image-removebg-preview (5).png",
+            image_url: "patches and pin icct.png",
             category_slug: "uniforms"
         },
         {
@@ -63,7 +63,7 @@ const STATIC_PRODUCTS = {
             description: "School logo pins",
             price: 25.00,
             stock_quantity: 180,
-            image_url: "image-removebg-preview (5).png",
+            image_url: "patches and pin icct.png",
             category_slug: "uniforms"
         },
         {

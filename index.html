@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICCT Essentials - Campus Store Hub</title>
-    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="style.css?v=5.1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Static product data fallback for GitHub Pages -->
@@ -20,7 +20,7 @@
         <div class="nav-content">
             <div class="nav-branding">
                 <img src="image-removebg-preview (5).png" alt="ICCT Logo" class="nav-logo">
-                <span class="nav-campus-name">ICCT Antipolo Campus</span>
+                <span class="nav-campus-name">AllThingsICCT-SHOP</span>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="active nav-link">Home</a></li>
@@ -114,66 +114,52 @@
         </div>
     </section>
 
-    <!-- Product Showcase -->
-    <section class="product-showcase">
+    <!-- Popular Uniforms - Banner Style -->
+    <section class="popular-uniforms-banners">
         <div class="container">
-            <div class="showcase-header">
-                <h2 class="section-title">Popular Uniforms</h2>
-                <div class="carousel-controls">
-                    <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+            <h2 class="section-title">Popular Uniforms</h2>
+            <div class="banners-grid">
+                <!-- Male Uniform Banner -->
+                <div class="uniform-banner">
+                    <img src="male model uniform.png" alt="Male School Uniform" class="banner-image">
+                    <div class="banner-overlay">
+                        <div class="banner-content">
+                            <span class="banner-category">ICCT ESSENTIALS</span>
+                            <h3 class="banner-title">Male School Uniform</h3>
+                            <p class="banner-price">₱1,200.00</p>
+                            <button class="banner-button add-to-cart-btn">
+                                <i class="fas fa-shopping-cart"></i> ADD TO CART
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="carousel">
-                <div class="carousel-track">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="pe icct.png" alt="PE Uniform">
-                        </div>
-                        <div class="product-info">
-                            <h3>ICCT PE Uniform</h3>
-                            <p class="price">₱850.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="boy unif.png" alt="School Uniform Male">
-                        </div>
-                        <div class="product-info">
-                            <h3>School Uniform (Male)</h3>
-                            <p class="price">₱1,200.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
+
+                <!-- Female Uniform Banner -->
+                <div class="uniform-banner">
+                    <img src="female model uniform.png" alt="Female School Uniform" class="banner-image">
+                    <div class="banner-overlay">
+                        <div class="banner-content">
+                            <span class="banner-category">ICCT ESSENTIALS</span>
+                            <h3 class="banner-title">Female School Uniform</h3>
+                            <p class="banner-price">₱1,200.00</p>
+                            <button class="banner-button add-to-cart-btn">
+                                <i class="fas fa-shopping-cart"></i> ADD TO CART
+                            </button>
                         </div>
                     </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="girl unif.png" alt="School Uniform Female">
-                        </div>
-                        <div class="product-info">
-                            <h3>School Uniform (Female)</h3>
-                            <p class="price">₱1,200.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="id lace.png" alt="ID Lace">
-                        </div>
-                        <div class="product-info">
-                            <h3>ID Lace & Holder</h3>
-                            <p class="price">₱50.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="icct nameplate.png" alt="Nameplate">
-                        </div>
-                        <div class="product-info">
-                            <h3>ICCT Nameplates</h3>
-                            <p class="price">₱80.00</p>
-                            <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- PE Uniform Banner -->
+                <div class="uniform-banner">
+                    <img src="pe uniform model.png" alt="PE Uniform" class="banner-image">
+                    <div class="banner-overlay">
+                        <div class="banner-content">
+                            <span class="banner-category">ACTIVE WEAR</span>
+                            <h3 class="banner-title">PE Uniform</h3>
+                            <p class="banner-price">₱850.00</p>
+                            <button class="banner-button add-to-cart-btn">
+                                <i class="fas fa-shopping-cart"></i> ADD TO CART
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -399,12 +385,12 @@
         <div class="container">
             <div class="split-layout">
                 <div class="image-section">
-                    <div class="image-placeholder">New PE Uniform Design</div>
+                    <img src="sportfest model.png" alt="Sportsfest Model" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div class="content-section">
-                    <h2>New ICCT PE Uniforms Now Available!</h2>
-                    <p>Our latest PE uniforms feature improved moisture-wicking fabric and a modern design that represents ICCT pride. Perfect for all your physical education activities and sports events.</p>
-                    <button class="cta-button">View Collection</button>
+                    <h2>ICCT Sportsfest Now Here!</h2>
+                    <p>Get ready for the biggest sports event of the year! Join us for an exciting day of athletic competition, team spirit, and ICCT pride. Official sportsfest merchandise and uniforms now available.</p>
+                    <button class="cta-button">Add to Cart</button>
                 </div>
             </div>
         </div>
