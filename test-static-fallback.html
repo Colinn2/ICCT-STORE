@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Fallback Test - ICCT Store</title>
+    <script src="products-data.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #0b5ad9;
+            text-align: center;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .product-card h3 {
+            color: #0b5ad9;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .product-card p {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .price {
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Static Product Data Fallback Test</h1>
+    
+    <div class="test-section">
+        <h2>📦 Data Load Status</h2>
+        <div id="loadStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>👕 Uniforms (21 products)</h2>
+        <div id="uniformsGrid" class="product-grid"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📄 Documents (7 products)</h2>
+        <div id="documentsGrid" class="product-grid"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>✏️ Supplies (5 products)</h2>
+        <div id="suppliesGrid" class="product-grid"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💰 Fees (13 products)</h2>
+        <div id="feesGrid" class="product-grid"></div>
+    </div>
+
+    <script>
+        // Test if STATIC_PRODUCTS loaded
+        const statusDiv = document.getElementById('loadStatus');
+        
+        if (typeof STATIC_PRODUCTS !== 'undefined') {
+            const counts = {
+                uniforms: STATIC_PRODUCTS.uniforms.length,
+                documents: STATIC_PRODUCTS.documents.length,
+                supplies: STATIC_PRODUCTS.supplies.length,
+                fees: STATIC_PRODUCTS.fees.length,
+                total: STATIC_PRODUCTS['all-products'].length
+            };
+            
+            statusDiv.innerHTML = `
+                <p class="success">✅ STATIC_PRODUCTS loaded successfully!</p>
+                <ul>
+                    <li>Uniforms: ${counts.uniforms} products</li>
+                    <li>Documents: ${counts.documents} products</li>
+                    <li>Supplies: ${counts.supplies} products</li>
+                    <li>Fees: ${counts.fees} products</li>
+                    <li><strong>Total: ${counts.total} products</strong></li>
+                </ul>
+            `;
+            
+            // Display products in each category
+            displayProducts('uniforms', 'uniformsGrid');
+            displayProducts('documents', 'documentsGrid');
+            displayProducts('supplies', 'suppliesGrid');
+            displayProducts('fees', 'feesGrid');
+            
+        } else {
+            statusDiv.innerHTML = `<p class="error">❌ STATIC_PRODUCTS not loaded!</p>`;
+        }
+        
+        function displayProducts(category, containerId) {
+            const container = document.getElementById(containerId);
+            const products = STATIC_PRODUCTS[category];
+            
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <p class="price">₱${product.price.toLocaleString()}</p>
+                    <p>Stock: ${product.stock_quantity}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>

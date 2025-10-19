@@ -60,51 +60,97 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('📋 Category Links found:', categoryLinks.length);
     console.log('📋 Category Sections found:', categorySections.length);
 
-    // Fetch and display products from database
+    // Fetch and display products from database (with static fallback)
     async function loadProducts(categorySlug) {
-        // Check if we're on GitHub Pages (no API available)
-        if (!window.location.hostname.includes('app.github.dev') && window.location.hostname !== 'localhost') {
-            console.error('❌ API server not available on GitHub Pages');
-            alert('⚠️ This website requires a backend server!\n\nPlease open this project in GitHub Codespaces to see the full functionality with MySQL database.\n\nGitHub Pages only shows static content.');
+        const isCodespaces = window.location.hostname.includes('app.github.dev');
+        const isLocalhost = window.location.hostname === 'localhost';
+        
+        // Try API first (if in development environment)
+        if (isCodespaces || isLocalhost) {
+            try {
+                const url = `${API_BASE_URL}/?action=products&category=${categorySlug}`;
+                console.log('🔄 Loading products from API:', url);
+                console.log('⏳ Fetching data...');
+                
+                const response = await fetch(url);
+                console.log('📡 Response received:', response.status, response.statusText);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    console.log('✅ API Response received');
+                    console.log('📊 Response data:', result);
+                    console.log('✅ Success?', result.success);
+                    console.log('📦 Products count:', result.data ? result.data.length : 0);
+                    
+                    if (result.success && result.data) {
+                        console.log('✅ Using MySQL database - Returning', result.data.length, 'products');
+                        if (result.data.length > 0) {
+                            console.log('📋 First product:', result.data[0].name);
+                        }
+                        return result.data;
+                    }
+                }
+                
+                console.warn('⚠️ API response not OK, falling back to static data');
+            } catch (error) {
+                console.warn('⚠️ API fetch failed:', error.message);
+                console.log('📦 Falling back to static product data...');
+            }
+        }
+        
+        // Fallback to static data (GitHub Pages or API unavailable)
+        console.log('📦 Using static product data for category:', categorySlug);
+        
+        // Check if STATIC_PRODUCTS is available
+        if (typeof STATIC_PRODUCTS === 'undefined') {
+            console.error('❌ Static product data not loaded!');
+            alert('⚠️ Product data not available. Please ensure products-data.js is loaded.');
             return [];
         }
         
-        try {
-            const url = `${API_BASE_URL}/?action=products&category=${categorySlug}`;
-            console.log('🔄 Loading products from:', url);
-            console.log('⏳ Fetching data...');
-            
-            const response = await fetch(url);
-            console.log('📡 Response received:', response.status, response.statusText);
-            console.log('📡 Response OK?', response.ok);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            
-            const result = await response.json();
-            
-            console.log('✅ API Response received');
-            console.log('📊 Response data:', result);
-            console.log('✅ Success?', result.success);
-            console.log('📦 Products count:', result.data ? result.data.length : 0);
-            
-            if (result.success && result.data) {
-                console.log('✅ Returning', result.data.length, 'products');
-                if (result.data.length > 0) {
-                    console.log('📋 First product:', result.data[0].name);
-                }
-                return result.data;
-            } else {
-                console.error('❌ Error fetching products:', result.error);
-                alert(`API Error: ${result.error || 'Unknown error'}`);
-                return [];
-            }
-        } catch (error) {
-            console.error('❌ Error loading products:', error);
-            alert(`Failed to load products: ${error.message}`);
-            return [];
+        const products = STATIC_PRODUCTS[categorySlug] || [];
+        console.log('✅ Loaded', products.length, 'products from static data');
+        
+        // Show info banner if on GitHub Pages
+        if (!isCodespaces && !isLocalhost) {
+            showStaticModeNotice();
         }
+        
+        return products;
+    }
+    
+    // Show notice when using static data
+    function showStaticModeNotice() {
+        // Only show once per session
+        if (sessionStorage.getItem('staticModeNoticeShown')) {
+            return;
+        }
+        
+        const notice = document.createElement('div');
+        notice.className = 'static-mode-notice';
+        notice.innerHTML = `
+            <div class="notice-content">
+                <span class="notice-icon">ℹ️</span>
+                <span class="notice-text">
+                    You're viewing the static demo. 
+                    <a href="https://github.com/Colinn2/ICCT-STORE#-how-to-run-github-codespaces" target="_blank">
+                        Open in Codespaces
+                    </a> for full database features.
+                </span>
+                <button class="notice-close" onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+        `;
+        document.body.appendChild(notice);
+        sessionStorage.setItem('staticModeNoticeShown', 'true');
+        
+        // Auto-hide after 10 seconds
+        setTimeout(() => {
+            if (notice.parentElement) {
+                notice.style.opacity = '0';
+                setTimeout(() => notice.remove(), 300);
+            }
+        }, 10000);
     }
 
     // Render products in the grid
@@ -144,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             productCard.className = 'product-card';
             productCard.innerHTML = `
                 <div class="product-image">
-                    <div class="image-placeholder">${product.name}</div>
+                    ${product.image_url ? `<img src="${product.image_url}" alt="${product.name}">` : `<div class="image-placeholder">${product.name}</div>`}
                 </div>
                 <div class="product-info">
                     <h3>${product.name}</h3>
@@ -201,14 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('🎯 ===== SHOW CATEGORY START =====');
         console.log('🎯 Category ID:', categoryId);
         
-        // Hide all sections
+        // Hide all OTHER category sections (not the one we're showing)
         categorySections.forEach(section => {
-            section.classList.add('hidden');
-            section.style.display = 'none';
+            if (section.id !== categoryId) {
+                section.classList.add('hidden');
+                section.style.display = 'none';
+            }
         });
         
-        if (productShowcase) productShowcase.style.display = 'none';
-        if (backToSchoolSection) backToSchoolSection.style.display = 'none';
+        // Keep homepage sections visible (Popular Uniforms, Back to School)
+        if (productShowcase) productShowcase.style.display = 'block';
+        if (backToSchoolSection) backToSchoolSection.style.display = 'block';
         
         // Show selected category
         const selectedSection = document.getElementById(categoryId);
@@ -326,6 +375,21 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Payment link clicked!');
             showCategory('payment');
         });
+    }
+
+    // Auto-open all-products on static/demo environments so users see items immediately
+    try {
+        const isCodespaces = window.location.hostname.includes('app.github.dev');
+        const isLocalhost = window.location.hostname === 'localhost';
+        if (!isCodespaces && !isLocalhost) {
+            console.log('🔎 Detected static/demo environment — auto-loading all-products for preview');
+            // Small delay to ensure DOM & styles are applied
+            setTimeout(() => {
+                showCategory('all-products');
+            }, 250);
+        }
+    } catch (e) {
+        console.warn('Auto-load skipped (error):', e && e.message);
     }
 });
 
