@@ -377,6 +377,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Hero slider navigation buttons
+    document.querySelectorAll('.hero-shop-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const category = button.dataset.category;
+            if (category) {
+                console.log('🎯 Hero button clicked - navigating to:', category);
+                showCategory(category);
+            }
+        });
+    });
+
     // Auto-open all-products on static/demo environments so users see items immediately
     try {
         const isCodespaces = window.location.hostname.includes('app.github.dev');
@@ -492,20 +504,98 @@ document.addEventListener('click', (e) => {
             button.style.background = '';
         }, 1500);
     }
+    
+    // Handle banner "Add to Cart" buttons
+    if (e.target.closest('.add-to-cart-btn')) {
+        const button = e.target.closest('.add-to-cart-btn');
+        const banner = button.closest('.uniform-banner');
+        const productName = banner.querySelector('.banner-title').textContent;
+        const priceText = banner.querySelector('.banner-price').textContent;
+        const productPrice = parseFloat(priceText.replace('₱', '').replace(',', ''));
+        
+        addToCart(productName, productPrice);
+        
+        // Visual feedback
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i> Added!';
+        button.style.background = '#28a745';
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.background = '';
+        }, 1500);
+    }
+    
+    // Handle sportsfest "Add to Cart" button
+    if (e.target.closest('.sportsfest-add-to-cart')) {
+        const button = e.target.closest('.sportsfest-add-to-cart');
+        const productName = button.dataset.product;
+        const productPrice = parseFloat(button.dataset.price);
+        
+        addToCart(productName, productPrice);
+        
+        // Visual feedback
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i> Added!';
+        button.style.background = '#28a745';
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.background = '';
+        }, 1500);
+    }
 });
 
 // Add to Cart Function
-function addToCart(name, price) {
-    const existingItem = cart.find(item => item.name === name);
+function addToCart(name, price, size = null, installments = null) {
+    // Check if item needs size selection (uniforms, jackets, hoodies, shirts)
+    const needsSize = name.toLowerCase().includes('uniform') || 
+                      name.toLowerCase().includes('jacket') || 
+                      name.toLowerCase().includes('hoodie') || 
+                      name.toLowerCase().includes('shirt') ||
+                      name.toLowerCase().includes('t-shirt');
+    
+    // Check if item needs installment plan (Tuition Installment)
+    const needsInstallment = name.toLowerCase().includes('tuition installment');
+    
+    // If needs size but no size provided, default to 'M'
+    if (needsSize && !size) {
+        size = 'M';
+    }
+    
+    // If needs installment but no installment provided, default to 1
+    if (needsInstallment && !installments) {
+        installments = 1;
+    }
+    
+    // Create unique identifier with size/installment if applicable
+    let itemKey = name;
+    if (needsSize && size) itemKey += `|size:${size}`;
+    if (needsInstallment && installments) itemKey += `|inst:${installments}`;
+    
+    const existingItem = cart.find(item => {
+        let existingKey = item.name;
+        if (item.size) existingKey += `|size:${item.size}`;
+        if (item.installments) existingKey += `|inst:${item.installments}`;
+        return existingKey === itemKey;
+    });
     
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({
+        const newItem = {
             name,
             price,
             quantity: 1
-        });
+        };
+        if (needsSize) {
+            newItem.size = size;
+        }
+        if (needsInstallment) {
+            newItem.installments = installments;
+            // Calculate installment price: 10k for 1 installment, up to 50k for 10 installments
+            newItem.basePrice = price; // Store original price
+            newItem.price = 10000 + ((installments - 1) * (40000 / 9)); // Linear scale from 10k to 50k
+        }
+        cart.push(newItem);
     }
     
     updateCart();
@@ -527,17 +617,49 @@ function updateCart() {
         document.querySelector('.empty-cart').style.display = 'none';
         document.querySelector('.cart-footer').style.display = 'block';
         
-        cart.forEach(item => {
+        cart.forEach((item, index) => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
+            
+            // Check if item has size option
+            const hasSizeOption = item.size !== undefined;
+            const sizeSelector = hasSizeOption ? `
+                <div class="size-selector-cart">
+                    <label for="size-${index}">Size:</label>
+                    <select id="size-${index}" class="cart-size-select" data-index="${index}">
+                        <option value="S" ${item.size === 'S' ? 'selected' : ''}>Small</option>
+                        <option value="M" ${item.size === 'M' ? 'selected' : ''}>Medium</option>
+                        <option value="L" ${item.size === 'L' ? 'selected' : ''}>Large</option>
+                        <option value="XL" ${item.size === 'XL' ? 'selected' : ''}>XL</option>
+                        <option value="2XL" ${item.size === '2XL' ? 'selected' : ''}>2XL</option>
+                    </select>
+                </div>
+            ` : '';
+            
+            // Check if item has installment option
+            const hasInstallmentOption = item.installments !== undefined;
+            const installmentSelector = hasInstallmentOption ? `
+                <div class="installment-selector-cart">
+                    <label for="installment-${index}">Installments:</label>
+                    <select id="installment-${index}" class="cart-installment-select" data-index="${index}">
+                        ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => 
+                            `<option value="${num}" ${item.installments === num ? 'selected' : ''}>${num} ${num === 1 ? 'payment' : 'payments'}</option>`
+                        ).join('')}
+                    </select>
+                    <p class="installment-info">Total: ₱${item.price.toFixed(2)} (₱${(item.price / item.installments).toFixed(2)}/payment)</p>
+                </div>
+            ` : '';
+            
             cartItem.innerHTML = `
                 <div class="cart-item-details">
                     <h4>${item.name}</h4>
+                    ${sizeSelector}
+                    ${installmentSelector}
                     <p>₱${item.price.toFixed(2)} x ${item.quantity}</p>
                 </div>
                 <div class="cart-item-total">
                     <p>₱${(item.price * item.quantity).toFixed(2)}</p>
-                    <button class="remove-item" data-name="${item.name}">
+                    <button class="remove-item" data-index="${index}">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -548,8 +670,30 @@ function updateCart() {
         // Add event listeners to remove buttons
         document.querySelectorAll('.remove-item').forEach(button => {
             button.addEventListener('click', (e) => {
-                const itemName = e.target.closest('.remove-item').dataset.name;
-                removeFromCart(itemName);
+                const itemIndex = parseInt(e.target.closest('.remove-item').dataset.index);
+                removeFromCart(itemIndex);
+            });
+        });
+        
+        // Add event listeners to size selectors
+        document.querySelectorAll('.cart-size-select').forEach(select => {
+            select.addEventListener('change', (e) => {
+                const itemIndex = parseInt(e.target.dataset.index);
+                const newSize = e.target.value;
+                cart[itemIndex].size = newSize;
+                updateCart();
+            });
+        });
+        
+        // Add event listeners to installment selectors
+        document.querySelectorAll('.cart-installment-select').forEach(select => {
+            select.addEventListener('change', (e) => {
+                const itemIndex = parseInt(e.target.dataset.index);
+                const newInstallments = parseInt(e.target.value);
+                cart[itemIndex].installments = newInstallments;
+                // Recalculate price: 10k for 1 installment, up to 50k for 10 installments
+                cart[itemIndex].price = 10000 + ((newInstallments - 1) * (40000 / 9));
+                updateCart();
             });
         });
     }
@@ -560,8 +704,8 @@ function updateCart() {
 }
 
 // Remove from Cart Function
-function removeFromCart(name) {
-    cart = cart.filter(item => item.name !== name);
+function removeFromCart(index) {
+    cart.splice(index, 1);
     updateCart();
 }
 

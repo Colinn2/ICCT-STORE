@@ -18,7 +18,7 @@ const STATIC_PRODUCTS = {
             description: "Complete male school uniform set",
             price: 1200.00,
             stock_quantity: 50,
-            image_url: "boy unif.png",
+            image_url: "images/boy unif.png",
             category_slug: "uniforms"
         },
         {
@@ -27,7 +27,7 @@ const STATIC_PRODUCTS = {
             description: "Complete female school uniform set",
             price: 1200.00,
             stock_quantity: 50,
-            image_url: "girl unif.png",
+            image_url: "images/girl unif.png",
             category_slug: "uniforms"
         },
         {
@@ -36,7 +36,7 @@ const STATIC_PRODUCTS = {
             description: "Official PE uniform with ICCT branding",
             price: 850.00,
             stock_quantity: 100,
-            image_url: "pe icct.png",
+            image_url: "images/pe icct.png",
             category_slug: "uniforms"
         },
         {
@@ -45,7 +45,7 @@ const STATIC_PRODUCTS = {
             description: "ICCT branded ID lace with holder",
             price: 50.00,
             stock_quantity: 200,
-            image_url: "id lace.png",
+            image_url: "images/id lace.png",
             category_slug: "uniforms"
         },
         {
@@ -54,7 +54,7 @@ const STATIC_PRODUCTS = {
             description: "Official school patches",
             price: 30.00,
             stock_quantity: 150,
-            image_url: "patches and pin icct.png",
+            image_url: "images/patches and pin icct.png",
             category_slug: "uniforms"
         },
         {
@@ -63,7 +63,7 @@ const STATIC_PRODUCTS = {
             description: "School logo pins",
             price: 25.00,
             stock_quantity: 180,
-            image_url: "patches and pin icct.png",
+            image_url: "images/patches and pin icct.png",
             category_slug: "uniforms"
         },
         {
@@ -72,7 +72,7 @@ const STATIC_PRODUCTS = {
             description: "Customizable student nameplates",
             price: 80.00,
             stock_quantity: 100,
-            image_url: "icct nameplate.png",
+            image_url: "images/icct nameplate.png",
             category_slug: "uniforms"
         }
     ],
@@ -84,7 +84,7 @@ const STATIC_PRODUCTS = {
             description: "Official good moral certificate",
             price: 100.00,
             stock_quantity: 999,
-            image_url: "good-moral.jpg",
+            image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
@@ -93,7 +93,7 @@ const STATIC_PRODUCTS = {
             description: "Official enrollment certificate",
             price: 80.00,
             stock_quantity: 999,
-            image_url: "cert-enrollment.jpg",
+            image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
@@ -102,7 +102,7 @@ const STATIC_PRODUCTS = {
             description: "Official transcript of records",
             price: 200.00,
             stock_quantity: 999,
-            image_url: "tor.jpg",
+            image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
@@ -111,7 +111,7 @@ const STATIC_PRODUCTS = {
             description: "Transfer credentials and honorable dismissal",
             price: 150.00,
             stock_quantity: 999,
-            image_url: "honorable-dismissal.jpg",
+            image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
@@ -120,7 +120,7 @@ const STATIC_PRODUCTS = {
             description: "Official Form 137 document",
             price: 120.00,
             stock_quantity: 999,
-            image_url: "form-137.jpg",
+            image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
@@ -129,7 +129,7 @@ const STATIC_PRODUCTS = {
             description: "Official Form 138 document",
             price: 120.00,
             stock_quantity: 999,
-            image_url: "form-138.jpg",
+            image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
@@ -138,7 +138,7 @@ const STATIC_PRODUCTS = {
             description: "Student ID card replacement",
             price: 150.00,
             stock_quantity: 999,
-            image_url: "id-replacement.jpg",
+            image_url: "images/icct documents.png",
             category_slug: "documents"
         }
     ],
@@ -150,7 +150,7 @@ const STATIC_PRODUCTS = {
             description: "School-branded jacket",
             price: 1500.00,
             stock_quantity: 30,
-            image_url: "jacket.jpg",
+            image_url: "images/icct jacket.png",
             category_slug: "supplies"
         },
         {
@@ -159,7 +159,7 @@ const STATIC_PRODUCTS = {
             description: "School-branded hoodie",
             price: 1100.00,
             stock_quantity: 40,
-            image_url: "hoodie.jpg",
+            image_url: "images/icct hoodie .png",
             category_slug: "supplies"
         },
         {
@@ -168,7 +168,7 @@ const STATIC_PRODUCTS = {
             description: "Durable school bag with ICCT logo",
             price: 800.00,
             stock_quantity: 60,
-            image_url: "school-bag.jpg",
+            image_url: "images/icct bag.png",
             category_slug: "supplies"
         },
         {
@@ -177,7 +177,7 @@ const STATIC_PRODUCTS = {
             description: "Eco-friendly tote bag with ICCT branding",
             price: 250.00,
             stock_quantity: 80,
-            image_url: "tote-bag.jpg",
+            image_url: "images/icct totebag.png",
             category_slug: "supplies"
         },
         {
@@ -186,7 +186,7 @@ const STATIC_PRODUCTS = {
             description: "School branded cap",
             price: 200.00,
             stock_quantity: 70,
-            image_url: "cap.jpg",
+            image_url: "images/icct cap.png",
             category_slug: "supplies"
         },
         {
@@ -195,7 +195,7 @@ const STATIC_PRODUCTS = {
             description: "Winter beanie with ICCT logo",
             price: 180.00,
             stock_quantity: 50,
-            image_url: "beanie.jpg",
+            image_url: "images/icct beanie.png",
             category_slug: "supplies"
         },
         {
@@ -204,7 +204,7 @@ const STATIC_PRODUCTS = {
             description: "Department-specific event shirts",
             price: 350.00,
             stock_quantity: 120,
-            image_url: "dept-shirt.jpg",
+            image_url: "images/department tshirt.png",
             category_slug: "supplies"
         },
         {
@@ -213,7 +213,7 @@ const STATIC_PRODUCTS = {
             description: "Special event commemorative shirts",
             price: 350.00,
             stock_quantity: 100,
-            image_url: "event-shirt.jpg",
+            image_url: "images/icct sportfest tshirt.png",
             category_slug: "supplies"
         },
         {
@@ -222,7 +222,7 @@ const STATIC_PRODUCTS = {
             description: "School logo keychain",
             price: 40.00,
             stock_quantity: 200,
-            image_url: "keychain.jpg",
+            image_url: "images/icct keychain.png",
             category_slug: "supplies"
         },
         {
@@ -231,7 +231,7 @@ const STATIC_PRODUCTS = {
             description: "Official school lanyard",
             price: 60.00,
             stock_quantity: 150,
-            image_url: "lanyard.jpg",
+            image_url: "images/id lace.png",
             category_slug: "supplies"
         },
         {
@@ -240,7 +240,7 @@ const STATIC_PRODUCTS = {
             description: "School logo sticker pack",
             price: 20.00,
             stock_quantity: 300,
-            image_url: "stickers.jpg",
+            image_url: "images/patches and pin icct.png",
             category_slug: "supplies"
         },
         {
@@ -249,7 +249,7 @@ const STATIC_PRODUCTS = {
             description: "Coffee mug with ICCT logo",
             price: 180.00,
             stock_quantity: 80,
-            image_url: "mug.jpg",
+            image_url: "images/icct mug.png",
             category_slug: "supplies"
         },
         {
@@ -258,7 +258,7 @@ const STATIC_PRODUCTS = {
             description: "Insulated tumbler with ICCT branding",
             price: 350.00,
             stock_quantity: 60,
-            image_url: "tumbler.jpg",
+            image_url: "images/icct thumbler.png",
             category_slug: "supplies"
         },
         {
@@ -267,7 +267,7 @@ const STATIC_PRODUCTS = {
             description: "ICCT branded phone accessories",
             price: 250.00,
             stock_quantity: 50,
-            image_url: "phone-case.jpg",
+            image_url: "images/icct phone case.png",
             category_slug: "supplies"
         },
         {
@@ -276,7 +276,7 @@ const STATIC_PRODUCTS = {
             description: "BPA-free reusable water bottle",
             price: 150.00,
             stock_quantity: 100,
-            image_url: "water-bottle.jpg",
+            image_url: "images/icct bottle water.png",
             category_slug: "supplies"
         },
         {
@@ -285,7 +285,7 @@ const STATIC_PRODUCTS = {
             description: "Disposable face masks",
             price: 50.00,
             stock_quantity: 200,
-            image_url: "face-mask.jpg",
+            image_url: "images/icct facemask.png",
             category_slug: "supplies"
         },
         {
@@ -294,7 +294,7 @@ const STATIC_PRODUCTS = {
             description: "Alcohol-based hand sanitizer",
             price: 40.00,
             stock_quantity: 150,
-            image_url: "sanitizer.jpg",
+            image_url: "images/icct hand sanitizer.png",
             category_slug: "supplies"
         },
         {
@@ -303,7 +303,7 @@ const STATIC_PRODUCTS = {
             description: "Compact first-aid kit with essentials",
             price: 180.00,
             stock_quantity: 80,
-            image_url: "first-aid.jpg",
+            image_url: "images/icct 1st aid kit.png",
             category_slug: "supplies"
         },
         {
@@ -312,7 +312,7 @@ const STATIC_PRODUCTS = {
             description: "Assorted adhesive bandages",
             price: 30.00,
             stock_quantity: 120,
-            image_url: "bandaid.jpg",
+            image_url: "images/icct band aid.png",
             category_slug: "supplies"
         }
     ],
@@ -324,16 +324,16 @@ const STATIC_PRODUCTS = {
             description: "Full semester tuition payment",
             price: 50000.00,
             stock_quantity: 999,
-            image_url: "tuition.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
             id: 35,
-            name: "Tuition Payment (Partial)",
-            description: "Partial tuition payment",
-            price: 25000.00,
+            name: "Tuition Installment",
+            description: "Installment payment for tuition",
+            price: 10000.00,
             stock_quantity: 999,
-            image_url: "tuition-partial.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -342,7 +342,7 @@ const STATIC_PRODUCTS = {
             description: "Initial enrollment down payment",
             price: 10000.00,
             stock_quantity: 999,
-            image_url: "enrollment-fee.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -351,16 +351,7 @@ const STATIC_PRODUCTS = {
             description: "Miscellaneous school fees",
             price: 3000.00,
             stock_quantity: 999,
-            image_url: "misc-fee.jpg",
-            category_slug: "fees"
-        },
-        {
-            id: 38,
-            name: "Laboratory Fee",
-            description: "Laboratory usage and materials fee",
-            price: 2500.00,
-            stock_quantity: 999,
-            image_url: "lab-fee.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -369,16 +360,7 @@ const STATIC_PRODUCTS = {
             description: "Library access and resources fee",
             price: 1500.00,
             stock_quantity: 999,
-            image_url: "library-fee.jpg",
-            category_slug: "fees"
-        },
-        {
-            id: 40,
-            name: "Internet / Computer Lab Fee",
-            description: "Computer lab and internet access fee",
-            price: 2000.00,
-            stock_quantity: 999,
-            image_url: "computer-fee.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -387,7 +369,7 @@ const STATIC_PRODUCTS = {
             description: "Graduation ceremony and materials fee",
             price: 5000.00,
             stock_quantity: 999,
-            image_url: "graduation-fee.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -396,7 +378,7 @@ const STATIC_PRODUCTS = {
             description: "Student organization membership fee",
             price: 500.00,
             stock_quantity: 999,
-            image_url: "org-fee.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -405,7 +387,7 @@ const STATIC_PRODUCTS = {
             description: "Document printing service",
             price: 5.00,
             stock_quantity: 999,
-            image_url: "printing.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -414,7 +396,7 @@ const STATIC_PRODUCTS = {
             description: "Scanning and photocopying service",
             price: 10.00,
             stock_quantity: 999,
-            image_url: "photocopy.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
@@ -423,16 +405,7 @@ const STATIC_PRODUCTS = {
             description: "Semester locker rental",
             price: 800.00,
             stock_quantity: 999,
-            image_url: "locker-fee.jpg",
-            category_slug: "fees"
-        },
-        {
-            id: 46,
-            name: "Lost & Found Claim Fee",
-            description: "Processing fee for lost and found items",
-            price: 50.00,
-            stock_quantity: 999,
-            image_url: "lost-found.jpg",
+            image_url: "images/icct fees.png",
             category_slug: "fees"
         }
     ],
