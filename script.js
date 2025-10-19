@@ -7,21 +7,46 @@ const navMenu = document.querySelector('.nav-menu');
 const cartToggle = document.getElementById('cartToggle');
 const closeCart = document.getElementById('closeCart');
 const cartSidebar = document.getElementById('cartSidebar');
+const wishlistToggle = document.getElementById('wishlistToggle');
+const closeWishlist = document.getElementById('closeWishlist');
+const wishlistSidebar = document.getElementById('wishlistSidebar');
 const overlay = document.getElementById('overlay');
 const carouselTrack = document.querySelector('.carousel-track');
 const prevBtn = document.querySelector('.carousel-btn.prev');
 const nextBtn = document.querySelector('.carousel-btn.next');
 const addToCartButtons = document.querySelectorAll('.add-to-cart');
 const cartCount = document.querySelector('.cart-count');
+const wishlistCount = document.querySelector('.wishlist-count');
 const cartItems = document.querySelector('.cart-items');
+const wishlistItems = document.querySelector('.wishlist-items');
 const cartTotal = document.querySelector('.cart-total span');
 const checkoutBtn = document.querySelector('.checkout-btn');
 const continueShopping = document.querySelector('.continue-shopping');
 const heroIndicators = document.querySelectorAll('.indicator');
+const loginModal = document.getElementById('loginModal');
+const closeLoginModal = document.getElementById('closeLoginModal');
+const loginForm = document.getElementById('loginForm');
+const togglePassword = document.getElementById('togglePassword');
+const profileToggle = document.getElementById('profileToggle');
+const accountSidebar = document.getElementById('accountSidebar');
+const closeAccount = document.getElementById('closeAccount');
+const accountLoginBtn = document.getElementById('accountLoginBtn');
+const accountNotLoggedIn = document.getElementById('accountNotLoggedIn');
+const accountLoggedIn = document.getElementById('accountLoggedIn');
+const logoutBtn = document.getElementById('logoutBtn');
+const transactionList = document.getElementById('transactionList');
+const transactionCount = document.getElementById('transactionCount');
+const accountUserName = document.getElementById('accountUserName');
+const accountUserEmail = document.getElementById('accountUserEmail');
+const accountStudentNumber = document.getElementById('accountStudentNumber');
 
 // Cart State
 let cart = [];
+let wishlist = [];
 let currentSlide = 0;
+let isLoggedIn = false;
+let currentUser = null;
+let transactionHistory = [];
 let carouselPosition = 0;
 const carouselItemWidth = 280; // Width + gap
 
@@ -236,6 +261,42 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         
+        // Add event listeners for Love/Wishlist buttons
+        const loveButtons = container.querySelectorAll('.love-btn');
+        loveButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productCard = this.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('₱', '').replace(',', ''));
+                
+                // Toggle - returns true if added, false if removed
+                const added = addToWishlist(productName, productPrice);
+                
+                const icon = this.querySelector('i');
+                
+                if (added) {
+                    // Added to wishlist - show filled red heart
+                    icon.className = 'fas fa-heart';
+                    icon.style.color = '#ff4757';
+                    this.style.background = '#ff4757';
+                    this.title = 'Remove from Favorites';
+                    
+                    // Open wishlist sidebar
+                    setTimeout(() => {
+                        wishlistSidebar.classList.add('active');
+                        overlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }, 300);
+                } else {
+                    // Removed from wishlist - show outline heart
+                    icon.className = 'far fa-heart';
+                    icon.style.color = '';
+                    this.style.background = '';
+                    this.title = 'Add to Wishlist';
+                }
+            });
+        });
+        
         console.log('✅ Rendered', products.length, 'products to container');
         console.log('✅ Final HTML length:', container.innerHTML.length);
         console.log('✅ Product cards in DOM:', container.querySelectorAll('.product-card').length);
@@ -378,13 +439,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Hero slider navigation buttons
-    document.querySelectorAll('.hero-shop-btn').forEach(button => {
+    console.log('🎯 Setting up hero slider buttons...');
+    const heroButtons = document.querySelectorAll('.hero-shop-btn');
+    console.log('🎯 Found hero buttons:', heroButtons.length);
+    
+    heroButtons.forEach((button, index) => {
+        console.log(`🎯 Button ${index}: category="${button.dataset.category}"`);
+        
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            const category = button.dataset.category;
+            e.stopPropagation();
+            
+            // Get category from the button that was actually clicked
+            const category = e.currentTarget.getAttribute('data-category');
+            console.log('🎯 Hero button clicked! Category:', category);
+            
             if (category) {
-                console.log('🎯 Hero button clicked - navigating to:', category);
+                console.log('🎯 Calling showCategory with:', category);
                 showCategory(category);
+            } else {
+                console.error('❌ No category found on button!');
             }
         });
     });
@@ -453,7 +527,14 @@ if (closeCart && cartSidebar && overlay) {
 
 if (overlay && cartSidebar) {
     overlay.addEventListener('click', () => {
+        // Close login modal if open
+        if (loginModal && loginModal.classList.contains('active')) {
+            loginModal.classList.remove('active');
+        }
+        // Close cart, wishlist, and account sidebar
         cartSidebar.classList.remove('active');
+        wishlistSidebar.classList.remove('active');
+        accountSidebar.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
     });
@@ -463,6 +544,77 @@ if (overlay && cartSidebar) {
 if (continueShopping && cartSidebar && overlay) {
     continueShopping.addEventListener('click', () => {
         cartSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
+
+// Toggle Wishlist Sidebar
+if (wishlistToggle && wishlistSidebar && overlay) {
+    wishlistToggle.addEventListener('click', () => {
+        wishlistSidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+}
+
+if (closeWishlist && wishlistSidebar && overlay) {
+    closeWishlist.addEventListener('click', () => {
+        wishlistSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
+
+// ===== ACCOUNT SIDEBAR =====
+// Toggle Account Sidebar
+if (profileToggle && accountSidebar && overlay) {
+    profileToggle.addEventListener('click', () => {
+        accountSidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateAccountDisplay();
+    });
+}
+
+// Close Account Sidebar
+if (closeAccount && accountSidebar && overlay) {
+    closeAccount.addEventListener('click', () => {
+        accountSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
+
+// Account Login Button (opens login modal)
+if (accountLoginBtn && loginModal) {
+    accountLoginBtn.addEventListener('click', () => {
+        accountSidebar.classList.remove('active');
+        openLoginModal();
+    });
+}
+
+// Logout Button
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to sign out?')) {
+            isLoggedIn = false;
+            currentUser = null;
+            transactionHistory = [];
+            updateAccountDisplay();
+            accountSidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            alert('You have been signed out successfully.');
+        }
+    });
+}
+
+// Continue Shopping Button for Wishlist
+const continueShoppingWishlist = document.querySelector('.continue-shopping-wishlist');
+if (continueShoppingWishlist && wishlistSidebar && overlay) {
+    continueShoppingWishlist.addEventListener('click', () => {
+        wishlistSidebar.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
     });
@@ -709,20 +861,363 @@ function removeFromCart(index) {
     updateCart();
 }
 
+// ===== WISHLIST FUNCTIONS =====
+
+// Add to Wishlist Function
+function addToWishlist(name, price, image = null) {
+    const existingItemIndex = wishlist.findIndex(item => item.name === name);
+    
+    if (existingItemIndex === -1) {
+        // Not in wishlist - add it
+        wishlist.push({
+            name,
+            price,
+            image
+        });
+        updateWishlist();
+        return true; // Added
+    } else {
+        // Already in wishlist - remove it (toggle)
+        wishlist.splice(existingItemIndex, 1);
+        updateWishlist();
+        return false; // Removed
+    }
+}
+
+// Remove from Wishlist Function
+function removeFromWishlist(index) {
+    wishlist.splice(index, 1);
+    updateWishlist();
+}
+
+// Update Wishlist Display
+function updateWishlist() {
+    if (!wishlistItems || !wishlistCount) return;
+    
+    wishlistCount.textContent = wishlist.length;
+    wishlistItems.innerHTML = '';
+    
+    const emptyWishlist = wishlistSidebar.querySelector('.empty-cart');
+    
+    if (wishlist.length === 0) {
+        emptyWishlist.style.display = 'flex';
+        wishlistItems.style.display = 'none';
+        return;
+    }
+    
+    emptyWishlist.style.display = 'none';
+    wishlistItems.style.display = 'block';
+    
+    wishlist.forEach((item, index) => {
+        const wishlistItem = document.createElement('div');
+        wishlistItem.className = 'cart-item';
+        
+        wishlistItem.innerHTML = `
+            <div class="cart-item-details">
+                <h4>${item.name}</h4>
+                <p>₱${item.price.toFixed(2)}</p>
+            </div>
+            <div class="cart-item-actions">
+                <button class="move-to-cart-btn" data-index="${index}" title="Move to Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                </button>
+                <button class="remove-wishlist-item" data-index="${index}" title="Remove">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        wishlistItems.appendChild(wishlistItem);
+    });
+    
+    // Add event listeners to move to cart buttons
+    document.querySelectorAll('.move-to-cart-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const itemIndex = parseInt(e.target.closest('.move-to-cart-btn').dataset.index);
+            const item = wishlist[itemIndex];
+            addToCart(item.name, item.price);
+            removeFromWishlist(itemIndex);
+            
+            // Update all love buttons for this product
+            updateLoveButtonsForProduct(item.name);
+            
+            // Visual feedback
+            e.target.closest('button').innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                updateWishlist();
+            }, 500);
+        });
+    });
+    
+    // Add event listeners to remove buttons
+    document.querySelectorAll('.remove-wishlist-item').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const itemIndex = parseInt(e.target.closest('.remove-wishlist-item').dataset.index);
+            const item = wishlist[itemIndex];
+            removeFromWishlist(itemIndex);
+            
+            // Update all love buttons for this product to show it's removed
+            updateLoveButtonsForProduct(item.name);
+        });
+    });
+}
+
+// Helper function to update love button states for a specific product
+function updateLoveButtonsForProduct(productName) {
+    const allLoveButtons = document.querySelectorAll('.love-btn');
+    const isInWishlist = wishlist.some(item => item.name === productName);
+    
+    allLoveButtons.forEach(button => {
+        const productCard = button.closest('.product-card');
+        if (productCard) {
+            const cardProductName = productCard.querySelector('h3').textContent;
+            if (cardProductName === productName) {
+                const icon = button.querySelector('i');
+                if (isInWishlist) {
+                    // In wishlist - show filled red heart
+                    icon.className = 'fas fa-heart';
+                    icon.style.color = '#ff4757';
+                    button.style.background = '#ff4757';
+                    button.title = 'Remove from Favorites';
+                } else {
+                    // Not in wishlist - show outline heart
+                    icon.className = 'far fa-heart';
+                    icon.style.color = '';
+                    button.style.background = '';
+                    button.title = 'Add to Wishlist';
+                }
+            }
+        }
+    });
+}
+
+// Move All to Cart Button
+const moveAllToCartBtn = document.querySelector('.move-all-to-cart-btn');
+if (moveAllToCartBtn) {
+    moveAllToCartBtn.addEventListener('click', () => {
+        if (wishlist.length > 0) {
+            // Store product names before clearing wishlist
+            const productNames = wishlist.map(item => item.name);
+            
+            wishlist.forEach(item => {
+                addToCart(item.name, item.price);
+            });
+            wishlist = [];
+            updateWishlist();
+            
+            // Update all love buttons for moved products
+            productNames.forEach(name => {
+                updateLoveButtonsForProduct(name);
+            });
+            
+            // Show success message
+            moveAllToCartBtn.innerHTML = '<i class="fas fa-check"></i> Moved to Cart!';
+            moveAllToCartBtn.style.background = '#28a745';
+            setTimeout(() => {
+                moveAllToCartBtn.innerHTML = 'Move All to Cart';
+                moveAllToCartBtn.style.background = '';
+            }, 2000);
+        }
+    });
+}
+
 // Checkout Button
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
         if (cart.length > 0) {
-            alert('Thank you for your purchase! Your order has been placed.');
-            cart = [];
-            updateCart();
-            cartSidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
+            // Check if user is logged in
+            if (!isLoggedIn) {
+                // Show login modal
+                openLoginModal();
+            } else {
+                // Proceed with checkout
+                proceedToCheckout();
+            }
         } else {
             alert('Your cart is empty. Add some items before checking out.');
         }
     });
+}
+
+// Login Modal Functions
+function openLoginModal() {
+    if (loginModal && overlay) {
+        loginModal.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeLoginModalFunc() {
+    if (loginModal && overlay) {
+        loginModal.classList.remove('active');
+        // Only remove overlay if cart and wishlist are also closed
+        if (!cartSidebar.classList.contains('active') && !wishlistSidebar.classList.contains('active')) {
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    }
+}
+
+// Close login modal button
+if (closeLoginModal) {
+    closeLoginModal.addEventListener('click', closeLoginModalFunc);
+}
+
+// Toggle password visibility
+if (togglePassword) {
+    togglePassword.addEventListener('click', () => {
+        const passwordInput = document.getElementById('password');
+        const icon = togglePassword.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            passwordInput.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    });
+}
+
+// Login form submission
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const studentNumber = document.getElementById('studentNumber').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // For now, accept any input (as requested)
+        if (studentNumber && email && password) {
+            // Store user info
+            isLoggedIn = true;
+            currentUser = {
+                studentNumber: studentNumber,
+                email: email
+            };
+            
+            console.log('✅ User logged in:', currentUser);
+            
+            // Update account display
+            updateAccountDisplay();
+            
+            // Close modal
+            closeLoginModalFunc();
+            
+            // Proceed to checkout
+            setTimeout(() => {
+                proceedToCheckout();
+            }, 300);
+        }
+    });
+}
+
+// Proceed to checkout function
+function proceedToCheckout() {
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+    
+    // Create transaction record
+    const transaction = {
+        id: `TXN-${Date.now()}`,
+        date: new Date().toLocaleString(),
+        items: [...cart],
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        status: 'completed',
+        studentNumber: currentUser ? currentUser.studentNumber : 'Guest'
+    };
+    
+    // Add to transaction history
+    transactionHistory.unshift(transaction); // Add to beginning
+    
+    // Update account display
+    updateAccountDisplay();
+    
+    alert(`Thank you for your purchase, ${currentUser ? currentUser.studentNumber : 'valued customer'}! Your order has been placed.`);
+    cart = [];
+    updateCart();
+    cartSidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Update Account Display
+function updateAccountDisplay() {
+    if (!accountNotLoggedIn || !accountLoggedIn) return;
+    
+    if (isLoggedIn && currentUser) {
+        // Show logged in state
+        accountNotLoggedIn.style.display = 'none';
+        accountLoggedIn.style.display = 'block';
+        
+        // Update user info
+        accountUserName.textContent = currentUser.studentNumber || 'Student';
+        accountUserEmail.textContent = currentUser.email || 'email@icct.edu.ph';
+        accountStudentNumber.textContent = `ID: ${currentUser.studentNumber || '000000'}`;
+        
+        // Update transaction history
+        updateTransactionHistory();
+    } else {
+        // Show not logged in state
+        accountNotLoggedIn.style.display = 'block';
+        accountLoggedIn.style.display = 'none';
+    }
+}
+
+// Update Transaction History
+function updateTransactionHistory() {
+    if (!transactionList || !transactionCount) return;
+    
+    // Update transaction count
+    transactionCount.textContent = `${transactionHistory.length} order${transactionHistory.length !== 1 ? 's' : ''}`;
+    
+    // Clear current list
+    transactionList.innerHTML = '';
+    
+    if (transactionHistory.length === 0) {
+        // Show empty state
+        transactionList.innerHTML = `
+            <div class="empty-transactions">
+                <i class="fas fa-shopping-bag"></i>
+                <p>No transactions yet</p>
+                <small>Your order history will appear here</small>
+            </div>
+        `;
+    } else {
+        // Display transactions
+        transactionHistory.forEach(transaction => {
+            const itemsList = transaction.items
+                .map(item => `${item.name} (x${item.quantity})`)
+                .join(', ');
+            
+            const transactionEl = document.createElement('div');
+            transactionEl.className = 'transaction-item';
+            transactionEl.innerHTML = `
+                <div class="transaction-header">
+                    <div>
+                        <div class="transaction-id">${transaction.id}</div>
+                        <div class="transaction-date">${transaction.date}</div>
+                    </div>
+                    <span class="transaction-status status-${transaction.status}">
+                        ${transaction.status}
+                    </span>
+                </div>
+                <div class="transaction-details">
+                    <div class="transaction-items">
+                        <strong>Items:</strong> ${itemsList}
+                    </div>
+                    <div class="transaction-total">
+                        <span>Total:</span>
+                        <span>₱${transaction.total.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+            transactionList.appendChild(transactionEl);
+        });
+    }
 }
 
 // Hero Slider

@@ -501,6 +501,8 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+    z-index: 10;
 }
 
 /* Badge */
@@ -569,6 +571,8 @@ body {
     align-items: center;
     gap: 0.5rem;
     animation: float 3s ease-in-out infinite;
+    z-index: 100;
+    pointer-events: auto;
 }
 
 .cta-button:hover {
@@ -1283,12 +1287,20 @@ body {
     text-align: center;
     padding: 40px 0;
     color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .empty-cart i {
     font-size: 50px;
     margin-bottom: 20px;
     opacity: 0.5;
+}
+
+.wishlist-items {
+    display: block;
 }
 
 .continue-shopping {
@@ -1354,6 +1366,482 @@ body {
     opacity: 0;
     visibility: hidden;
     transition: var(--transition);
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ===== ACCOUNT SIDEBAR ===== */
+.account-sidebar {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 450px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    z-index: 1052;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+}
+
+.account-sidebar.active {
+    right: 0;
+}
+
+/* Account Login Prompt */
+.account-not-logged-in {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.account-login-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px 20px;
+}
+
+.account-login-prompt i {
+    font-size: 80px;
+    color: var(--icct-blue);
+    opacity: 0.8;
+}
+
+.account-login-prompt h3 {
+    font-size: 24px;
+    color: var(--navy);
+    margin: 0;
+}
+
+.account-login-prompt p {
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.account-login-btn {
+    background: var(--icct-blue);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.account-login-btn:hover {
+    background: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+/* Account Logged In */
+.account-logged-in {
+    padding: 0;
+}
+
+.account-info {
+    background: linear-gradient(135deg, var(--icct-blue), var(--navy));
+    color: white;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-avatar {
+    font-size: 60px;
+    color: white;
+    opacity: 0.9;
+}
+
+.user-details h3 {
+    margin: 0 0 5px 0;
+    font-size: 20px;
+    color: white;
+}
+
+.user-details p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.student-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Account Sections */
+.account-sections {
+    padding: 0;
+}
+
+.account-section {
+    padding: 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.transaction-count {
+    font-size: 13px;
+    color: #666;
+    background: #f5f5f5;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+/* Transaction List */
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.empty-transactions {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+
+.empty-transactions i {
+    font-size: 50px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-transactions p {
+    margin: 10px 0 5px 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.empty-transactions small {
+    font-size: 13px;
+    color: #999;
+}
+
+/* Transaction Item */
+.transaction-item {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.transaction-item:hover {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 12px;
+}
+
+.transaction-id {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+.transaction-date {
+    font-size: 11px;
+    color: #999;
+}
+
+.transaction-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.transaction-items {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+}
+
+.transaction-items strong {
+    color: var(--navy);
+}
+
+.transaction-total {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--icct-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.transaction-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-processing {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Account Actions */
+.account-actions {
+    padding: 20px 25px;
+}
+
+.logout-btn {
+    width: 100%;
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+/* Login Modal */
+.login-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 1060;
+    width: 90%;
+    max-width: 450px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.login-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.login-modal-content {
+    padding: 40px 30px 30px;
+    position: relative;
+}
+
+.close-login-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.close-login-modal:hover {
+    background: #f0f0f0;
+    color: var(--icct-blue);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header i {
+    font-size: 60px;
+    color: var(--icct-blue);
+    margin-bottom: 15px;
+}
+
+.login-header h2 {
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.login-header p {
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group label i {
+    color: var(--icct-blue);
+    font-size: 16px;
+}
+
+.form-group input {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--icct-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #999;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    bottom: 13px;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.toggle-password:hover {
+    color: var(--icct-blue);
+}
+
+.login-btn {
+    background: var(--icct-blue);
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    background: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.login-footer p {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.register-link {
+    color: var(--icct-blue);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.register-link:hover {
+    text-decoration: underline;
+    color: var(--navy);
 }
 
 .overlay.active {
@@ -1476,6 +1964,82 @@ body {
 
 .remove-item:hover {
     color: #c82333;
+}
+
+/* Wishlist Item Actions */
+.cart-item-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.move-to-cart-btn,
+.remove-wishlist-item {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: var(--transition);
+    font-size: 14px;
+}
+
+.move-to-cart-btn:hover {
+    background: var(--icct-blue);
+    color: var(--white);
+    border-color: var(--icct-blue);
+}
+
+.remove-wishlist-item:hover {
+    background: #dc3545;
+    color: var(--white);
+    border-color: #dc3545;
+}
+
+.move-all-to-cart-btn {
+    width: 100%;
+    background: var(--icct-blue);
+    color: var(--white);
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.move-all-to-cart-btn:hover {
+    background: var(--navy);
+}
+
+.close-wishlist {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.close-wishlist:hover {
+    color: var(--icct-blue);
+}
+
+.continue-shopping-wishlist {
+    background: var(--icct-blue);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.continue-shopping-wishlist:hover {
+    background: var(--navy);
 }
 
 /* Footer */
@@ -1749,6 +2313,34 @@ body {
     .cta-button, .secondary-button {
         padding: 0.8rem 1.5rem;
         font-size: 0.9rem;
+    }
+    
+    /* Login Modal Mobile */
+    .login-modal {
+        width: 95%;
+        max-width: 100%;
+    }
+    
+    .login-modal-content {
+        padding: 30px 20px 20px;
+    }
+    
+    .login-header h2 {
+        font-size: 22px;
+    }
+    
+    .login-header i {
+        font-size: 50px;
+    }
+    
+    .form-group input {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    .login-btn {
+        padding: 12px 18px;
+        font-size: 15px;
     }
 }
 
@@ -2236,5 +2828,24 @@ body {
     
     .notice-icon {
         font-size: 20px;
+    }
+    
+    /* Account Sidebar Mobile */
+    .account-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .account-sidebar.active {
+        right: 0;
+    }
+    
+    .account-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .transaction-item {
+        padding: 12px;
     }
 }

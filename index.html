@@ -80,7 +80,7 @@
                 <div class="slide-content">
                     <h1>Your Campus Store Hub — Everything ICCT Students Need in One Place</h1>
                     <p>Shop smarter and faster with ICCT Essentials.</p>
-                    <button class="cta-button hero-shop-btn" data-category="supplies">Shop Now</button>
+                    <button class="cta-button hero-shop-btn" data-category="all-products">Shop Now</button>
                 </div>
                 <div class="slide-image">
                     <img src="images/Gemini_Generated_Image_ydr8fgydr8fgydr8.png" alt="ICCT Campus Store" class="slide-image">
@@ -421,6 +421,149 @@
             <button class="checkout-btn">Checkout</button>
         </div>
     </div>
+
+    <!-- Floating Wishlist Sidebar -->
+    <div class="cart-sidebar" id="wishlistSidebar">
+        <div class="cart-header">
+            <h3>Your Favorites</h3>
+            <button class="close-wishlist" id="closeWishlist"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-content">
+            <div class="empty-cart">
+                <i class="fas fa-heart"></i>
+                <p>Your favorites list is empty</p>
+                <button class="continue-shopping-wishlist">Continue Shopping</button>
+            </div>
+            <div class="wishlist-items">
+                <!-- Wishlist items will be added dynamically -->
+            </div>
+        </div>
+        <div class="cart-footer">
+            <button class="move-all-to-cart-btn">Move All to Cart</button>
+        </div>
+    </div>
+    
+    <!-- Account Sidebar -->
+    <div class="account-sidebar" id="accountSidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-user-circle"></i> My Account</h2>
+            <button class="close-sidebar" id="closeAccount">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Not Logged In State -->
+        <div class="account-not-logged-in" id="accountNotLoggedIn">
+            <div class="account-login-prompt">
+                <i class="fas fa-user-lock"></i>
+                <h3>Welcome!</h3>
+                <p>Please sign in to view your account and transaction history</p>
+                <button class="account-login-btn" id="accountLoginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </div>
+        </div>
+        
+        <!-- Logged In State -->
+        <div class="account-logged-in" id="accountLoggedIn" style="display: none;">
+            <div class="account-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <h3 id="accountUserName">Student</h3>
+                    <p id="accountUserEmail">email@icct.edu.ph</p>
+                    <span class="student-badge" id="accountStudentNumber">ID: 000000</span>
+                </div>
+            </div>
+            
+            <div class="account-sections">
+                <!-- Transaction History Section -->
+                <div class="account-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-history"></i> Transaction History</h3>
+                        <span class="transaction-count" id="transactionCount">0 orders</span>
+                    </div>
+                    <div class="transaction-list" id="transactionList">
+                        <div class="empty-transactions">
+                            <i class="fas fa-shopping-bag"></i>
+                            <p>No transactions yet</p>
+                            <small>Your order history will appear here</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Actions -->
+                <div class="account-actions">
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <button class="close-login-modal" id="closeLoginModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="login-header">
+                <i class="fas fa-user-circle"></i>
+                <h2>Sign In to Continue</h2>
+                <p>Please log in to complete your checkout</p>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="studentNumber">
+                        <i class="fas fa-id-card"></i> Student Number
+                    </label>
+                    <input 
+                        type="text" 
+                        id="studentNumber" 
+                        name="studentNumber" 
+                        placeholder="Enter your student number"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                        required
+                    >
+                    <span class="toggle-password" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                <div class="login-footer">
+                    <p>Don't have an account? <a href="#" class="register-link">Register here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <div class="overlay" id="overlay"></div>
 
     <!-- Footer -->

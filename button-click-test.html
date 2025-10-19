@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Click Test - ICCT Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #2563eb;
+            color: white;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .log {
+            background: #1e293b;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-item {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 10px;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Hero Button Click Test</h1>
+    
+    <div class="test-container">
+        <h2>Test Buttons (Same as Hero Slider)</h2>
+        <button class="hero-shop-btn" data-category="all-products">Shop Now</button>
+        <button class="hero-shop-btn" data-category="uniforms">Browse Uniforms</button>
+        <button class="hero-shop-btn" data-category="documents">View Documents</button>
+    </div>
+    
+    <div class="test-container">
+        <h2>Console Log</h2>
+        <div class="log" id="log"></div>
+    </div>
+    
+    <script>
+        const logEl = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            const item = document.createElement('div');
+            item.className = `log-item ${type}`;
+            item.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.appendChild(item);
+            logEl.scrollTop = logEl.scrollHeight;
+            console.log(message);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            log('✅ DOM Content Loaded!', 'success');
+            
+            const heroButtons = document.querySelectorAll('.hero-shop-btn');
+            log(`🎯 Found hero buttons: ${heroButtons.length}`, 'info');
+            
+            heroButtons.forEach((button, index) => {
+                const category = button.getAttribute('data-category');
+                log(`🎯 Button ${index}: category="${category}"`, 'info');
+                
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const clickedCategory = e.currentTarget.getAttribute('data-category');
+                    log(`✅ BUTTON CLICKED! Category: ${clickedCategory}`, 'success');
+                    log(`   Button text: ${e.currentTarget.textContent}`, 'info');
+                    log(`   Expected category: ${category}`, 'info');
+                    
+                    if (clickedCategory === category) {
+                        log(`   ✅ Category matches correctly!`, 'success');
+                    } else {
+                        log(`   ❌ ERROR: Category mismatch!`, 'error');
+                    }
+                });
+            });
+            
+            log('✅ All event listeners attached', 'success');
+        });
+    </script>
+</body>
+</html>

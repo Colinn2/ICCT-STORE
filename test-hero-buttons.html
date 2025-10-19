@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hero Button Debug Test</title>
+</head>
+<body>
+    <h1>Hero Button Test</h1>
+    
+    <div>
+        <button class="cta-button hero-shop-btn" data-category="all-products">Shop Now</button>
+        <button class="cta-button hero-shop-btn" data-category="uniforms">Browse Uniforms</button>
+        <button class="cta-button hero-shop-btn" data-category="documents">View Documents</button>
+    </div>
+    
+    <div id="output"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM Loaded!');
+            
+            const buttons = document.querySelectorAll('.hero-shop-btn');
+            console.log('Found buttons:', buttons.length);
+            
+            buttons.forEach((button, index) => {
+                console.log(`Button ${index}:`, button.dataset.category);
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const category = button.dataset.category;
+                    console.log('Button clicked:', category);
+                    document.getElementById('output').innerHTML += `<p>Clicked: ${category}</p>`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
