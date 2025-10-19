@@ -1537,6 +1537,7 @@ body {
 }
 
 .products-grid .product-image {
+    position: relative;
     width: 100%;
     height: 200px;
     background: linear-gradient(135deg, var(--light-blue), var(--soft-gray));
@@ -1544,6 +1545,57 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+}
+
+.products-grid .product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 51, 102, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.products-grid .product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.products-grid .action-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    color: var(--icct-blue);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(20px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.products-grid .product-card:hover .action-btn {
+    transform: translateY(0);
+}
+
+.products-grid .action-btn:hover {
+    background: var(--icct-blue);
+    color: white;
+    transform: scale(1.2) translateY(0);
+}
+
+.products-grid .love-btn:hover {
+    background: #e91e63;
+    color: white;
 }
 
 .products-grid .image-placeholder {
@@ -1795,4 +1847,54 @@ body {
     .payment-card {
         padding: 20px;
     }
+}
+/* Product Card Actions */
+.products-grid .product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    width: 100%;
+}
+
+.products-grid .buy-now-btn,
+.products-grid .add-to-cart {
+    flex: 1;
+    padding: 12px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.products-grid .buy-now-btn {
+    background: var(--green);
+    color: var(--white);
+}
+
+.products-grid .buy-now-btn:hover {
+    background: #00853e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 166, 81, 0.4);
+}
+
+.products-grid .add-to-cart {
+    background: var(--icct-blue);
+    color: var(--white);
+}
+
+.products-grid .add-to-cart:hover {
+    background: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 51, 102, 0.4);
+}
+
+.products-grid .buy-now-btn:active,
+.products-grid .add-to-cart:active {
+    transform: scale(0.98);
 }

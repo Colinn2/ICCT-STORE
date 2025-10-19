@@ -33,8 +33,10 @@ if (window.location.hostname === 'localhost') {
     // Local development
     API_BASE_URL = 'http://localhost:8080';
 } else if (window.location.hostname.includes('app.github.dev')) {
-    // GitHub Codespaces
-    API_BASE_URL = window.location.origin.replace('-8000.', '-8080.');
+    // GitHub Codespaces - use same protocol (HTTPS) and replace port
+    const protocol = window.location.protocol; // Will be 'https:'
+    const host = window.location.host.replace('-8000.', '-8080.');
+    API_BASE_URL = `${protocol}//${host}`;
 } else {
     // GitHub Pages or other - use relative path (won't work without backend)
     API_BASE_URL = 'http://localhost:8080'; // Fallback
@@ -44,6 +46,7 @@ if (window.location.hostname === 'localhost') {
 
 console.log('🔗 API URL:', API_BASE_URL);
 console.log('🌐 Current hostname:', window.location.hostname);
+console.log('🌐 Protocol:', window.location.protocol);
 
 // Initialize after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -142,15 +145,26 @@ document.addEventListener('DOMContentLoaded', () => {
             productCard.innerHTML = `
                 <div class="product-image">
                     <div class="image-placeholder">${product.name}</div>
+                    <div class="product-overlay">
+                        <button class="action-btn love-btn" title="Add to Wishlist">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <button class="action-btn quick-view-btn" title="Quick View">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="product-info">
                     <h3>${product.name}</h3>
                     ${product.description ? `<p class="product-desc">${product.description}</p>` : ''}
                     <p class="price">₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                    ${product.stock_quantity > 0 ? 
-                        `<button class="add-to-cart">Add to Cart</button>` : 
-                        `<button class="out-of-stock" disabled>Out of Stock</button>`
-                    }
+                    <div class="product-actions">
+                        ${product.stock_quantity > 0 ? 
+                            `<button class="buy-now-btn"><i class="fas fa-shopping-bag"></i> Buy Now</button>
+                             <button class="add-to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>` : 
+                            `<button class="out-of-stock" disabled>Out of Stock</button>`
+                        }
+                    </div>
                 </div>
             `;
             container.appendChild(productCard);
