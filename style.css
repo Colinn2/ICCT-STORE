@@ -21,6 +21,10 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 100%;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-dark);
@@ -28,6 +32,11 @@ body {
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    zoom: 0.95;
+    transform: scale(0.95);
+    transform-origin: 0 0;
+    -moz-transform: scale(0.95);
+    -moz-transform-origin: 0 0;
 }
 
 /* Control visual order of sections */
