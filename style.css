@@ -3327,6 +3327,7 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
+    align-items: start;
 }
 
 .faq-category {
@@ -3336,7 +3337,9 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border: 1px solid rgba(0,0,0,0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: fit-content;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .faq-category:hover {
@@ -3485,20 +3488,28 @@ body {
 }
 
 .supplies-grid {
-    display: block;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto 50px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    align-items: start;
 }
 
 .info-card {
     background: white;
     border-radius: 16px;
-    padding: 50px;
+    padding: 30px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .info-card:hover {
+    transform: translateY(-3px);
     box-shadow: 0 6px 24px rgba(0,0,0,0.12);
 }
 
@@ -3507,52 +3518,64 @@ body {
 }
 
 .info-card h3 {
-    text-align: center;
     color: var(--navy);
-    font-size: 32px;
+    font-size: 20px;
     font-weight: 700;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 3px solid var(--icct-blue);
-}
-
-.info-details {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-}
-
-.info-item {
-    background: #f8fafc;
-    padding: 25px;
-    border-radius: 12px;
-    border-left: 4px solid var(--icct-blue);
-    transition: all 0.3s ease;
-}
-
-.info-item:hover {
-    background: #eef2f7;
-    border-left-color: var(--navy);
-    transform: translateX(5px);
-}
-
-.info-item strong {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--icct-blue);
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.info-card h3 i {
+    color: var(--icct-blue);
+    font-size: 22px;
+    background: linear-gradient(135deg, var(--icct-blue), var(--light-blue));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.info-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+}
+
+.info-item {
+    background: transparent;
+    padding: 16px 0;
+    border-radius: 0;
+    border-left: none;
+    border-bottom: 1px solid #e0e7ef;
+    transition: all 0.3s ease;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item:hover {
+    background: #f8fafc;
+    transform: translateX(0);
+    margin: 0 -8px;
+    padding: 16px 8px;
+    border-radius: 8px;
+}
+
+.info-item strong {
+    display: block;
     color: var(--navy);
-    font-size: 18px;
-    margin-bottom: 12px;
+    font-size: 16px;
+    margin-bottom: 8px;
     font-weight: 700;
 }
 
 .info-item strong::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: var(--icct-blue);
-    border-radius: 50%;
+    display: none;
 }
 
 .info-item p {
@@ -3560,7 +3583,6 @@ body {
     font-size: 15px;
     line-height: 1.9;
     margin: 0;
-    padding-left: 18px;
 }
 
 .info-item p br {
@@ -3640,23 +3662,18 @@ body {
 
 /* Responsive Styles for FAQ and Supplies */
 @media (max-width: 992px) {
-    .faq-container {
+    .faq-container,
+    .supplies-grid {
         grid-template-columns: 1fr;
         gap: 25px;
     }
 
-    .info-details {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
     .info-card {
-        padding: 35px 30px;
+        padding: 30px 25px;
     }
 
     .info-card h3 {
-        font-size: 28px;
-        margin-bottom: 30px;
+        font-size: 18px;
     }
 }
 
@@ -3716,23 +3733,21 @@ body {
         font-size: 17px;
     }
 
-    .info-card {
-        padding: 30px 25px;
+    .info-card h3 {
+        font-size: 18px;
     }
 
-    .info-card h3 {
-        font-size: 24px;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
+    .info-card h3 i {
+        font-size: 20px;
     }
 
     .info-item {
-        padding: 20px;
+        padding: 14px 0;
     }
 
     .info-item strong {
-        font-size: 17px;
-        margin-bottom: 10px;
+        font-size: 15px;
+        margin-bottom: 6px;
     }
 
     .info-item p {
