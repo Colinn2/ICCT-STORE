@@ -1,6 +1,16 @@
 // script.js
 console.log('🚀 Script loaded!');
 
+// Sticky Navbar on Scroll
+const mainNav = document.querySelector('.main-nav');
+window.addEventListener('scroll', function() {
+    if (window.scrollY > 50) {
+        mainNav.classList.add('scrolled');
+    } else {
+        mainNav.classList.remove('scrolled');
+    }
+});
+
 // DOM Elements
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.querySelector('.nav-menu');
