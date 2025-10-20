@@ -505,6 +505,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
         console.warn('Auto-load skipped (error):', e && e.message);
     }
+
+    // Ensure home is shown on page load
+    console.log('🏠 Initializing home view...');
+    showHome();
 });
 
 // ===== END CATEGORY NAVIGATION =====
