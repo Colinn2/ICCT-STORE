@@ -407,22 +407,27 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedSection.style.display = 'block';
             console.log('✅ Section displayed:', categoryId);
             
-            // Load products from database
-            console.log('🔄 ===== LOADING PRODUCTS =====');
-            console.log('🔄 Category slug:', categoryId);
-            const products = await loadProducts(categoryId);
-            console.log('📦 Products received:', products.length);
-            
-            if (products.length > 0) {
-                console.log('📋 Sample products:');
-                products.slice(0, 3).forEach((p, i) => {
-                    console.log(`  ${i+1}. ${p.name} - ₱${p.price}`);
-                });
+            // Skip product loading for payment section (it's a guide, not a product category)
+            if (categoryId !== 'payment') {
+                // Load products from database
+                console.log('🔄 ===== LOADING PRODUCTS =====');
+                console.log('🔄 Category slug:', categoryId);
+                const products = await loadProducts(categoryId);
+                console.log('📦 Products received:', products.length);
+                
+                if (products.length > 0) {
+                    console.log('📋 Sample products:');
+                    products.slice(0, 3).forEach((p, i) => {
+                        console.log(`  ${i+1}. ${p.name} - ₱${p.price}`);
+                    });
+                }
+                
+                console.log('🔄 ===== CALLING RENDER =====');
+                renderProducts(products, categoryId);
+                console.log('🔄 ===== RENDER COMPLETE =====');
+            } else {
+                console.log('💳 Payment section - displaying guide only (no products)');
             }
-            
-            console.log('🔄 ===== CALLING RENDER =====');
-            renderProducts(products, categoryId);
-            console.log('🔄 ===== RENDER COMPLETE =====');
             
             // Scroll to the section with navbar visible
             setTimeout(() => {
