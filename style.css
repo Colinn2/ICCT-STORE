@@ -22,7 +22,8 @@
 }
 
 html {
-    font-size: 100%;
+    font-size: 94%;
+    overflow-x: hidden;
 }
 
 body {
@@ -32,6 +33,9 @@ body {
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 /* Control visual order of sections */
