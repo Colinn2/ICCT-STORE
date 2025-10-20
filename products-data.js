@@ -461,15 +461,6 @@ const STATIC_PRODUCTS = {
             stock_quantity: 999,
             image_url: "images/icct fees.png",
             category_slug: "fees"
-        },
-        {
-            id: 51,
-            name: "Locker Rental Fee",
-            description: "Semester locker rental",
-            price: 800.00,
-            stock_quantity: 999,
-            image_url: "images/icct fees.png",
-            category_slug: "fees"
         }
     ],
     
