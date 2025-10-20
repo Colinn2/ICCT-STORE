@@ -407,8 +407,9 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedSection.style.display = 'block';
             console.log('✅ Section displayed:', categoryId);
             
-            // Skip product loading for payment section (it's a guide, not a product category)
-            if (categoryId !== 'payment') {
+            // Skip product loading for info sections (payment, FAQ, supplies info)
+            const infoSections = ['payment', 'about', 'contact'];
+            if (!infoSections.includes(categoryId)) {
                 // Load products from database
                 console.log('🔄 ===== LOADING PRODUCTS =====');
                 console.log('🔄 Category slug:', categoryId);
@@ -426,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderProducts(products, categoryId);
                 console.log('🔄 ===== RENDER COMPLETE =====');
             } else {
-                console.log('💳 Payment section - displaying guide only (no products)');
+                console.log(`ℹ️ ${categoryId} section - displaying info only (no products)`);
             }
             
             // Scroll to the section with navbar visible
@@ -515,6 +516,26 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             console.log('Payment link clicked!');
             showCategory('payment');
+        });
+    }
+
+    // FAQ Link Navigation
+    const faqLink = document.querySelector('a[href="#about"]');
+    if (faqLink) {
+        faqLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('FAQ link clicked!');
+            showCategory('about');
+        });
+    }
+
+    // Supplies Info Link Navigation
+    const suppliesLink = document.querySelector('a[href="#contact"]');
+    if (suppliesLink) {
+        suppliesLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Supplies Info link clicked!');
+            showCategory('contact');
         });
     }
 
