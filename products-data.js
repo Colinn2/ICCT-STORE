@@ -116,24 +116,33 @@ const STATIC_PRODUCTS = {
         },
         {
             id: 26,
-            name: "Form 137 Request",
-            description: "Official Form 137 document",
-            price: 120.00,
+            name: "Dry Seal",
+            description: "Official dry seal for documents",
+            price: 50.00,
             stock_quantity: 999,
             image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
             id: 27,
-            name: "Form 138 Request",
-            description: "Official Form 138 document",
-            price: 120.00,
+            name: "Certificate of Enrollment",
+            description: "Official certificate of enrollment",
+            price: 100.00,
             stock_quantity: 999,
             image_url: "images/icct documents.png",
             category_slug: "documents"
         },
         {
             id: 28,
+            name: "Affidavit of Loss",
+            description: "Affidavit for lost documents or items",
+            price: 150.00,
+            stock_quantity: 999,
+            image_url: "images/icct documents.png",
+            category_slug: "documents"
+        },
+        {
+            id: 29,
             name: "ID Replacement",
             description: "Student ID card replacement",
             price: 150.00,
