@@ -390,6 +390,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 section.style.display = 'none';
             }
         });
+
+        // IMPORTANT: Also hide search results when navigating to categories
+        const searchSection = document.getElementById('search-results');
+        if (searchSection && searchSection.id !== categoryId) {
+            searchSection.classList.add('hidden');
+            searchSection.style.display = 'none';
+            console.log('🔍 Search results cleared');
+        }
         
         // Keep homepage sections visible (Popular Uniforms, Back to School)
         if (productShowcase) productShowcase.style.display = 'block';
@@ -1501,10 +1509,18 @@ function displaySearchResults(products, query) {
                 searchSection.classList.add('hidden');
                 searchSection.style.display = 'none';
                 
-                const productShowcase = document.querySelector('.product-showcase');
+                // Show home sections
+                const productShowcase = document.querySelector('.popular-uniforms-banners');
                 const backToSchool = document.querySelector('.back-to-school');
                 if (productShowcase) productShowcase.style.display = 'block';
                 if (backToSchool) backToSchool.style.display = 'block';
+                
+                // Make sure all category sections are hidden
+                const allSections = document.querySelectorAll('.category-section');
+                allSections.forEach(section => {
+                    section.classList.add('hidden');
+                    section.style.display = 'none';
+                });
                 
                 // Scroll to top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1563,13 +1579,15 @@ function displaySearchResults(products, query) {
         section.style.display = 'none';
     });
     
-    const productShowcase = document.querySelector('.product-showcase');
+    const productShowcase = document.querySelector('.popular-uniforms-banners');
     const backToSchool = document.querySelector('.back-to-school');
     if (productShowcase) productShowcase.style.display = 'none';
     if (backToSchool) backToSchool.style.display = 'none';
     
     searchSection.classList.remove('hidden');
     searchSection.style.display = 'block';
+    
+    console.log('🔍 All category sections hidden, search results displayed');
     
     // Scroll to results
     const navbar = document.querySelector('.header');
