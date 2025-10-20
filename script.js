@@ -43,6 +43,11 @@ const successModal = document.getElementById('successModal');
 const successTitle = document.getElementById('successTitle');
 const successMessage = document.getElementById('successMessage');
 const successBtn = document.getElementById('successBtn');
+const confirmModal = document.getElementById('confirmModal');
+const confirmTitle = document.getElementById('confirmTitle');
+const confirmMessage = document.getElementById('confirmMessage');
+const confirmOkBtn = document.getElementById('confirmOkBtn');
+const confirmCancelBtn = document.getElementById('confirmCancelBtn');
 
 // Cart State
 let cart = [];
@@ -52,6 +57,7 @@ let isLoggedIn = false;
 let currentUser = null;
 let transactionHistory = [];
 let carouselPosition = 0;
+let confirmCallback = null; // Store callback for confirm modal
 
 // Success Modal Functions
 function showSuccessModal(title, message) {
@@ -72,10 +78,51 @@ function closeSuccessModal() {
     }
 }
 
+// Confirm Modal Functions
+function showConfirmModal(title, message, callback) {
+    if (confirmModal && confirmTitle && confirmMessage) {
+        confirmTitle.textContent = title;
+        confirmMessage.textContent = message;
+        confirmCallback = callback;
+        confirmModal.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeConfirmModal() {
+    if (confirmModal) {
+        confirmModal.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        confirmCallback = null;
+    }
+}
+
 // Success Modal Close Button
 if (successBtn) {
     successBtn.addEventListener('click', closeSuccessModal);
 }
+
+// Confirm Modal Buttons
+if (confirmOkBtn) {
+    confirmOkBtn.addEventListener('click', () => {
+        if (confirmCallback) {
+            confirmCallback(true);
+        }
+        closeConfirmModal();
+    });
+}
+
+if (confirmCancelBtn) {
+    confirmCancelBtn.addEventListener('click', () => {
+        if (confirmCallback) {
+            confirmCallback(false);
+        }
+        closeConfirmModal();
+    });
+}
+
 const carouselItemWidth = 280; // Width + gap
 
 // ===== CATEGORY NAVIGATION =====
@@ -559,6 +606,14 @@ if (closeCart && cartSidebar && overlay) {
 
 if (overlay && cartSidebar) {
     overlay.addEventListener('click', () => {
+        // Close confirm modal if open
+        if (confirmModal && confirmModal.classList.contains('active')) {
+            if (confirmCallback) {
+                confirmCallback(false);
+            }
+            closeConfirmModal();
+            return;
+        }
         // Close success modal if open
         if (successModal && successModal.classList.contains('active')) {
             closeSuccessModal();
@@ -634,18 +689,20 @@ if (accountLoginBtn && loginModal) {
 // Logout Button
 if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to sign out?')) {
-            isLoggedIn = false;
-            currentUser = null;
-            transactionHistory = [];
-            updateAccountDisplay();
-            accountSidebar.classList.remove('active');
-            
-            // Show success modal instead of alert
-            setTimeout(() => {
-                showSuccessModal('Signed Out Successfully', 'You have been logged out. See you next time!');
-            }, 300);
-        }
+        showConfirmModal('Confirm Sign Out', 'Are you sure you want to sign out?', (confirmed) => {
+            if (confirmed) {
+                isLoggedIn = false;
+                currentUser = null;
+                transactionHistory = [];
+                updateAccountDisplay();
+                accountSidebar.classList.remove('active');
+                
+                // Show success modal instead of alert
+                setTimeout(() => {
+                    showSuccessModal('Signed Out Successfully', 'You have been logged out. See you next time!');
+                }, 300);
+            }
+        });
     });
 }
 
