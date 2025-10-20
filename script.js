@@ -1343,11 +1343,207 @@ if (searchInput && searchButton) {
 }
 
 function performSearch() {
-    const query = searchInput.value.trim();
-    if (query) {
-        alert(`Searching for: ${query}`);
-        // In a real implementation, this would filter products
+    const query = searchInput.value.trim().toLowerCase();
+    
+    if (!query) {
+        showSuccessModal('Search Empty', 'Please enter a search term to find products.');
+        return;
     }
+
+    console.log('🔍 Searching for:', query);
+    
+    // Collect all products from STATIC_PRODUCTS
+    let allProducts = [];
+    
+    if (typeof STATIC_PRODUCTS !== 'undefined') {
+        Object.values(STATIC_PRODUCTS).forEach(categoryProducts => {
+            if (Array.isArray(categoryProducts)) {
+                allProducts = allProducts.concat(categoryProducts);
+            }
+        });
+    }
+    
+    console.log('📦 Total products to search:', allProducts.length);
+    
+    // Filter products based on search query
+    const results = allProducts.filter(product => {
+        const searchInName = product.name.toLowerCase().includes(query);
+        const searchInDescription = product.description.toLowerCase().includes(query);
+        const searchInCategory = product.category_slug.toLowerCase().includes(query);
+        
+        return searchInName || searchInDescription || searchInCategory;
+    });
+    
+    console.log('✅ Search results:', results.length);
+    
+    // Display results
+    if (results.length > 0) {
+        displaySearchResults(results, query);
+        searchInput.value = ''; // Clear search input
+    } else {
+        showSuccessModal('No Results Found', `No products found matching "${query}". Try different keywords.`);
+    }
+}
+
+function displaySearchResults(products, query) {
+    // Get or create search results section
+    let searchSection = document.getElementById('search-results');
+    
+    if (!searchSection) {
+        // Create search results section
+        const paymentSection = document.getElementById('payment');
+        searchSection = document.createElement('section');
+        searchSection.id = 'search-results';
+        searchSection.className = 'category-section payment-section hidden';
+        searchSection.innerHTML = `
+            <div class="container">
+                <div class="category-header">
+                    <button class="back-btn" id="searchBackBtn"><i class="fas fa-arrow-left"></i> Back</button>
+                    <h2 class="section-title" id="searchResultsTitle">Search Results</h2>
+                </div>
+                <div id="searchResultsContainer" class="products-grid"></div>
+            </div>
+        `;
+        
+        if (paymentSection && paymentSection.parentNode) {
+            paymentSection.parentNode.insertBefore(searchSection, paymentSection);
+        } else {
+            document.querySelector('main').appendChild(searchSection);
+        }
+        
+        // Add back button functionality
+        const searchBackBtn = searchSection.querySelector('#searchBackBtn');
+        if (searchBackBtn) {
+            searchBackBtn.addEventListener('click', () => {
+                searchSection.classList.add('hidden');
+                searchSection.style.display = 'none';
+                
+                const productShowcase = document.querySelector('.product-showcase');
+                const backToSchool = document.querySelector('.back-to-school');
+                if (productShowcase) productShowcase.style.display = 'block';
+                if (backToSchool) backToSchool.style.display = 'block';
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    }
+    
+    // Update title
+    const titleElement = searchSection.querySelector('#searchResultsTitle');
+    if (titleElement) {
+        titleElement.textContent = `Search Results for "${query}" (${products.length} ${products.length === 1 ? 'item' : 'items'})`;
+    }
+    
+    // Render products
+    const container = searchSection.querySelector('#searchResultsContainer');
+    if (container) {
+        container.innerHTML = ''; // Clear previous results
+        
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image_url}" alt="${product.name}">
+                    <span class="category-badge">${product.category_slug}</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-footer">
+                        <span class="product-price">₱${parseFloat(product.price).toFixed(2)}</span>
+                        <div class="product-actions">
+                            ${product.stock_quantity > 0 ? 
+                                `<button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image_url}" title="Add to Cart">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                                <button class="love-btn" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image_url}" title="Add to Wishlist">
+                                    <i class="fas fa-heart"></i>
+                                </button>` : 
+                                `<button class="out-of-stock" disabled>Out of Stock</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(productCard);
+        });
+        
+        // Re-initialize add to cart and wishlist functionality
+        initializeProductButtons(container);
+    }
+    
+    // Show search results section
+    const categorySections = document.querySelectorAll('.category-section');
+    categorySections.forEach(section => {
+        section.classList.add('hidden');
+        section.style.display = 'none';
+    });
+    
+    const productShowcase = document.querySelector('.product-showcase');
+    const backToSchool = document.querySelector('.back-to-school');
+    if (productShowcase) productShowcase.style.display = 'none';
+    if (backToSchool) backToSchool.style.display = 'none';
+    
+    searchSection.classList.remove('hidden');
+    searchSection.style.display = 'block';
+    
+    // Scroll to results
+    const navbar = document.querySelector('.header');
+    const navbarHeight = navbar ? navbar.offsetHeight : 0;
+    const searchTop = searchSection.offsetTop - navbarHeight;
+    
+    window.scrollTo({
+        top: searchTop,
+        behavior: 'smooth'
+    });
+}
+
+// Helper function to initialize product buttons (add to cart, wishlist)
+function initializeProductButtons(container) {
+    // Add to cart buttons
+    const addToCartButtons = container.querySelectorAll('.add-to-cart');
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.id;
+            const productName = this.dataset.name;
+            const productPrice = parseFloat(this.dataset.price);
+            const productImage = this.dataset.image;
+            
+            addToCart({ id: productId, name: productName, price: productPrice, image_url: productImage });
+            
+            // Visual feedback
+            const icon = this.querySelector('i');
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            this.style.background = '#4caf50';
+            
+            setTimeout(() => {
+                icon.className = originalClass;
+                this.style.background = '';
+            }, 1500);
+        });
+    });
+    
+    // Wishlist buttons
+    const loveButtons = container.querySelectorAll('.love-btn');
+    loveButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.id;
+            const productName = this.dataset.name;
+            const productPrice = parseFloat(this.dataset.price);
+            const productImage = this.dataset.image;
+            
+            addToWishlist({ id: productId, name: productName, price: productPrice, image_url: productImage });
+            
+            // Visual feedback
+            this.classList.add('loved');
+            setTimeout(() => {
+                this.classList.remove('loved');
+            }, 1500);
+        });
+    });
 }
 
 // Quick Filters
