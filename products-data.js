@@ -392,26 +392,28 @@ const STATIC_PRODUCTS = {
         },
         {
             id: 43,
-            name: "Completion of Incomplete Grade (per subject)",
-            description: "Fee for completion of incomplete grade (up to 7 subjects)",
+            name: "Completion of Incomplete Grade",
+            description: "Fee for completion of incomplete grade (per subject, up to 7 subjects)",
             price: 200.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
-            category_slug: "fees"
+            category_slug: "fees",
+            max_quantity: 7
         },
         {
             id: 44,
-            name: "Dropped Subject (per subject)",
-            description: "Fee for dropped subject processing (up to 5 subjects)",
+            name: "Dropped Subject",
+            description: "Fee for dropped subject processing (per subject, up to 5 subjects)",
             price: 150.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
-            category_slug: "fees"
+            category_slug: "fees",
+            max_quantity: 5
         },
         {
             id: 45,
-            name: "Late Enrollee Processing Fee - Cancellation",
-            description: "Late enrollment processing fee for cancellation",
+            name: "Late Enrollee Fee",
+            description: "Late enrollment processing fee",
             price: 500.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
@@ -419,33 +421,42 @@ const STATIC_PRODUCTS = {
         },
         {
             id: 46,
-            name: "Late Enrollee Processing Fee - Pullout",
-            description: "Late enrollment processing fee for pullout",
-            price: 500.00,
+            name: "Processing Fee - Cancellation",
+            description: "Processing fee for cancellation",
+            price: 300.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
             id: 47,
-            name: "Late Enrollee Processing Fee - Transfer",
-            description: "Late enrollment processing fee for transfer",
-            price: 500.00,
+            name: "Processing Fee - Pullout",
+            description: "Processing fee for pullout",
+            price: 300.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
             id: 48,
-            name: "Late Enrollee Processing Fee - Withdrawal",
-            description: "Late enrollment processing fee for withdrawal",
-            price: 500.00,
+            name: "Processing Fee - Transfer",
+            description: "Processing fee for transfer",
+            price: 300.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
             id: 49,
+            name: "Processing Fee - Withdrawal",
+            description: "Processing fee for withdrawal",
+            price: 300.00,
+            stock_quantity: 999,
+            image_url: "images/icct fees.png",
+            category_slug: "fees"
+        },
+        {
+            id: 50,
             name: "Lost School ID Replacement",
             description: "Replacement fee for lost school ID",
             price: 300.00,
@@ -454,7 +465,7 @@ const STATIC_PRODUCTS = {
             category_slug: "fees"
         },
         {
-            id: 50,
+            id: 51,
             name: "Lost Library ID Replacement",
             description: "Replacement fee for lost library ID",
             price: 200.00,

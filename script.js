@@ -858,6 +858,14 @@ function addToCart(name, price, size = null, installments = null) {
         installments = 1;
     }
     
+    // Check for max quantity limits
+    let maxQuantity = null;
+    if (name.toLowerCase().includes('completion of incomplete grade')) {
+        maxQuantity = 7;
+    } else if (name.toLowerCase().includes('dropped subject')) {
+        maxQuantity = 5;
+    }
+    
     // Create unique identifier with size/installment if applicable
     let itemKey = name;
     if (needsSize && size) itemKey += `|size:${size}`;
@@ -871,6 +879,11 @@ function addToCart(name, price, size = null, installments = null) {
     });
     
     if (existingItem) {
+        // Check max quantity limit before incrementing
+        if (maxQuantity && existingItem.quantity >= maxQuantity) {
+            showSuccessModal('Quantity Limit', `⚠️ Maximum quantity for ${name} is ${maxQuantity}.`);
+            return;
+        }
         existingItem.quantity += 1;
     } else {
         const newItem = {
@@ -886,6 +899,9 @@ function addToCart(name, price, size = null, installments = null) {
             // Calculate installment price: 10k for 1 installment, up to 50k for 10 installments
             newItem.basePrice = price; // Store original price
             newItem.price = 10000 + ((installments - 1) * (40000 / 9)); // Linear scale from 10k to 50k
+        }
+        if (maxQuantity) {
+            newItem.maxQuantity = maxQuantity;
         }
         cart.push(newItem);
     }
@@ -942,12 +958,17 @@ function updateCart() {
                 </div>
             ` : '';
             
+            // Show max quantity warning if applicable
+            const maxQuantityWarning = item.maxQuantity && item.quantity >= item.maxQuantity ? 
+                `<p class="max-qty-warning"><i class="fas fa-exclamation-triangle"></i> Maximum ${item.maxQuantity} allowed</p>` : '';
+            
             cartItem.innerHTML = `
                 <div class="cart-item-details">
                     <h4>${item.name}</h4>
                     ${sizeSelector}
                     ${installmentSelector}
                     <p>₱${item.price.toFixed(2)} x ${item.quantity}</p>
+                    ${maxQuantityWarning}
                 </div>
                 <div class="cart-item-total">
                     <p>₱${(item.price * item.quantity).toFixed(2)}</p>
