@@ -1606,22 +1606,24 @@ function initializeProductButtons(container) {
     const addToCartButtons = container.querySelectorAll('.add-to-cart');
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const productId = this.dataset.id;
             const productName = this.dataset.name;
             const productPrice = parseFloat(this.dataset.price);
             const productImage = this.dataset.image;
             
-            addToCart({ id: productId, name: productName, price: productPrice, image_url: productImage });
+            // Call addToCart with correct parameters (name, price, size, installments)
+            addToCart(productName, productPrice);
             
             // Visual feedback
             const icon = this.querySelector('i');
             const originalClass = icon.className;
             icon.className = 'fas fa-check';
             this.style.background = '#4caf50';
+            this.title = 'Added to Cart';
             
             setTimeout(() => {
                 icon.className = originalClass;
                 this.style.background = '';
+                this.title = 'Add to Cart';
             }, 1500);
         });
     });
@@ -1630,18 +1632,28 @@ function initializeProductButtons(container) {
     const loveButtons = container.querySelectorAll('.love-btn');
     loveButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const productId = this.dataset.id;
             const productName = this.dataset.name;
             const productPrice = parseFloat(this.dataset.price);
             const productImage = this.dataset.image;
             
-            addToWishlist({ id: productId, name: productName, price: productPrice, image_url: productImage });
+            // Call addToWishlist with correct parameters (name, price, image)
+            const added = addToWishlist(productName, productPrice, productImage);
             
-            // Visual feedback
-            this.classList.add('loved');
-            setTimeout(() => {
-                this.classList.remove('loved');
-            }, 1500);
+            // Visual feedback - toggle heart icon
+            const icon = this.querySelector('i');
+            if (added) {
+                // Added to wishlist - show filled heart
+                icon.className = 'fas fa-heart';
+                icon.style.color = '#ff4757';
+                this.style.background = 'rgba(255, 71, 87, 0.1)';
+                this.title = 'Remove from Wishlist';
+            } else {
+                // Removed from wishlist - show outline heart
+                icon.className = 'far fa-heart';
+                icon.style.color = '';
+                this.style.background = '';
+                this.title = 'Add to Wishlist';
+            }
         });
     });
 }
