@@ -1154,13 +1154,29 @@ if (moveAllToCartBtn) {
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
         if (cart.length > 0) {
+            // Check payment method selection
+            const paymentMethodSelect = document.getElementById('paymentMethod');
+            const selectedPaymentMethod = paymentMethodSelect ? paymentMethodSelect.value : '';
+            
+            if (!selectedPaymentMethod) {
+                showSuccessModal('Payment Method Required', 'Please select a payment method before checkout.');
+                if (paymentMethodSelect) {
+                    paymentMethodSelect.focus();
+                    paymentMethodSelect.style.borderColor = '#ff4444';
+                    setTimeout(() => {
+                        paymentMethodSelect.style.borderColor = '';
+                    }, 2000);
+                }
+                return;
+            }
+            
             // Check if user is logged in
             if (!isLoggedIn) {
                 // Show login modal
                 openLoginModal();
             } else {
                 // Proceed with checkout
-                proceedToCheckout();
+                proceedToCheckout(selectedPaymentMethod);
             }
         } else {
             showSuccessModal('Cart Empty', 'Your cart is empty. Add some items before checking out.');
@@ -1242,18 +1258,32 @@ if (loginForm) {
             
             // Proceed to checkout after modal is closed
             setTimeout(() => {
-                proceedToCheckout();
+                const paymentMethodSelect = document.getElementById('paymentMethod');
+                const selectedPaymentMethod = paymentMethodSelect ? paymentMethodSelect.value : '';
+                proceedToCheckout(selectedPaymentMethod);
             }, 2500);
         }
     });
 }
 
 // Proceed to checkout function
-function proceedToCheckout() {
+function proceedToCheckout(paymentMethod = 'Not Specified') {
     if (cart.length === 0) {
         showSuccessModal('Cart Empty', 'Your cart is empty! Add items to continue.');
         return;
     }
+    
+    // Get payment method name
+    const paymentMethodNames = {
+        'gcash': 'GCash',
+        'maya': 'Maya (PayMaya)',
+        'bank': 'Bank Transfer',
+        'counter': 'Over the Counter',
+        'card': 'Credit/Debit Card',
+        'installment': 'Installment Plan'
+    };
+    
+    const paymentMethodName = paymentMethodNames[paymentMethod] || paymentMethod;
     
     // Create transaction record
     const transaction = {
@@ -1262,6 +1292,7 @@ function proceedToCheckout() {
         items: [...cart],
         total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
         status: 'completed',
+        paymentMethod: paymentMethodName,
         studentNumber: currentUser ? currentUser.studentNumber : 'Guest'
     };
     
@@ -1271,7 +1302,13 @@ function proceedToCheckout() {
     // Update account display
     updateAccountDisplay();
     
-    showSuccessModal('Order Placed Successfully!', `Thank you for your purchase, ${currentUser ? currentUser.studentNumber : 'valued customer'}! Your order has been placed and added to your transaction history.`);
+    // Reset payment method selector
+    const paymentMethodSelect = document.getElementById('paymentMethod');
+    if (paymentMethodSelect) {
+        paymentMethodSelect.value = '';
+    }
+    
+    showSuccessModal('Order Placed Successfully!', `Thank you for your purchase, ${currentUser ? currentUser.studentNumber : 'valued customer'}! Your order has been placed via ${paymentMethodName} and added to your transaction history.`);
     cart = [];
     updateCart();
     cartSidebar.classList.remove('active');
@@ -1344,6 +1381,11 @@ function updateTransactionHistory() {
                     <div class="transaction-items">
                         <strong>Items:</strong> ${itemsList}
                     </div>
+                    ${transaction.paymentMethod ? `
+                    <div class="transaction-payment">
+                        <i class="fas fa-credit-card"></i> <strong>Payment:</strong> ${transaction.paymentMethod}
+                    </div>
+                    ` : ''}
                     <div class="transaction-total">
                         <span>Total:</span>
                         <span>₱${transaction.total.toFixed(2)}</span>

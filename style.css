@@ -1323,6 +1323,46 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
+.payment-method-selector {
+    margin-bottom: 20px;
+}
+
+.payment-method-selector label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+}
+
+.payment-method-selector label i {
+    margin-right: 5px;
+    color: var(--icct-blue);
+}
+
+.payment-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--navy);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.payment-select:focus {
+    outline: none;
+    border-color: var(--icct-blue);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.payment-select option {
+    padding: 10px;
+}
+
 .cart-total {
     display: flex;
     justify-content: space-between;
@@ -1674,6 +1714,21 @@ body {
     color: var(--navy);
     display: block;
     margin-bottom: 3px;
+}
+
+.transaction-payment {
+    font-size: 12px;
+    color: #555;
+    padding: 6px 0;
+}
+
+.transaction-payment i {
+    color: var(--icct-blue);
+    margin-right: 5px;
+}
+
+.transaction-payment strong {
+    color: var(--navy);
 }
 
 .transaction-total {
