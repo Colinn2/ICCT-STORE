@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if STATIC_PRODUCTS is available
         if (typeof STATIC_PRODUCTS === 'undefined') {
             console.error('❌ Static product data not loaded!');
-            alert('⚠️ Product data not available. Please ensure products-data.js is loaded.');
+            showSuccessModal('Data Error', '⚠️ Product data not available. Please ensure products-data.js is loaded.');
             return [];
         }
         
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!container) {
             console.error('❌ Container not found for selector:', selector);
-            alert(`ERROR: Cannot find container for ${containerId}`);
+            showSuccessModal('Container Error', `ERROR: Cannot find container for ${containerId}`);
             return;
         }
         
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('🎯 ===== SHOW CATEGORY END =====');
         } else {
             console.error('❌ Section not found:', categoryId);
-            alert(`ERROR: Cannot find section with ID: ${categoryId}`);
+            showSuccessModal('Section Error', `ERROR: Cannot find section with ID: ${categoryId}`);
         }
     }
 
@@ -1072,7 +1072,7 @@ if (checkoutBtn) {
                 proceedToCheckout();
             }
         } else {
-            alert('Your cart is empty. Add some items before checking out.');
+            showSuccessModal('Cart Empty', 'Your cart is empty. Add some items before checking out.');
         }
     });
 }
@@ -1160,7 +1160,7 @@ if (loginForm) {
 // Proceed to checkout function
 function proceedToCheckout() {
     if (cart.length === 0) {
-        alert('Your cart is empty!');
+        showSuccessModal('Cart Empty', 'Your cart is empty! Add items to continue.');
         return;
     }
     
@@ -1180,7 +1180,7 @@ function proceedToCheckout() {
     // Update account display
     updateAccountDisplay();
     
-    alert(`Thank you for your purchase, ${currentUser ? currentUser.studentNumber : 'valued customer'}! Your order has been placed.`);
+    showSuccessModal('Order Placed Successfully!', `Thank you for your purchase, ${currentUser ? currentUser.studentNumber : 'valued customer'}! Your order has been placed and added to your transaction history.`);
     cart = [];
     updateCart();
     cartSidebar.classList.remove('active');
@@ -1555,7 +1555,7 @@ filters.forEach(filter => {
         
         // In a real implementation, this would filter products
         const filterType = filter.textContent;
-        alert(`Filtering by: ${filterType}`);
+        showSuccessModal('Filter Applied', `Filtering by: ${filterType}`);
     });
 });
 
