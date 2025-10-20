@@ -34,9 +34,9 @@ body {
     flex-direction: column;
     zoom: 0.95;
     transform: scale(0.95);
-    transform-origin: 0 0;
+    transform-origin: top center;
     -moz-transform: scale(0.95);
-    -moz-transform-origin: 0 0;
+    -moz-transform-origin: top center;
 }
 
 /* Control visual order of sections */
