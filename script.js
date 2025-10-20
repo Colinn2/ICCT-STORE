@@ -1446,7 +1446,6 @@ function displaySearchResults(products, query) {
             productCard.innerHTML = `
                 <div class="product-image">
                     <img src="${product.image_url}" alt="${product.name}">
-                    <span class="category-badge">${product.category_slug}</span>
                 </div>
                 <div class="product-info">
                     <h3 class="product-title">${product.name}</h3>
