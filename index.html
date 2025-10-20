@@ -788,6 +788,134 @@
                     <option value="installment">Installment Plan</option>
                 </select>
             </div>
+            
+            <!-- Payment Details Form (Hidden by default) -->
+            <div class="payment-details-form" id="paymentDetailsForm" style="display: none;">
+                <div class="form-header">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="paymentFormTitle">Payment Details</span>
+                </div>
+                
+                <!-- GCash Form -->
+                <div class="payment-form gcash-form" data-payment="gcash" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Account Name</label>
+                        <input type="text" placeholder="Enter your GCash name" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Mobile Number</label>
+                        <input type="tel" placeholder="09XX-XXX-XXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag"></i> Reference Number</label>
+                        <input type="text" placeholder="Enter GCash reference number" required>
+                    </div>
+                </div>
+                
+                <!-- Maya Form -->
+                <div class="payment-form maya-form" data-payment="maya" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Account Name</label>
+                        <input type="text" placeholder="Enter your Maya name" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Mobile Number</label>
+                        <input type="tel" placeholder="09XX-XXX-XXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag"></i> Transaction ID</label>
+                        <input type="text" placeholder="Enter Maya transaction ID" required>
+                    </div>
+                </div>
+                
+                <!-- Bank Transfer Form -->
+                <div class="payment-form bank-form" data-payment="bank" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-university"></i> Bank Name</label>
+                        <input type="text" placeholder="Enter your bank name" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Account Name</label>
+                        <input type="text" placeholder="Enter account holder name" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag"></i> Reference Number</label>
+                        <input type="text" placeholder="Enter bank reference number" required>
+                    </div>
+                </div>
+                
+                <!-- Over the Counter Form -->
+                <div class="payment-form counter-form" data-payment="counter" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Preferred Date</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Preferred Time</label>
+                        <select required>
+                            <option value="">Select time</option>
+                            <option value="8-10">8:00 AM - 10:00 AM</option>
+                            <option value="10-12">10:00 AM - 12:00 PM</option>
+                            <option value="1-3">1:00 PM - 3:00 PM</option>
+                            <option value="3-5">3:00 PM - 5:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-comment"></i> Special Instructions</label>
+                        <textarea placeholder="Any special requests? (Optional)" rows="2"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Credit/Debit Card Form -->
+                <div class="payment-form card-form" data-payment="card" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-credit-card"></i> Card Number</label>
+                        <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar"></i> Expiry</label>
+                            <input type="text" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> CVV</label>
+                            <input type="text" placeholder="XXX" maxlength="3" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Cardholder Name</label>
+                        <input type="text" placeholder="Name on card" required>
+                    </div>
+                </div>
+                
+                <!-- Installment Form -->
+                <div class="payment-form installment-form" data-payment="installment" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Installment Period</label>
+                        <select required>
+                            <option value="">Select period</option>
+                            <option value="2">2 Months</option>
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> Valid ID Type</label>
+                        <select required>
+                            <option value="">Select ID type</option>
+                            <option value="student">Student ID</option>
+                            <option value="national">National ID</option>
+                            <option value="drivers">Driver's License</option>
+                            <option value="passport">Passport</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-hashtag"></i> ID Number</label>
+                        <input type="text" placeholder="Enter ID number" required>
+                    </div>
+                </div>
+            </div>
+            
             <div class="cart-total">
                 <p>Total: <span>₱0.00</span></p>
             </div>

@@ -1150,6 +1150,48 @@ if (moveAllToCartBtn) {
     });
 }
 
+// Payment Method Selector - Show/Hide Payment Details Form
+const paymentMethodSelect = document.getElementById('paymentMethod');
+const paymentDetailsForm = document.getElementById('paymentDetailsForm');
+const paymentFormTitle = document.getElementById('paymentFormTitle');
+
+if (paymentMethodSelect && paymentDetailsForm) {
+    paymentMethodSelect.addEventListener('change', function() {
+        const selectedMethod = this.value;
+        
+        // Hide all payment forms first
+        const allForms = paymentDetailsForm.querySelectorAll('.payment-form');
+        allForms.forEach(form => {
+            form.style.display = 'none';
+        });
+        
+        if (selectedMethod) {
+            // Show the payment details container
+            paymentDetailsForm.style.display = 'block';
+            
+            // Update the form title
+            const methodNames = {
+                'gcash': 'GCash Payment Details',
+                'maya': 'Maya Payment Details',
+                'bank': 'Bank Transfer Details',
+                'counter': 'Over the Counter Details',
+                'card': 'Card Payment Details',
+                'installment': 'Installment Plan Details'
+            };
+            paymentFormTitle.textContent = methodNames[selectedMethod] || 'Payment Details';
+            
+            // Show the corresponding form
+            const targetForm = paymentDetailsForm.querySelector(`[data-payment="${selectedMethod}"]`);
+            if (targetForm) {
+                targetForm.style.display = 'block';
+            }
+        } else {
+            // Hide the payment details container if no method selected
+            paymentDetailsForm.style.display = 'none';
+        }
+    });
+}
+
 // Checkout Button
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
@@ -1168,6 +1210,31 @@ if (checkoutBtn) {
                     }, 2000);
                 }
                 return;
+            }
+            
+            // Validate payment details form if visible
+            const paymentDetailsForm = document.getElementById('paymentDetailsForm');
+            if (paymentDetailsForm && paymentDetailsForm.style.display !== 'none') {
+                const activeForm = paymentDetailsForm.querySelector('.payment-form[style*="display: block"]');
+                if (activeForm) {
+                    const requiredInputs = activeForm.querySelectorAll('[required]');
+                    let allFilled = true;
+                    
+                    requiredInputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            allFilled = false;
+                            input.style.borderColor = '#ff4444';
+                            setTimeout(() => {
+                                input.style.borderColor = '';
+                            }, 2000);
+                        }
+                    });
+                    
+                    if (!allFilled) {
+                        showSuccessModal('Incomplete Payment Details', 'Please fill in all required payment information.');
+                        return;
+                    }
+                }
             }
             
             // Check if user is logged in
@@ -1306,6 +1373,17 @@ function proceedToCheckout(paymentMethod = 'Not Specified') {
     const paymentMethodSelect = document.getElementById('paymentMethod');
     if (paymentMethodSelect) {
         paymentMethodSelect.value = '';
+    }
+    
+    // Reset and hide payment details form
+    const paymentDetailsForm = document.getElementById('paymentDetailsForm');
+    if (paymentDetailsForm) {
+        paymentDetailsForm.style.display = 'none';
+        // Clear all form inputs
+        const allInputs = paymentDetailsForm.querySelectorAll('input, select, textarea');
+        allInputs.forEach(input => {
+            input.value = '';
+        });
     }
     
     showSuccessModal('Order Placed Successfully!', `Thank you for your purchase, ${currentUser ? currentUser.studentNumber : 'valued customer'}! Your order has been placed via ${paymentMethodName} and added to your transaction history.`);

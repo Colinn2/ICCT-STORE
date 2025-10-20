@@ -1372,6 +1372,101 @@ body {
     padding: 10px;
 }
 
+/* Payment Details Form */
+.payment-details-form {
+    background: #f8fafc;
+    border: 2px solid var(--icct-blue);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.payment-details-form .form-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e7ef;
+}
+
+.payment-details-form .form-header i {
+    color: var(--icct-blue);
+    font-size: 16px;
+}
+
+.payment-form .form-group {
+    margin-bottom: 15px;
+}
+
+.payment-form .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.payment-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+
+.payment-form label i {
+    color: var(--icct-blue);
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+.payment-form input[type="text"],
+.payment-form input[type="tel"],
+.payment-form input[type="date"],
+.payment-form select,
+.payment-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    background: white;
+    transition: var(--transition);
+}
+
+.payment-form input:focus,
+.payment-form select:focus,
+.payment-form textarea:focus {
+    outline: none;
+    border-color: var(--icct-blue);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.payment-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.payment-form textarea {
+    resize: vertical;
+    min-height: 50px;
+}
+
 .cart-total {
     display: flex;
     justify-content: space-between;
