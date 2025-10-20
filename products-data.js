@@ -383,24 +383,78 @@ const STATIC_PRODUCTS = {
         },
         {
             id: 43,
-            name: "Printing Fee (per page)",
-            description: "Document printing service",
-            price: 5.00,
+            name: "Completion of Incomplete Grade (per subject)",
+            description: "Fee for completion of incomplete grade (up to 7 subjects)",
+            price: 200.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
             id: 44,
-            name: "Scanning / Photocopy Fee",
-            description: "Scanning and photocopying service",
-            price: 10.00,
+            name: "Dropped Subject (per subject)",
+            description: "Fee for dropped subject processing (up to 5 subjects)",
+            price: 150.00,
             stock_quantity: 999,
             image_url: "images/icct fees.png",
             category_slug: "fees"
         },
         {
             id: 45,
+            name: "Late Enrollee Processing Fee - Cancellation",
+            description: "Late enrollment processing fee for cancellation",
+            price: 500.00,
+            stock_quantity: 999,
+            image_url: "images/icct fees.png",
+            category_slug: "fees"
+        },
+        {
+            id: 46,
+            name: "Late Enrollee Processing Fee - Pullout",
+            description: "Late enrollment processing fee for pullout",
+            price: 500.00,
+            stock_quantity: 999,
+            image_url: "images/icct fees.png",
+            category_slug: "fees"
+        },
+        {
+            id: 47,
+            name: "Late Enrollee Processing Fee - Transfer",
+            description: "Late enrollment processing fee for transfer",
+            price: 500.00,
+            stock_quantity: 999,
+            image_url: "images/icct fees.png",
+            category_slug: "fees"
+        },
+        {
+            id: 48,
+            name: "Late Enrollee Processing Fee - Withdrawal",
+            description: "Late enrollment processing fee for withdrawal",
+            price: 500.00,
+            stock_quantity: 999,
+            image_url: "images/icct fees.png",
+            category_slug: "fees"
+        },
+        {
+            id: 49,
+            name: "Lost School ID Replacement",
+            description: "Replacement fee for lost school ID",
+            price: 300.00,
+            stock_quantity: 999,
+            image_url: "images/icct fees.png",
+            category_slug: "fees"
+        },
+        {
+            id: 50,
+            name: "Lost Library ID Replacement",
+            description: "Replacement fee for lost library ID",
+            price: 200.00,
+            stock_quantity: 999,
+            image_url: "images/icct fees.png",
+            category_slug: "fees"
+        },
+        {
+            id: 51,
             name: "Locker Rental Fee",
             description: "Semester locker rental",
             price: 800.00,
