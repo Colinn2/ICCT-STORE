@@ -18,10 +18,10 @@
     /* Legacy variable mapping for compatibility */
     --icct-blue: #4A90E2;
     --navy: #0F1C2D;
-    --soft-gray: #374357;
+    --soft-gray: #f8f9fa;
     --light-blue: #6B9FE8;
-    --text-dark: #E2E8F0;
-    --text-light: #E2E8F0;
+    --text-dark: #212529;            /* Dark text for light backgrounds */
+    --text-light: #6c757d;           /* Medium gray text */
     --light-grey: #E2E8F0;
     --medium-grey: #4A5568;
     --secondary-accent: #D4AF37;
@@ -3196,6 +3196,7 @@ body {
 .category-header .section-title {
     margin: 0;
     flex: 1;
+    color: var(--navy);
 }
 
 .products-grid {
