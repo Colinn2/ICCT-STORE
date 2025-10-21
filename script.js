@@ -161,6 +161,11 @@ console.log('🌐 Protocol:', window.location.protocol);
 // Initialize after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ DOM Content Loaded!');
+    
+    // Always start at home section
+    window.scrollTo(0, 0);
+    window.location.hash = '';
+    
     const categoryLinks = document.querySelectorAll('.category-link');
     const categorySections = document.querySelectorAll('.category-section');
     const backButtons = document.querySelectorAll('.back-btn');
