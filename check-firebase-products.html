@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Product Checker - ICCT Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #333; margin-bottom: 10px; font-size: 32px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover { background: #5568d3; transform: translateY(-2px); }
+        .results {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .category-group {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+        .category-group h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .product-item {
+            padding: 8px;
+            background: #f8f9fa;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-line { margin-bottom: 4px; }
+        .log-line.success { color: #4ec9b0; }
+        .log-line.error { color: #f48771; }
+        .log-line.info { color: #4fc1ff; }
+        .log-line.warning { color: #ffc66d; }
+        .summary {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .summary strong { font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Firebase Product Checker</h1>
+        <p class="subtitle">Analyze your Firebase products and categories</p>
+
+        <div>
+            <button onclick="checkAllProducts()">🔍 Check All Products</button>
+            <button onclick="groupByCategory()">📊 Group by Category</button>
+            <button onclick="listCategorySlugs()">🏷️ List Category Slugs</button>
+        </div>
+
+        <div id="results"></div>
+        <div class="log" id="log"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase Configuration with Asia Southeast Database URL
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuB9a4SkFWgKELHlilwvo2PHRRFNsS7E",
+            authDomain: "icct-store-29ea5.firebaseapp.com",
+            databaseURL: "https://icct-store-29ea5-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "icct-store-29ea5",
+            storageBucket: "icct-store-29ea5.firebasestorage.app",
+            messagingSenderId: "1095541958931",
+            appId: "1:1095541958931:web:b1c27c99f5d8e8614592e6"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const logContainer = document.getElementById('log');
+        const resultsContainer = document.getElementById('results');
+
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(line);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        async function checkAllProducts() {
+            resultsContainer.innerHTML = '';
+            log('🔍 Fetching all products from Firebase...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found in Firebase!', 'warning');
+                    resultsContainer.innerHTML = '<div class="summary">⚠️ <strong>No products found!</strong> Your Firebase database is empty.</div>';
+                    return;
+                }
+                
+                const products = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+                
+                log(`✅ Found ${products.length} products in Firebase`, 'success');
+                
+                let html = `<div class="summary">✅ <strong>Total Products: ${products.length}</strong></div>`;
+                html += '<div class="results">';
+                
+                products.forEach((product, index) => {
+                    html += `
+                        <div class="product-item">
+                            ${index + 1}. <strong>${product.name}</strong> - 
+                            Category: <code>${product.category || 'NO CATEGORY'}</code> - 
+                            Stock: ${product.stock || 0} - 
+                            Price: ₱${product.price}
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                resultsContainer.innerHTML = html;
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+                resultsContainer.innerHTML = `<div class="summary" style="background: #f8d7da; border-color: #f5c6cb; color: #721c24;">❌ <strong>Error:</strong> ${error.message}</div>`;
+            }
+        }
+
+        async function groupByCategory() {
+            resultsContainer.innerHTML = '';
+            log('📊 Grouping products by category...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const products = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+                
+                // Group by category
+                const grouped = {};
+                products.forEach(product => {
+                    const category = product.category || 'uncategorized';
+                    if (!grouped[category]) {
+                        grouped[category] = [];
+                    }
+                    grouped[category].push(product);
+                });
+                
+                log(`✅ Found ${Object.keys(grouped).length} categories`, 'success');
+                
+                let html = `<div class="summary">✅ <strong>Total: ${products.length} products in ${Object.keys(grouped).length} categories</strong></div>`;
+                
+                Object.keys(grouped).sort().forEach(category => {
+                    const categoryProducts = grouped[category];
+                    html += `
+                        <div class="category-group">
+                            <h3>📁 ${category} (${categoryProducts.length} products)</h3>
+                    `;
+                    
+                    categoryProducts.forEach(product => {
+                        html += `
+                            <div class="product-item">
+                                • ${product.name} - Stock: ${product.stock || 0} - ₱${product.price}
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                });
+                
+                resultsContainer.innerHTML = html;
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function listCategorySlugs() {
+            resultsContainer.innerHTML = '';
+            log('🏷️ Extracting unique category slugs...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const products = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+                
+                // Get unique categories
+                const categories = [...new Set(products.map(p => p.category || 'uncategorized'))];
+                
+                log(`✅ Found ${categories.length} unique categories`, 'success');
+                
+                let html = `<div class="summary">✅ <strong>Unique Category Slugs Found:</strong></div>`;
+                html += '<div class="results">';
+                html += '<h3 style="margin-bottom: 15px;">Category slugs in your Firebase:</h3>';
+                
+                categories.sort().forEach((category, index) => {
+                    const count = products.filter(p => (p.category || 'uncategorized') === category).length;
+                    html += `
+                        <div class="product-item" style="font-size: 16px;">
+                            ${index + 1}. <code style="background: #667eea; color: white; padding: 4px 8px; border-radius: 4px;">${category}</code> 
+                            - ${count} products
+                        </div>
+                    `;
+                    log(`  Category: ${category} (${count} products)`, 'info');
+                });
+                
+                html += '<hr style="margin: 20px 0;">';
+                html += '<h3 style="margin-bottom: 15px;">Your website navigation expects these slugs:</h3>';
+                html += `
+                    <div class="product-item" style="font-size: 16px;">
+                        1. <code style="background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px;">uniforms</code>
+                    </div>
+                    <div class="product-item" style="font-size: 16px;">
+                        2. <code style="background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px;">documents</code>
+                    </div>
+                    <div class="product-item" style="font-size: 16px;">
+                        3. <code style="background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px;">campus-collection</code> or <code style="background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px;">supplies</code>
+                    </div>
+                    <div class="product-item" style="font-size: 16px;">
+                        4. <code style="background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px;">fees</code>
+                    </div>
+                `;
+                
+                html += '</div>';
+                resultsContainer.innerHTML = html;
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize
+        log('🔥 Firebase initialized with Asia Southeast database', 'success');
+        log(`📍 Database URL: ${firebaseConfig.databaseURL}`, 'info');
+        log('✅ Ready to check products', 'success');
+        log('👉 Click "Check All Products" to see all 49 products', 'info');
+    </script>
+</body>
+</html>

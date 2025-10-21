@@ -30,13 +30,11 @@
                         <li><a href="#all-products" class="category-link">All Products</a></li>
                         <li><a href="#uniforms" class="category-link">Uniforms</a></li>
                         <li><a href="#documents" class="category-link">Documents</a></li>
-                        <li><a href="#supplies" class="category-link">Campus Collection</a></li>
                         <li><a href="#fees" class="category-link">Fees</a></li>
                     </ul>
                 </li>
                 <li><a href="#payment" class="nav-link">Payment</a></li>
                 <li><a href="#about" class="nav-link">FAQ</a></li>
-                <li><a href="#contact" class="nav-link">Supplies Info</a></li>
             </ul>
             <div class="nav-actions">
                 <!-- Search Bar -->
@@ -204,18 +202,6 @@
         </div>
     </section>
 
-    <section id="supplies" class="category-section hidden">
-        <div class="container">
-            <div class="category-header">
-                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
-                <h2 class="section-title">Campus Collection</h2>
-            </div>
-            <div class="products-grid">
-                <!-- Products will be loaded dynamically from database -->
-            </div>
-        </div>
-    </section>
-
     <section id="fees" class="category-section hidden">
         <div class="container">
             <div class="category-header">
@@ -252,124 +238,99 @@
                         <h4>How to Pay:</h4>
                         <ol>
                             <li>Open your GCash app</li>
-                            <li>Select "Send Money" or "Pay QR"</li>
+                            <li>Select "Send Money"</li>
                             <li>Enter our GCash number: <strong>0917-123-4567</strong></li>
-                            <li>Enter the amount and send</li>
-                            <li>Take a screenshot of the receipt</li>
-                            <li>Show the receipt at the cashier or upload on your account</li>
+                            <li>Enter the exact amount</li>
+                            <li>Click Send and confirm</li>
+                            <li>Take a screenshot of your receipt</li>
+                            <li>Keep your reference number for verification</li>
                         </ol>
+                        <div class="payment-note-box">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Make sure to save your transaction reference number for confirmation.</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- PayMaya -->
-                <div class="payment-card">
-                    <div class="payment-icon">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <h3>Maya (PayMaya)</h3>
-                    <p class="payment-description">Digital wallet payment</p>
-                    <div class="payment-instructions">
-                        <h4>How to Pay:</h4>
-                        <ol>
-                            <li>Open Maya app</li>
-                            <li>Tap "Send Money"</li>
-                            <li>Select "To Mobile Number"</li>
-                            <li>Enter: <strong>0918-765-4321</strong></li>
-                            <li>Enter amount and confirm</li>
-                            <li>Save the transaction receipt</li>
-                            <li>Present at cashier for verification</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <!-- Bank Transfer -->
-                <div class="payment-card">
-                    <div class="payment-icon">
-                        <i class="fas fa-university"></i>
-                    </div>
-                    <h3>Bank Transfer</h3>
-                    <p class="payment-description">Direct bank deposit or online transfer</p>
-                    <div class="payment-instructions">
-                        <h4>How to Pay:</h4>
-                        <ol>
-                            <li>Go to your bank or use online banking</li>
-                            <li>Transfer to: <strong>BDO - ICCT Colleges</strong></li>
-                            <li>Account Number: <strong>0012-3456-7890</strong></li>
-                            <li>Enter the amount</li>
-                            <li>Keep the deposit slip or confirmation</li>
-                            <li>Bring receipt to cashier</li>
-                            <li>Include your name and student number</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <!-- Over the Counter -->
-                <div class="payment-card">
-                    <div class="payment-icon">
-                        <i class="fas fa-store"></i>
-                    </div>
-                    <h3>Over the Counter</h3>
-                    <p class="payment-description">Pay at the campus cashier</p>
-                    <div class="payment-instructions">
-                        <h4>How to Pay:</h4>
-                        <ol>
-                            <li>Visit ICCT Antipolo Campus Cashier</li>
-                            <li>Office Hours: Mon-Fri, 8:00 AM - 5:00 PM</li>
-                            <li>Bring your student ID</li>
-                            <li>Present your order details</li>
-                            <li>Pay in cash or card</li>
-                            <li>Get your official receipt</li>
-                            <li>Items can be claimed immediately</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <!-- Credit/Debit Card -->
+                <!-- ECPay -->
                 <div class="payment-card">
                     <div class="payment-icon">
                         <i class="fas fa-credit-card"></i>
                     </div>
-                    <h3>Credit/Debit Card</h3>
-                    <p class="payment-description">Visa, Mastercard, JCB accepted</p>
+                    <h3>ECPay</h3>
+                    <p class="payment-description">Convenient payment centers nationwide</p>
                     <div class="payment-instructions">
                         <h4>How to Pay:</h4>
                         <ol>
-                            <li>Visit the cashier with your card</li>
-                            <li>Present your order details</li>
-                            <li>Swipe or insert your card</li>
-                            <li>Enter your PIN</li>
-                            <li>Wait for approval</li>
-                            <li>Get your receipt</li>
-                            <li>Claim your items</li>
+                            <li>Visit any ECPay partner outlet (7-Eleven, SM, Robinsons)</li>
+                            <li>Tell the cashier you want to make an ECPay payment</li>
+                            <li>Provide biller name: <strong>ICCT Colleges</strong></li>
+                            <li>Give your student number as reference</li>
+                            <li>Pay the exact amount in cash</li>
+                            <li>Get your official receipt</li>
+                            <li>Keep the receipt with reference number</li>
                         </ol>
+                        <div class="payment-note-box">
+                            <i class="fas fa-info-circle"></i>
+                            <p>ECPay is available at 7-Eleven, SM Business Centers, Robinsons, and other partner outlets.</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Installment -->
+                <!-- Cebuana Lhuillier -->
                 <div class="payment-card">
                     <div class="payment-icon">
-                        <i class="fas fa-calendar-alt"></i>
+                        <i class="fas fa-building"></i>
                     </div>
-                    <h3>Installment Plan</h3>
-                    <p class="payment-description">Pay in flexible installments</p>
+                    <h3>Cebuana Lhuillier</h3>
+                    <p class="payment-description">Pay at any Cebuana Lhuillier branch</p>
                     <div class="payment-instructions">
-                        <h4>How to Apply:</h4>
+                        <h4>How to Pay:</h4>
                         <ol>
-                            <li>Visit the Cashier's Office</li>
-                            <li>Bring valid ID and student ID</li>
-                            <li>Fill out installment application form</li>
-                            <li>Choose payment schedule (2-6 months)</li>
-                            <li>Submit required documents</li>
-                            <li>Wait for approval (1-2 business days)</li>
-                            <li>Start paying monthly installments</li>
+                            <li>Go to any Cebuana Lhuillier branch</li>
+                            <li>Fill out the payment form</li>
+                            <li>Recipient: <strong>ICCT Colleges - Antipolo</strong></li>
+                            <li>Write your student number and name</li>
+                            <li>Pay the amount in cash</li>
+                            <li>Get the official receipt</li>
+                            <li>Keep the control number for tracking</li>
                         </ol>
+                        <div class="payment-note-box">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Present a valid ID and your student ID when making payments.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- M Lhuillier -->
+                <div class="payment-card">
+                    <div class="payment-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3>M Lhuillier</h3>
+                    <p class="payment-description">Remittance center payment option</p>
+                    <div class="payment-instructions">
+                        <h4>How to Pay:</h4>
+                        <ol>
+                            <li>Visit any M Lhuillier branch nationwide</li>
+                            <li>Request for "Bills Payment"</li>
+                            <li>Company name: <strong>ICCT Colleges</strong></li>
+                            <li>Account name: <strong>ICCT Antipolo Campus</strong></li>
+                            <li>Provide your student number as reference</li>
+                            <li>Pay the exact amount in cash</li>
+                            <li>Secure your receipt and reference number</li>
+                        </ol>
+                        <div class="payment-note-box">
+                            <i class="fas fa-info-circle"></i>
+                            <p>M Lhuillier has branches in malls, public markets, and major areas nationwide.</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="payment-note">
                 <i class="fas fa-info-circle"></i>
-                <p><strong>Important:</strong> Always keep your payment receipts and transaction confirmations. For payment inquiries, visit the cashier's office or call <strong>(02) 1234-5678</strong> during office hours.</p>
+                <p><strong>Important:</strong> Always keep your payment receipts and reference numbers. Payment processing takes 24-48 hours. For inquiries, contact the cashier's office at <strong>(02) 1234-5678</strong>.</p>
             </div>
         </div>
     </section>
@@ -567,180 +528,6 @@
         </div>
     </section>
 
-    <!-- Supplies Info Section -->
-    <section id="contact" class="category-section supplies-info-section hidden">
-        <div class="container">
-            <div class="category-header">
-                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</button>
-                <h2 class="section-title">Supplies & Product Information</h2>
-            </div>
-            
-            <div class="supplies-intro">
-                <p>Essential information about document processing, uniform sizes, pickup schedule, and sizing guide.</p>
-            </div>
-
-            <div class="supplies-grid">
-                <!-- Document Processing Times Card -->
-                <div class="info-card">
-                    <h3><i class="fas fa-file-alt"></i> Document Processing Times</h3>
-                    <div class="info-details">
-                        <div class="info-item">
-                            <strong>Transcript of Records</strong>
-                            <p>5-7 business days</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Certificate of Enrollment</strong>
-                            <p>1-2 business days</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Certificate of Grades</strong>
-                            <p>3-5 business days</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Good Moral Character</strong>
-                            <p>3-5 business days</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Honorable Dismissal</strong>
-                            <p>7-10 business days</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Dry Seal</strong>
-                            <p>Same day processing</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Affidavit of Loss</strong>
-                            <p>1-2 business days</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>ID Replacement</strong>
-                            <p>5-7 business days</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Available Sizes Card -->
-                <div class="info-card">
-                    <h3><i class="fas fa-tshirt"></i> Available Uniform Sizes</h3>
-                    <div class="info-details">
-                        <div class="info-item">
-                            <strong>School Uniforms</strong>
-                            <p>Available in XS, S, M, L, XL, 2XL, 3XL</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Campus Collection</strong>
-                            <p>Clothing: XS - 2XL | Accessories: One size fits all</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>In-Stock Items</strong>
-                            <p>Immediate availability for pickup</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Out-of-Stock Orders</strong>
-                            <p>5-7 business days for restocking</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Try-On Service</strong>
-                            <p>Available at Cashier's Office during office hours</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Custom Sizing</strong>
-                            <p>Contact office for custom orders (additional fees may apply)</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pickup Schedule Card -->
-                <div class="info-card">
-                    <h3><i class="fas fa-calendar-check"></i> Pickup Schedule & Locations</h3>
-                    <div class="info-details">
-                        <div class="info-item">
-                            <strong>Office Hours</strong>
-                            <p>Monday - Friday, 8:00 AM - 5:00 PM<br>(Closed on weekends and holidays)</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Documents Pickup</strong>
-                            <p>Registrar's Office, Main Building</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Uniforms & Items Pickup</strong>
-                            <p>Cashier's Office, Ground Floor</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Required Documents</strong>
-                            <p>Student ID, Payment receipt, Order confirmation</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Unclaimed Items Policy</strong>
-                            <p>Items not claimed within 30 days will be returned to inventory</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Authorized Representative</strong>
-                            <p>Authorization letter required if someone else picks up your order</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Size Guide Card -->
-                <div class="info-card">
-                    <h3><i class="fas fa-ruler"></i> Size Guide & Measurements</h3>
-                    <div class="info-details">
-                        <div class="info-item">
-                            <strong>XS (Extra Small)</strong>
-                            <p>Chest: 32-34" | Height: 4'10"-5'2"</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>S (Small)</strong>
-                            <p>Chest: 34-36" | Height: 5'2"-5'4"</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>M (Medium)</strong>
-                            <p>Chest: 36-38" | Height: 5'4"-5'6"</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>L (Large)</strong>
-                            <p>Chest: 38-40" | Height: 5'6"-5'8"</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>XL (Extra Large)</strong>
-                            <p>Chest: 40-42" | Height: 5'8"-5'10"</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>2XL (Double XL)</strong>
-                            <p>Chest: 42-44" | Height: 5'10"-6'0"</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>3XL (Triple XL)</strong>
-                            <p>Chest: 44-46" | Height: 6'0" and above</p>
-                        </div>
-                        <div class="info-item">
-                            <strong>Important Tips</strong>
-                            <p>Visit Cashier's Office for try-on | Exchange within 7 days if unworn with tags</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="supplies-cta">
-                <div class="cta-box">
-                    <i class="fas fa-question-circle"></i>
-                    <h4>Need More Information?</h4>
-                    <p>Visit our FAQ section or contact the offices directly:</p>
-                    <div class="contact-grid">
-                        <div>
-                            <strong>Cashier's Office</strong><br>
-                            (02) 1234-5678
-                        </div>
-                        <div>
-                            <strong>Registrar's Office</strong><br>
-                            (02) 1234-5679
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Back to School Section -->
     <section class="back-to-school">
         <div class="container">
@@ -783,139 +570,27 @@
                         <select id="paymentMethod" class="payment-select">
                             <option value="">Select Payment Method</option>
                             <option value="gcash">GCash</option>
-                            <option value="maya">Maya (PayMaya)</option>
-                            <option value="bank">Bank Transfer</option>
-                            <option value="counter">Over the Counter</option>
-                            <option value="card">Credit/Debit Card</option>
-                            <option value="installment">Installment Plan</option>
+                            <option value="ecpay">ECPay</option>
+                            <option value="cebuana">Cebuana Lhuillier</option>
+                            <option value="mlhuillier">M Lhuillier</option>
                         </select>
                     </div>
                     
-                    <!-- Payment Details Form (Hidden by default) -->
-                    <div class="payment-details-form" id="paymentDetailsForm" style="display: none;">
-                        <div class="form-header">
-                            <i class="fas fa-info-circle"></i>
-                            <span id="paymentFormTitle">Payment Details</span>
+                    <!-- Payment Reference Display -->
+                    <div class="payment-reference-display" id="paymentReferenceDisplay" style="display: none;">
+                        <div class="reference-box">
+                            <i class="fas fa-check-circle"></i>
+                            <h4>Payment Reference Number</h4>
+                            <p class="reference-number" id="referenceNumber"></p>
+                            <small>Please save this reference number for your records</small>
                         </div>
-                        
-                        <!-- GCash Form -->
-                        <div class="payment-form gcash-form" data-payment="gcash" style="display: none;">
-                            <div class="form-group">
-                                <label><i class="fas fa-user"></i> Account Name</label>
-                                <input type="text" placeholder="Enter your GCash name" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-phone"></i> Mobile Number</label>
-                                <input type="tel" placeholder="09XX-XXX-XXXX" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-hashtag"></i> Reference Number</label>
-                                <input type="text" placeholder="Enter GCash reference number" required>
-                            </div>
-                        </div>
-                        
-                        <!-- Maya Form -->
-                        <div class="payment-form maya-form" data-payment="maya" style="display: none;">
-                            <div class="form-group">
-                                <label><i class="fas fa-user"></i> Account Name</label>
-                                <input type="text" placeholder="Enter your Maya name" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-phone"></i> Mobile Number</label>
-                                <input type="tel" placeholder="09XX-XXX-XXXX" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-hashtag"></i> Transaction ID</label>
-                                <input type="text" placeholder="Enter Maya transaction ID" required>
-                            </div>
-                        </div>
-                        
-                        <!-- Bank Transfer Form -->
-                        <div class="payment-form bank-form" data-payment="bank" style="display: none;">
-                            <div class="form-group">
-                                <label><i class="fas fa-university"></i> Bank Name</label>
-                                <input type="text" placeholder="Enter your bank name" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-user"></i> Account Name</label>
-                                <input type="text" placeholder="Enter account holder name" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-hashtag"></i> Reference Number</label>
-                                <input type="text" placeholder="Enter bank reference number" required>
-                            </div>
-                        </div>
-                        
-                        <!-- Over the Counter Form -->
-                        <div class="payment-form counter-form" data-payment="counter" style="display: none;">
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar"></i> Preferred Date</label>
-                                <input type="date" required>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-clock"></i> Preferred Time</label>
-                                <select required>
-                                    <option value="">Select time</option>
-                                    <option value="8-10">8:00 AM - 10:00 AM</option>
-                                    <option value="10-12">10:00 AM - 12:00 PM</option>
-                                    <option value="1-3">1:00 PM - 3:00 PM</option>
-                                    <option value="3-5">3:00 PM - 5:00 PM</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-comment"></i> Special Instructions</label>
-                                <textarea placeholder="Any special requests? (Optional)" rows="2"></textarea>
-                            </div>
-                        </div>
-                        
-                        <!-- Credit/Debit Card Form -->
-                        <div class="payment-form card-form" data-payment="card" style="display: none;">
-                            <div class="form-group">
-                                <label><i class="fas fa-credit-card"></i> Card Number</label>
-                                <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" required>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label><i class="fas fa-calendar"></i> Expiry</label>
-                                    <input type="text" placeholder="MM/YY" maxlength="5" required>
-                                </div>
-                                <div class="form-group">
-                                    <label><i class="fas fa-lock"></i> CVV</label>
-                                    <input type="text" placeholder="XXX" maxlength="3" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-user"></i> Cardholder Name</label>
-                                <input type="text" placeholder="Name on card" required>
-                            </div>
-                        </div>
-                        
-                        <!-- Installment Form -->
-                        <div class="payment-form installment-form" data-payment="installment" style="display: none;">
-                            <div class="form-group">
-                                <label><i class="fas fa-calendar-alt"></i> Installment Period</label>
-                                <select required>
-                                    <option value="">Select period</option>
-                                    <option value="2">2 Months</option>
-                                    <option value="3">3 Months</option>
-                                    <option value="6">6 Months</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-id-card"></i> Valid ID Type</label>
-                                <select required>
-                                    <option value="">Select ID type</option>
-                                    <option value="student">Student ID</option>
-                                    <option value="national">National ID</option>
-                                    <option value="drivers">Driver's License</option>
-                                    <option value="passport">Passport</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fas fa-hashtag"></i> ID Number</label>
-                                <input type="text" placeholder="Enter ID number" required>
-                            </div>
-                        </div>
+                    </div>
+                    
+                    <!-- Confirm Payment Button -->
+                    <div class="confirm-payment-section" id="confirmPaymentSection" style="display: none;">
+                        <button class="confirm-payment-btn" id="confirmPaymentBtn">
+                            <i class="fas fa-check"></i> Confirm Payment Method
+                        </button>
                     </div>
                 </div>
             </div>
@@ -967,6 +642,11 @@
                 <button class="account-login-btn" id="accountLoginBtn">
                     <i class="fas fa-sign-in-alt"></i> Sign In
                 </button>
+                
+                <!-- Admin Login Button -->
+                <button class="admin-login-trigger-btn" id="adminLoginTriggerBtn">
+                    <i class="fas fa-shield-alt"></i> Admin Login
+                </button>
             </div>
         </div>
         
@@ -984,6 +664,12 @@
             </div>
             
             <div class="account-sections">
+                <!-- Admin Mode Indicator (Only visible in admin mode) -->
+                <div class="admin-mode-banner" id="adminModeBanner" style="display: none;">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Admin Mode Active</span>
+                </div>
+
                 <!-- Transaction History Section -->
                 <div class="account-section">
                     <div class="section-header">
@@ -998,11 +684,29 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Admin Payments Section (Only visible in admin mode) -->
+                <div class="account-section admin-only" id="adminPaymentsSection" style="display: none;">
+                    <div class="section-header">
+                        <h3><i class="fas fa-credit-card"></i> Payment Management</h3>
+                        <span class="payment-count" id="paymentCount">0 payments</span>
+                    </div>
+                    <div class="payment-list" id="paymentList">
+                        <div class="empty-payments">
+                            <i class="fas fa-money-check-alt"></i>
+                            <p>No payments to manage</p>
+                            <small>Transaction payments will appear here</small>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Account Actions -->
                 <div class="account-actions">
                     <button class="logout-btn" id="logoutBtn">
                         <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                    <button class="admin-logout-btn" id="adminLogoutBtn" style="display: none;">
+                        <i class="fas fa-sign-out-alt"></i> Exit Admin Mode
                     </button>
                 </div>
             </div>
@@ -1067,6 +771,192 @@
                     <p>Don't have an account? <a href="#" class="register-link">Register here</a></p>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-modal-content">
+            <button class="close-modal" id="closeAdminModal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="admin-header">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Admin Login</h2>
+                <p>Enter any credentials to access admin mode</p>
+            </div>
+            
+            <form class="admin-form" id="adminForm">
+                <div class="form-group">
+                    <label for="adminUsername">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="adminUsername" 
+                        name="adminUsername" 
+                        placeholder="Enter any username"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="adminPassword" 
+                        name="adminPassword" 
+                        placeholder="Enter any password"
+                        required
+                    >
+                    <span class="toggle-password" id="toggleAdminPassword">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <button type="submit" class="admin-submit-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login as Admin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Mode Indicator (Top-Right Corner) -->
+    <div class="admin-indicator" id="adminIndicator" style="display: none;">
+        <div class="admin-indicator-content">
+            <span class="admin-badge">
+                <i class="fas fa-shield-alt"></i> Admin Mode Active
+            </span>
+            <button class="admin-logout-btn-top" id="adminLogoutBtnTop">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Full Screen Overlay) -->
+    <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <div class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <i class="fas fa-shield-alt"></i>
+                <h2>Admin Panel</h2>
+            </div>
+            
+            <nav class="admin-nav">
+                <button class="admin-nav-btn active" data-section="products">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </button>
+                <button class="admin-nav-btn" data-section="transactions">
+                    <i class="fas fa-receipt"></i>
+                    <span>Transaction History</span>
+                </button>
+                <button class="admin-nav-btn" data-section="payments">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Payments</span>
+                </button>
+                <button class="admin-nav-btn" data-section="orders">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Order Status</span>
+                </button>
+            </nav>
+            
+            <div class="admin-sidebar-footer">
+                <button class="admin-logout-btn-sidebar" id="adminLogoutBtnSidebar">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="admin-content">
+            <!-- Products Section -->
+            <div class="admin-section active" id="adminProductsSection">
+                <div class="admin-section-header">
+                    <h1><i class="fas fa-box"></i> Products Management</h1>
+                    <p>Manage product inventory and stock levels</p>
+                </div>
+                <div class="admin-products-grid" id="adminProductsGrid">
+                    <!-- Products will be loaded here dynamically -->
+                </div>
+            </div>
+            
+            <!-- Transaction History Section -->
+            <div class="admin-section" id="adminTransactionsSection">
+                <div class="admin-section-header">
+                    <h1><i class="fas fa-receipt"></i> Transaction History</h1>
+                    <p>View all student transactions and orders</p>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Student Number</th>
+                                <th>Date & Time</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody">
+                            <!-- Transactions will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Payments Section -->
+            <div class="admin-section" id="adminPaymentsSection">
+                <div class="admin-section-header">
+                    <h1><i class="fas fa-credit-card"></i> Payment Management</h1>
+                    <p>Monitor and update payment statuses</p>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>Student Number</th>
+                                <th>Date & Time</th>
+                                <th>Payment Method</th>
+                                <th>Amount</th>
+                                <th>Payment Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTableBody">
+                            <!-- Payments will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Order Status Section -->
+            <div class="admin-section" id="adminOrdersSection">
+                <div class="admin-section-header">
+                    <h1><i class="fas fa-shopping-bag"></i> Order Status Management</h1>
+                    <p>Track and update student order statuses</p>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Student Number</th>
+                                <th>Product Name(s)</th>
+                                <th>Quantity</th>
+                                <th>Order Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

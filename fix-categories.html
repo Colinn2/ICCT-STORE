@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Fix Firebase Categories - ICCT Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #333; margin-bottom: 10px; font-size: 32px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover { background: #5568d3; transform: translateY(-2px); }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .results {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .issue-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #ffc107;
+        }
+        .issue-card.error { border-left-color: #dc3545; }
+        .issue-card.success { border-left-color: #28a745; }
+        .fix-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-line { margin-bottom: 4px; }
+        .log-line.success { color: #4ec9b0; }
+        .log-line.error { color: #f48771; }
+        .log-line.info { color: #4fc1ff; }
+        .log-line.warning { color: #ffc66d; }
+        .summary {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .summary strong { font-size: 18px; display: block; margin-bottom: 10px; }
+        .category-mapping {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .category-mapping .arrow {
+            font-size: 24px;
+            color: #667eea;
+        }
+        code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Auto-Fix Firebase Categories</h1>
+        <p class="subtitle">Automatically detect and fix category mismatches between Firebase and your website</p>
+
+        <div>
+            <button onclick="analyzeMismatches()" class="btn-success">🔍 Analyze Issues</button>
+            <button onclick="fixAllCategories()" class="btn-success">🔧 Auto-Fix All Categories</button>
+            <button onclick="fixImagePaths()" class="btn-success">🖼️ Fix Image Paths</button>
+            <button onclick="showCurrentState()" style="background: #17a2b8;">📊 Show Current State</button>
+        </div>
+
+        <div id="results"></div>
+        <div class="log" id="log"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuB9a4SkFWgKELHlilwvo2PHRRFNsS7E",
+            authDomain: "icct-store-29ea5.firebaseapp.com",
+            databaseURL: "https://icct-store-29ea5-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "icct-store-29ea5",
+            storageBucket: "icct-store-29ea5.firebasestorage.app",
+            messagingSenderId: "1095541958931",
+            appId: "1:1095541958931:web:b1c27c99f5d8e8614592e6"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const logContainer = document.getElementById('log');
+        const resultsContainer = document.getElementById('results');
+
+        // Expected categories by website
+        const EXPECTED_CATEGORIES = {
+            'uniforms': 'uniforms',
+            'documents': 'documents',
+            'campus-collection': 'supplies',  // Website uses 'supplies' but Firebase might use 'campus-collection'
+            'supplies': 'supplies',
+            'fees': 'fees'
+        };
+
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(line);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        async function analyzeMismatches() {
+            resultsContainer.innerHTML = '';
+            log('🔍 Analyzing category mismatches...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const products = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+                
+                log(`✅ Found ${products.length} products`, 'success');
+                
+                // Analyze categories
+                const categoryCounts = {};
+                const imageIssues = [];
+                const categoryIssues = [];
+                
+                products.forEach(product => {
+                    const category = product.category || 'NO_CATEGORY';
+                    categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+                    
+                    // Check if category matches expected
+                    const normalized = category.toLowerCase();
+                    if (!EXPECTED_CATEGORIES[normalized] && category !== 'NO_CATEGORY') {
+                        categoryIssues.push({
+                            product: product.name,
+                            currentCategory: category,
+                            suggestedFix: getSuggestedCategory(category)
+                        });
+                    }
+                    
+                    // Check image paths
+                    if (!product.image || product.image === '' || product.image === 'undefined') {
+                        imageIssues.push({
+                            product: product.name,
+                            id: product.id,
+                            currentImage: product.image || 'MISSING'
+                        });
+                    }
+                });
+                
+                log(`📊 Found ${Object.keys(categoryCounts).length} unique categories`, 'info');
+                log(`⚠️ Found ${categoryIssues.length} category issues`, 'warning');
+                log(`🖼️ Found ${imageIssues.length} image issues`, 'warning');
+                
+                // Display results
+                let html = `
+                    <div class="summary">
+                        <strong>📊 Analysis Complete</strong>
+                        <p>Total Products: ${products.length}</p>
+                        <p>Category Issues: ${categoryIssues.length}</p>
+                        <p>Image Issues: ${imageIssues.length}</p>
+                    </div>
+                `;
+                
+                // Show current categories
+                html += '<h3>📁 Current Categories in Firebase:</h3>';
+                Object.keys(categoryCounts).forEach(cat => {
+                    const count = categoryCounts[cat];
+                    const isValid = EXPECTED_CATEGORIES[cat.toLowerCase()] || cat === 'NO_CATEGORY';
+                    html += `
+                        <div class="issue-card ${isValid ? 'success' : 'error'}">
+                            <strong>${isValid ? '✅' : '❌'} <code>${cat}</code></strong> - ${count} products
+                        </div>
+                    `;
+                });
+                
+                // Show expected categories
+                html += '<h3 style="margin-top: 20px;">🎯 Website Expects These Categories:</h3>';
+                html += `
+                    <div class="category-mapping">
+                        <div><code>uniforms</code></div>
+                        <div class="arrow">→</div>
+                        <div>Uniforms section</div>
+                    </div>
+                    <div class="category-mapping">
+                        <div><code>documents</code></div>
+                        <div class="arrow">→</div>
+                        <div>Documents section</div>
+                    </div>
+                    <div class="category-mapping">
+                        <div><code>supplies</code> or <code>campus-collection</code></div>
+                        <div class="arrow">→</div>
+                        <div>Campus Collection section</div>
+                    </div>
+                    <div class="category-mapping">
+                        <div><code>fees</code></div>
+                        <div class="arrow">→</div>
+                        <div>Fees section</div>
+                    </div>
+                `;
+                
+                if (categoryIssues.length > 0) {
+                    html += '<h3 style="margin-top: 20px;">⚠️ Products with Category Issues:</h3>';
+                    categoryIssues.forEach(issue => {
+                        html += `
+                            <div class="issue-card error">
+                                <strong>${issue.product}</strong><br>
+                                Current: <code>${issue.currentCategory}</code> ❌<br>
+                                Suggested: <code>${issue.suggestedFix}</code> ✅
+                            </div>
+                        `;
+                    });
+                }
+                
+                if (imageIssues.length > 0) {
+                    html += '<h3 style="margin-top: 20px;">🖼️ Products with Missing Images:</h3>';
+                    imageIssues.slice(0, 10).forEach(issue => {
+                        html += `
+                            <div class="issue-card error">
+                                <strong>${issue.product}</strong> (ID: ${issue.id})<br>
+                                Current image: <code>${issue.currentImage}</code>
+                            </div>
+                        `;
+                    });
+                    if (imageIssues.length > 10) {
+                        html += `<p style="color: #856404; margin-top: 10px;">...and ${imageIssues.length - 10} more</p>`;
+                    }
+                }
+                
+                resultsContainer.innerHTML = html;
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        function getSuggestedCategory(currentCategory) {
+            const normalized = currentCategory.toLowerCase().trim();
+            
+            if (normalized.includes('uniform')) return 'uniforms';
+            if (normalized.includes('document')) return 'documents';
+            if (normalized.includes('campus') || normalized.includes('collection') || normalized.includes('supplies')) return 'supplies';
+            if (normalized.includes('fee') || normalized.includes('payment')) return 'fees';
+            
+            return 'uniforms'; // default
+        }
+
+        async function fixAllCategories() {
+            if (!confirm('🔧 This will automatically fix all category names in Firebase. Continue?')) {
+                return;
+            }
+            
+            log('🔧 Starting auto-fix...', 'info');
+            resultsContainer.innerHTML = '<div class="summary">⏳ Fixing categories...</div>';
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const updates = {};
+                let fixCount = 0;
+                
+                Object.keys(data).forEach(productId => {
+                    const product = data[productId];
+                    const currentCategory = product.category || '';
+                    const normalized = currentCategory.toLowerCase().trim();
+                    
+                    let newCategory = null;
+                    
+                    // Fix category if needed
+                    if (normalized === 'campus-collection' || normalized === 'campus collection') {
+                        newCategory = 'supplies';
+                    } else if (normalized.includes('uniform') && normalized !== 'uniforms') {
+                        newCategory = 'uniforms';
+                    } else if (normalized.includes('document') && normalized !== 'documents') {
+                        newCategory = 'documents';
+                    } else if (normalized.includes('fee') && normalized !== 'fees') {
+                        newCategory = 'fees';
+                    } else if (normalized === '' || normalized === 'no_category') {
+                        newCategory = 'uniforms'; // default
+                    }
+                    
+                    if (newCategory && newCategory !== currentCategory) {
+                        updates[`products/${productId}/category`] = newCategory;
+                        fixCount++;
+                        log(`📝 ${product.name}: "${currentCategory}" → "${newCategory}"`, 'info');
+                    }
+                });
+                
+                if (fixCount > 0) {
+                    await database.ref().update(updates);
+                    log(`✅ Fixed ${fixCount} categories!`, 'success');
+                    resultsContainer.innerHTML = `
+                        <div class="summary" style="background: #d4edda; border-color: #c3e6cb; color: #155724;">
+                            <strong>✅ Success!</strong>
+                            <p>Fixed ${fixCount} product categories</p>
+                            <p>Refresh your website to see the changes!</p>
+                        </div>
+                    `;
+                } else {
+                    log('✅ All categories are already correct!', 'success');
+                    resultsContainer.innerHTML = `
+                        <div class="summary" style="background: #d4edda; border-color: #c3e6cb; color: #155724;">
+                            <strong>✅ All Good!</strong>
+                            <p>All categories are already correct</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function fixImagePaths() {
+            if (!confirm('🖼️ This will fix missing image paths. Continue?')) {
+                return;
+            }
+            
+            log('🖼️ Fixing image paths...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const updates = {};
+                let fixCount = 0;
+                
+                Object.keys(data).forEach(productId => {
+                    const product = data[productId];
+                    
+                    // Fix missing or invalid image paths
+                    if (!product.image || product.image === '' || product.image === 'undefined' || product.image === 'null') {
+                        // Generate image path from product ID or name
+                        const imagePath = `images/${productId}.jpg`;
+                        updates[`products/${productId}/image`] = imagePath;
+                        fixCount++;
+                        log(`🖼️ ${product.name}: → "${imagePath}"`, 'info');
+                    }
+                });
+                
+                if (fixCount > 0) {
+                    await database.ref().update(updates);
+                    log(`✅ Fixed ${fixCount} image paths!`, 'success');
+                    resultsContainer.innerHTML = `
+                        <div class="summary" style="background: #d4edda; border-color: #c3e6cb; color: #155724;">
+                            <strong>✅ Success!</strong>
+                            <p>Fixed ${fixCount} image paths</p>
+                            <p style="margin-top: 10px;">⚠️ Note: Make sure the actual image files exist in the /images folder</p>
+                        </div>
+                    `;
+                } else {
+                    log('✅ All image paths are already set!', 'success');
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function showCurrentState() {
+            log('📊 Loading current state...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                
+                // Group by category
+                const grouped = {};
+                products.forEach(p => {
+                    const cat = p.category || 'NO_CATEGORY';
+                    if (!grouped[cat]) grouped[cat] = [];
+                    grouped[cat].push(p);
+                });
+                
+                let html = `<div class="summary"><strong>📊 Current Database State</strong><p>Total: ${products.length} products</p></div>`;
+                
+                Object.keys(grouped).sort().forEach(category => {
+                    const items = grouped[category];
+                    html += `
+                        <div class="issue-card success">
+                            <h3>📁 ${category} (${items.length} products)</h3>
+                            ${items.map(p => `
+                                <div style="margin: 5px 0; padding: 5px; background: #f8f9fa; border-radius: 3px;">
+                                    • <strong>${p.name}</strong> - 
+                                    Image: <code>${p.image || 'MISSING'}</code> - 
+                                    Stock: ${p.stock || 0}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                });
+                
+                resultsContainer.innerHTML = html;
+                log('✅ State loaded', 'success');
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        log('🔥 Firebase initialized', 'success');
+        log('✅ Ready to fix categories and images', 'success');
+    </script>
+</body>
+</html>

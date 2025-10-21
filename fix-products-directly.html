@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Fix - ICCT Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { 
+            color: #667eea; 
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .big-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            width: 100%;
+            margin: 10px 0;
+            transition: transform 0.2s;
+        }
+        .big-button:hover {
+            transform: scale(1.05);
+        }
+        .big-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .output {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .success { color: #10b981; font-weight: bold; }
+        .error { color: #ef4444; font-weight: bold; }
+        .warning { color: #f59e0b; font-weight: bold; }
+        .info { color: #3b82f6; }
+        .step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .progress {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Quick Fix Tool</h1>
+        <p class="subtitle">Fix your dropdown menu and product categories in one click</p>
+        
+        <button id="fixBtn" class="big-button" onclick="fixEverything()">
+            🚀 FIX EVERYTHING NOW
+        </button>
+        
+        <button class="big-button" onclick="checkStatus()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            ✅ CHECK STATUS
+        </button>
+        
+        <div class="progress" style="display: none;">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        
+        <div id="output" class="output" style="display: none;"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuB9a4SkFWgKELHlilwvo2PHRRFNsS7E",
+            authDomain: "icct-store-29ea5.firebaseapp.com",
+            databaseURL: "https://icct-store-29ea5-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "icct-store-29ea5",
+            storageBucket: "icct-store-29ea5.firebasestorage.app",
+            messagingSenderId: "1095541958931",
+            appId: "1:1095541958931:web:b1c27c99f5d8e8614592e6"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const output = document.getElementById('output');
+        const progressBar = document.getElementById('progressBar');
+
+        function log(message, type = 'info') {
+            output.style.display = 'block';
+            const line = document.createElement('div');
+            line.className = type;
+            line.innerHTML = message;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function setProgress(percent) {
+            document.querySelector('.progress').style.display = 'block';
+            progressBar.style.width = percent + '%';
+        }
+
+        function clearOutput() {
+            output.innerHTML = '';
+            output.style.display = 'none';
+            document.querySelector('.progress').style.display = 'none';
+            progressBar.style.width = '0%';
+        }
+
+        async function fixEverything() {
+            clearOutput();
+            const btn = document.getElementById('fixBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ FIXING... PLEASE WAIT';
+            
+            try {
+                log('🔥 Starting automatic fix...', 'info');
+                setProgress(10);
+                
+                // Step 1: Get all products
+                log('<br><div class="step">📦 Step 1: Loading products from Firebase...</div>', 'info');
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('❌ No products found in Firebase!', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '🚀 FIX EVERYTHING NOW';
+                    return;
+                }
+                
+                const productCount = Object.keys(data).length;
+                log(`✅ Found ${productCount} products`, 'success');
+                setProgress(30);
+                
+                // Step 2: Fix categories and images
+                log('<br><div class="step">🔧 Step 2: Auto-fixing categories and images...</div>', 'info');
+                const updates = {};
+                let fixedCount = 0;
+                let categoryCounts = { uniforms: 0, documents: 0, supplies: 0, fees: 0 };
+                
+                Object.keys(data).forEach(productId => {
+                    const product = data[productId];
+                    const name = (product.name || '').toLowerCase();
+                    const id = productId.toLowerCase();
+                    let changed = false;
+                    
+                    // Detect correct category
+                    let correctCategory = null;
+                    
+                    if (name.includes('uniform') || name.includes('polo') || name.includes('necktie') || 
+                        name.includes('lab') || name.includes('nstp') || name.includes('pe ') ||
+                        name.includes('lace') || id.includes('uniform') || id.includes('polo') || 
+                        id.includes('necktie') || id.includes('lab') || id.includes('nstp') || 
+                        id.includes('lace')) {
+                        correctCategory = 'uniforms';
+                    } else if (name.includes('form') || name.includes('clearance') || name.includes('certificate') ||
+                               name.includes('transcript') || name.includes('diploma') || name.includes('card') ||
+                               name.includes('authentication') || name.includes('dismissal') || name.includes('cog') ||
+                               id.includes('form') || id.includes('clearance') || id.includes('certificate') ||
+                               id.includes('transcript') || id.includes('diploma') || id.includes('card') || 
+                               id.includes('cog') || id.includes('authentication')) {
+                        correctCategory = 'documents';
+                    } else if (name.includes('bag') || name.includes('tumbler') || name.includes('notebook') ||
+                               name.includes('pen') || name.includes('jacket') || name.includes('cap') ||
+                               name.includes('lanyard') || id.includes('bag') || id.includes('tumbler') || 
+                               id.includes('notebook') || id.includes('pen') || id.includes('jacket') || 
+                               id.includes('cap') || id.includes('lanyard')) {
+                        correctCategory = 'supplies';
+                    } else if (name.includes('fee') || name.includes('tuition') || name.includes('registration') ||
+                               name.includes('payment') || id.includes('fee') || id.includes('tuition') || 
+                               id.includes('registration')) {
+                        correctCategory = 'fees';
+                    }
+                    
+                    // Fix category if wrong or missing
+                    if (correctCategory && product.category !== correctCategory) {
+                        updates[`products/${productId}/category`] = correctCategory;
+                        changed = true;
+                    }
+                    
+                    // Count by category
+                    if (correctCategory) {
+                        categoryCounts[correctCategory]++;
+                    }
+                    
+                    // Fix image path if missing/invalid
+                    if (!product.image || product.image === 'undefined' || product.image === '' || 
+                        product.image === 'null' || !product.image.startsWith('images/')) {
+                        updates[`products/${productId}/image`] = `images/${productId}.jpg`;
+                        changed = true;
+                    }
+                    
+                    if (changed) {
+                        fixedCount++;
+                        log(`✅ Fixed: ${product.name}`, 'success');
+                    }
+                });
+                
+                setProgress(60);
+                
+                // Step 3: Apply updates
+                if (Object.keys(updates).length > 0) {
+                    log(`<br><div class="step">💾 Step 3: Saving ${Object.keys(updates).length} updates to Firebase...</div>`, 'info');
+                    await database.ref().update(updates);
+                    log(`✅ Successfully updated ${fixedCount} products!`, 'success');
+                } else {
+                    log('<br>ℹ️ No updates needed - everything already correct!', 'info');
+                }
+                
+                setProgress(90);
+                
+                // Step 4: Show summary
+                log('<br><div class="step">📊 Step 4: Summary</div>', 'info');
+                log(`<br><strong>Products by Category:</strong>`, 'info');
+                log(`👕 Uniforms: ${categoryCounts.uniforms} products`, categoryCounts.uniforms > 0 ? 'success' : 'error');
+                log(`📄 Documents: ${categoryCounts.documents} products`, categoryCounts.documents > 0 ? 'success' : 'error');
+                log(`🎒 Supplies: ${categoryCounts.supplies} products`, categoryCounts.supplies > 0 ? 'success' : 'error');
+                log(`💰 Fees: ${categoryCounts.fees} products`, categoryCounts.fees > 0 ? 'success' : 'error');
+                
+                setProgress(100);
+                
+                // Success message
+                log('<br><div class="step" style="border-left-color: #10b981;">✅ <strong>SUCCESS!</strong> All products fixed!</div>', 'success');
+                log('<br><strong style="font-size: 16px;">🎉 NOW DO THIS:</strong>', 'warning');
+                log('1. Go to your website: <strong>index.html</strong>', 'info');
+                log('2. Press <strong>Ctrl+F5</strong> to force refresh', 'info');
+                log('3. Click on the dropdown menu (Uniforms, Documents, etc.)', 'info');
+                log('4. Products should now appear in each category!', 'success');
+                
+            } catch (error) {
+                log(`<br>❌ ERROR: ${error.message}`, 'error');
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 FIX EVERYTHING NOW';
+            }
+        }
+
+        async function checkStatus() {
+            clearOutput();
+            log('🔍 Checking current status...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('❌ No products in database', 'error');
+                    return;
+                }
+                
+                const products = Object.keys(data).map(k => ({ id: k, ...data[k] }));
+                log(`<br>📦 Total Products: ${products.length}`, 'success');
+                
+                // Check categories
+                const categories = {};
+                const issues = [];
+                
+                products.forEach(p => {
+                    const cat = p.category || 'NO_CATEGORY';
+                    categories[cat] = (categories[cat] || 0) + 1;
+                    
+                    if (!['uniforms', 'documents', 'supplies', 'fees'].includes(p.category)) {
+                        issues.push(`❌ ${p.name} - has bad category: "${p.category}"`);
+                    }
+                    if (!p.image || p.image === 'undefined') {
+                        issues.push(`❌ ${p.name} - missing image`);
+                    }
+                });
+                
+                log('<br><strong>Categories:</strong>', 'info');
+                Object.keys(categories).forEach(cat => {
+                    const valid = ['uniforms', 'documents', 'supplies', 'fees'].includes(cat);
+                    log(`${valid ? '✅' : '❌'} ${cat}: ${categories[cat]} products`, valid ? 'success' : 'error');
+                });
+                
+                if (issues.length > 0) {
+                    log(`<br><strong>⚠️ Found ${issues.length} issues:</strong>`, 'warning');
+                    issues.slice(0, 10).forEach(issue => log(issue, 'warning'));
+                    if (issues.length > 10) log(`... and ${issues.length - 10} more`, 'warning');
+                    log('<br>👉 <strong>Click "FIX EVERYTHING NOW" to fix these issues</strong>', 'warning');
+                } else {
+                    log('<br>✅ <strong>Everything looks good!</strong>', 'success');
+                    log('Your dropdown menu should be working now.', 'success');
+                }
+                
+            } catch (error) {
+                log(`❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Products to Firebase - ICCT Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .status-box {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .status-box.success {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        .status-box.error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .progress {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-line { margin-bottom: 4px; }
+        .log-line.success { color: #4ec9b0; }
+        .log-line.error { color: #f48771; }
+        .log-line.info { color: #4fc1ff; }
+        .log-line.warning { color: #ffc66d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Upload Products to Firebase</h1>
+        <p class="subtitle">Upload all ICCT Store products to Firebase Realtime Database (Asia Southeast)</p>
+
+        <div class="status-box" id="statusBox">
+            <h3>Status: <span id="statusText">Ready to upload</span></h3>
+            <p id="statusDetail">Click the button below to upload 31 products to Firebase</p>
+        </div>
+
+        <div>
+            <button id="uploadBtn" onclick="uploadAllProducts()">🚀 Upload All Products to Firebase</button>
+            <button onclick="checkProducts()">🔍 Check Existing Products</button>
+            <button onclick="clearProducts()" style="background: #dc3545;">🗑️ Clear All Products</button>
+        </div>
+
+        <div class="progress" id="progressContainer" style="display: none;">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase Configuration with CORRECT Asia Southeast Database URL
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuB9a4SkFWgKELHlilwvo2PHRRFNsS7E",
+            authDomain: "icct-store-29ea5.firebaseapp.com",
+            databaseURL: "https://icct-store-29ea5-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "icct-store-29ea5",
+            storageBucket: "icct-store-29ea5.firebasestorage.app",
+            messagingSenderId: "1095541958931",
+            appId: "1:1095541958931:web:b1c27c99f5d8e8614592e6"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const logContainer = document.getElementById('log');
+        const statusBox = document.getElementById('statusBox');
+        const statusText = document.getElementById('statusText');
+        const statusDetail = document.getElementById('statusDetail');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(line);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            console.log(message);
+        }
+
+        function updateStatus(text, detail, isSuccess = false, isError = false) {
+            statusText.textContent = text;
+            statusDetail.textContent = detail;
+            statusBox.className = 'status-box';
+            if (isSuccess) statusBox.classList.add('success');
+            if (isError) statusBox.classList.add('error');
+        }
+
+        function updateProgress(current, total) {
+            const percent = Math.round((current / total) * 100);
+            progressBar.style.width = percent + '%';
+            progressBar.textContent = percent + '%';
+        }
+
+        // All 31 Products
+        const products = [
+            // Uniforms (8 products)
+            { id: 'uniform-male', name: 'ICCT Uniform (Male)', price: 550, stock: 45, category: 'uniforms', description: 'Official ICCT Colleges uniform for male students', image: 'images/uniform-male.jpg' },
+            { id: 'uniform-female', name: 'ICCT Uniform (Female)', price: 550, stock: 38, category: 'uniforms', description: 'Official ICCT Colleges uniform for female students', image: 'images/uniform-female.jpg' },
+            { id: 'pe-uniform', name: 'ICCT PE Uniform', price: 450, stock: 60, category: 'uniforms', description: 'Physical Education uniform with ICCT logo', image: 'images/pe-uniform.jpg' },
+            { id: 'nstp-uniform', name: 'NSTP Uniform', price: 400, stock: 52, category: 'uniforms', description: 'NSTP uniform for civic welfare training', image: 'images/nstp-uniform.jpg' },
+            { id: 'lab-gown', name: 'Laboratory Gown', price: 350, stock: 40, category: 'uniforms', description: 'White laboratory gown for science subjects', image: 'images/lab-gown.jpg' },
+            { id: 'id-lace', name: 'ID Lace', price: 50, stock: 150, category: 'uniforms', description: 'Official ICCT ID lace with logo', image: 'images/id-lace.jpg' },
+            { id: 'necktie', name: 'School Necktie', price: 120, stock: 80, category: 'uniforms', description: 'Official school necktie', image: 'images/necktie.jpg' },
+            { id: 'white-polo', name: 'White Polo Shirt', price: 280, stock: 65, category: 'uniforms', description: 'Official white polo shirt', image: 'images/white-polo.jpg' },
+            
+            // Documents (10 products)
+            { id: 'enrollment-form', name: 'Enrollment Form', price: 20, stock: 200, category: 'documents', description: 'Official enrollment form', image: 'images/enrollment-form.jpg' },
+            { id: 'clearance', name: 'Clearance Form', price: 15, stock: 180, category: 'documents', description: 'Student clearance form', image: 'images/clearance.jpg' },
+            { id: 'cog', name: 'Certificate of Grades', price: 50, stock: 100, category: 'documents', description: 'Official certificate of grades', image: 'images/cog.jpg' },
+            { id: 'transcript', name: 'Transcript of Records', price: 100, stock: 80, category: 'documents', description: 'Official transcript of records', image: 'images/transcript.jpg' },
+            { id: 'diploma', name: 'Diploma', price: 200, stock: 50, category: 'documents', description: 'Official diploma', image: 'images/diploma.jpg' },
+            { id: 'honorable-dismissal', name: 'Honorable Dismissal', price: 75, stock: 60, category: 'documents', description: 'Honorable dismissal certificate', image: 'images/honorable-dismissal.jpg' },
+            { id: 'good-moral', name: 'Certificate of Good Moral', price: 50, stock: 120, category: 'documents', description: 'Certificate of good moral character', image: 'images/good-moral.jpg' },
+            { id: 'authentication', name: 'Document Authentication', price: 100, stock: 70, category: 'documents', description: 'Document authentication service', image: 'images/authentication.jpg' },
+            { id: 'id-card', name: 'Student ID Card', price: 150, stock: 90, category: 'documents', description: 'Official student ID card', image: 'images/id-card.jpg' },
+            { id: 'library-card', name: 'Library Card', price: 50, stock: 110, category: 'documents', description: 'Library membership card', image: 'images/library-card.jpg' },
+            
+            // Campus Collection (6 products)
+            { id: 'tote-bag', name: 'ICCT Tote Bag', price: 250, stock: 75, category: 'campus-collection', description: 'Canvas tote bag with ICCT logo', image: 'images/tote-bag.jpg' },
+            { id: 'tumbler', name: 'ICCT Tumbler', price: 300, stock: 55, category: 'campus-collection', description: 'Stainless steel tumbler with logo', image: 'images/tumbler.jpg' },
+            { id: 'notebook', name: 'ICCT Notebook', price: 80, stock: 120, category: 'campus-collection', description: 'Official ICCT notebook', image: 'images/notebook.jpg' },
+            { id: 'pen', name: 'ICCT Ballpen (Set of 3)', price: 45, stock: 200, category: 'campus-collection', description: 'Set of 3 ICCT ballpens', image: 'images/pen.jpg' },
+            { id: 'jacket', name: 'ICCT Jacket', price: 650, stock: 35, category: 'campus-collection', description: 'Official ICCT varsity jacket', image: 'images/jacket.jpg' },
+            { id: 'cap', name: 'ICCT Cap', price: 180, stock: 85, category: 'campus-collection', description: 'Baseball cap with ICCT embroidery', image: 'images/cap.jpg' },
+            
+            // Fees (7 products)
+            { id: 'registration-fee', name: 'Registration Fee', price: 1500, stock: 999, category: 'fees', description: 'Semester registration fee', image: 'images/registration-fee.jpg' },
+            { id: 'tuition-fee', name: 'Tuition Fee (Per Unit)', price: 500, stock: 999, category: 'fees', description: 'Tuition fee per unit', image: 'images/tuition-fee.jpg' },
+            { id: 'laboratory-fee', name: 'Laboratory Fee', price: 2000, stock: 999, category: 'fees', description: 'Laboratory equipment and materials fee', image: 'images/laboratory-fee.jpg' },
+            { id: 'library-fee', name: 'Library Fee', price: 800, stock: 999, category: 'fees', description: 'Library access and maintenance fee', image: 'images/library-fee.jpg' },
+            { id: 'internet-fee', name: 'Internet Fee', price: 600, stock: 999, category: 'fees', description: 'Internet and computer laboratory fee', image: 'images/internet-fee.jpg' },
+            { id: 'athletic-fee', name: 'Athletic Fee', price: 500, stock: 999, category: 'fees', description: 'Athletic and sports development fee', image: 'images/athletic-fee.jpg' },
+            { id: 'miscellaneous-fee', name: 'Miscellaneous Fee', price: 1200, stock: 999, category: 'fees', description: 'Other miscellaneous school fees', image: 'images/miscellaneous-fee.jpg' }
+        ];
+
+        async function uploadAllProducts() {
+            uploadBtn.disabled = true;
+            progressContainer.style.display = 'block';
+            updateStatus('Uploading...', 'Please wait while products are being uploaded', false, false);
+            log('🚀 Starting product upload...', 'info');
+            log(`📦 Total products to upload: ${products.length}`, 'info');
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
+                try {
+                    await database.ref(`products/${product.id}`).set({
+                        name: product.name,
+                        price: product.price,
+                        stock: product.stock,
+                        category: product.category,
+                        description: product.description,
+                        image: product.image
+                    });
+                    successCount++;
+                    log(`✅ Uploaded: ${product.name} (${product.category})`, 'success');
+                    updateProgress(i + 1, products.length);
+                } catch (error) {
+                    errorCount++;
+                    log(`❌ Failed: ${product.name} - ${error.message}`, 'error');
+                }
+            }
+
+            uploadBtn.disabled = false;
+            
+            if (errorCount === 0) {
+                updateStatus('✅ Upload Complete!', `Successfully uploaded ${successCount} products to Firebase`, true, false);
+                log('🎉 All products uploaded successfully!', 'success');
+            } else {
+                updateStatus('⚠️ Upload Completed with Errors', `Uploaded ${successCount} products, ${errorCount} failed`, false, true);
+                log(`⚠️ Upload complete: ${successCount} success, ${errorCount} failed`, 'warning');
+            }
+        }
+
+        async function checkProducts() {
+            log('🔍 Checking existing products in Firebase...', 'info');
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (data) {
+                    const count = Object.keys(data).length;
+                    log(`✅ Found ${count} products in Firebase:`, 'success');
+                    Object.keys(data).forEach(key => {
+                        log(`   📦 ${data[key].name} - Stock: ${data[key].stock} (${data[key].category})`, 'info');
+                    });
+                    updateStatus('Products Found', `${count} products exist in Firebase database`, true, false);
+                } else {
+                    log('⚠️ No products found in Firebase database', 'warning');
+                    updateStatus('No Products', 'Database is empty. Click "Upload All Products" to add products', false, false);
+                }
+            } catch (error) {
+                log(`❌ Error checking products: ${error.message}`, 'error');
+                updateStatus('Error', `Failed to check products: ${error.message}`, false, true);
+            }
+        }
+
+        async function clearProducts() {
+            if (!confirm('⚠️ Are you sure you want to delete ALL products from Firebase? This cannot be undone!')) {
+                return;
+            }
+            
+            log('🗑️ Clearing all products from Firebase...', 'warning');
+            try {
+                await database.ref('products').remove();
+                log('✅ All products cleared successfully', 'success');
+                updateStatus('Products Cleared', 'All products have been deleted from Firebase', true, false);
+            } catch (error) {
+                log(`❌ Error clearing products: ${error.message}`, 'error');
+                updateStatus('Error', `Failed to clear products: ${error.message}`, false, true);
+            }
+        }
+
+        // Initialize
+        log('🔥 Firebase initialized with Asia Southeast database', 'success');
+        log(`📍 Database URL: ${firebaseConfig.databaseURL}`, 'info');
+        log('✅ Ready to upload products', 'success');
+    </script>
+</body>
+</html>

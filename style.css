@@ -1022,6 +1022,35 @@ body {
     margin-top: 5px;
 }
 
+/* Stock Display for Student View */
+.stock-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: rgba(74, 144, 226, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(74, 144, 226, 0.2);
+}
+
+.stock-display i {
+    font-size: 14px;
+    color: var(--primary-accent);
+}
+
+.stock-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-body);
+    letter-spacing: 0.5px;
+}
+
+.stock-text.out-of-stock-text {
+    color: #ef4444;
+}
+
 .product-actions {
     display: flex;
     gap: 10px;
@@ -1679,6 +1708,34 @@ body {
     background: var(--navy);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+/* Admin Login Trigger Button */
+.admin-login-trigger-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.admin-login-trigger-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.admin-login-trigger-btn i {
+    font-size: 16px;
 }
 
 /* Account Logged In */
@@ -3354,7 +3411,7 @@ body {
 }
 
 .payment-description {
-    color: var(--text-light);
+    color: var(--text-dark);
     font-size: 14px;
     margin-bottom: 20px;
 }
@@ -3422,6 +3479,125 @@ body {
     font-weight: 600;
 }
 
+/* Payment Note Box within Cards */
+.payment-note-box {
+    background: rgba(74, 144, 226, 0.1);
+    border-left: 3px solid var(--primary-accent);
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.payment-note-box i {
+    color: var(--primary-accent);
+    font-size: 16px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.payment-note-box p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+/* Confirm Payment Section */
+.confirm-payment-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.confirm-payment-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.confirm-payment-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.confirm-payment-btn i {
+    font-size: 18px;
+}
+
+/* Payment Reference Display */
+.payment-reference-display {
+    margin-top: 20px;
+    padding: 25px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.reference-box {
+    text-align: center;
+    color: white;
+}
+
+.reference-box i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    animation: scaleIn 0.5s ease;
+}
+
+.reference-box h4 {
+    font-size: 18px;
+    margin: 0 0 15px 0;
+    font-weight: 600;
+}
+
+.reference-number {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin: 15px 0;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+}
+
+.reference-box small {
+    font-size: 13px;
+    opacity: 0.9;
+    display: block;
+    margin-top: 10px;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 @media (max-width: 768px) {
     .category-header {
         flex-direction: column;
@@ -3472,7 +3648,7 @@ body {
 }
 
 .faq-intro p {
-    color: var(--text-light);
+    color: var(--text-dark);
     font-size: 17px;
     line-height: 1.6;
     margin: 0;
@@ -3587,7 +3763,7 @@ body {
 }
 
 .faq-answer p {
-    color: var(--text-light);
+    color: var(--text-dark);
     font-size: 15px;
     line-height: 1.7;
     padding: 12px 16px;
@@ -4612,4 +4788,1869 @@ body {
         font-size: 13px;
     }
 }
+
+/* ===== ADMIN SYSTEM STYLES ===== */
+
+/* Admin Login Section in Account Sidebar */
+.admin-login-section {
+    margin-top: 20px;
+}
+
+.admin-login-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.admin-login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.admin-login-btn i {
+    font-size: 18px;
+}
+
+/* Admin Modal */
+.admin-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.admin-modal.active {
+    display: flex;
+}
+
+.admin-modal-content {
+    background: white;
+    padding: 0;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.close-admin-modal,
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.close-admin-modal:hover,
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.admin-header {
+    text-align: center;
+    padding: 50px 40px 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.admin-header i {
+    font-size: 60px;
+    color: white;
+    margin-bottom: 15px;
+    display: block;
+    opacity: 0.95;
+}
+
+.admin-header h2 {
+    color: white;
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.admin-header p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* Admin Credentials Display */
+.admin-credentials-display {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 0 40px 20px;
+}
+
+.credentials-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.credentials-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #495057 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    margin: 0 0 12px 0 !important;
+}
+
+.credentials-title i {
+    font-size: 16px;
+    color: #667eea;
+}
+
+.credential-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.credential-label {
+    color: #6c757d;
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 80px;
+}
+
+.credential-value {
+    color: #667eea;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background: #f0f2ff;
+    padding: 4px 12px;
+    border-radius: 6px;
+    flex: 1;
+    text-align: center;
+}
+
+.credentials-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #868e96 !important;
+    font-size: 11px !important;
+    font-style: italic !important;
+    margin: 8px 0 0 0 !important;
+}
+
+.credentials-note i {
+    font-size: 12px;
+}
+
+/* Admin Form */
+.admin-form {
+    padding: 40px 40px 30px;
+}
+
+.admin-form .form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.admin-form label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: #212529;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.admin-form label i {
+    color: #667eea;
+    font-size: 16px;
+}
+
+.admin-form input {
+    width: 100%;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    color: #212529;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.admin-form input::placeholder {
+    color: #adb5bd;
+}
+
+.admin-form input:focus {
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.admin-submit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--cta-color);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.admin-submit-btn:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(240, 180, 41, 0.3);
+}
+
+.admin-submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Toggle Password */
+.admin-form .toggle-password {
+    position: absolute;
+    right: 15px;
+    bottom: 13px;
+    background: transparent;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    z-index: 10;
+    padding: 0;
+}
+
+.admin-form .toggle-password:hover {
+    color: #667eea;
+}
+
+/* Admin Indicator */
+.admin-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+    z-index: 9999;
+    animation: slideInRight 0.5s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-indicator-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-indicator i {
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.admin-badge {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.admin-badge i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.admin-logout-btn,
+.admin-logout-btn-top {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-logout-btn:hover,
+.admin-logout-btn-top:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Stock Display (User Mode) */
+.stock-display {
+    margin: 10px 0 5px 0;
+}
+
+.stock-text {
+    color: #999;
+    font-size: 13px;
+}
+
+.stock-count {
+    color: var(--primary-accent);
+    font-weight: 600;
+}
+
+/* Admin Controls */
+.admin-controls {
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(102, 126, 234, 0.1);
+    border: 2px solid var(--primary-accent);
+    border-radius: 10px;
+}
+
+.admin-controls label {
+    display: block;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.stock-control {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.stock-input {
+    flex: 1;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stock-input:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.update-stock-btn {
+    padding: 10px 16px;
+    background: var(--primary-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.update-stock-btn:hover {
+    background: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+.update-stock-btn i {
+    font-size: 12px;
+}
+
+/* Hide/Show elements based on mode */
+.admin-mode .user-mode-only {
+    display: none !important;
+}
+
+.admin-mode .admin-mode-only {
+    display: block !important;
+}
+
+body:not(.admin-mode) .admin-mode-only {
+    display: none !important;
+}
+
+body:not(.admin-mode) .user-mode-only {
+    display: block !important;
+}
+
+/* Out of Stock Button Styling */
+.out-of-stock,
+.out-of-stock-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #555 0%, #444 100%);
+    color: #bbb;
+    border: 2px solid #666;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.out-of-stock-btn i {
+    color: #ef4444;
+}
+
+/* Smooth transitions */
+.product-card .user-mode-only,
+.product-card .admin-mode-only {
+    transition: all 0.3s ease;
+}
+
+/* Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-modal-content {
+        padding: 30px 20px;
+        max-width: 90%;
+    }
+    
+    .admin-header h2 {
+        font-size: 24px;
+    }
+    
+    .admin-indicator {
+        top: 10px;
+        right: 10px;
+        padding: 12px 18px;
+        font-size: 13px;
+    }
+    
+    .admin-indicator-content {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .admin-logout-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .stock-control {
+        flex-direction: column;
+    }
+    
+    .update-stock-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ===== ADMIN DASHBOARD STYLES ===== */
+
+/* Admin Dashboard Container */
+.admin-dashboard {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--primary-bg);
+    z-index: 10000;
+    overflow: hidden;
+}
+
+body.admin-mode .admin-dashboard {
+    display: flex !important;
+}
+
+/* Admin Sidebar */
+.admin-sidebar {
+    width: 280px;
+    background: var(--elevated-bg);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid var(--border-color);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.admin-sidebar-header {
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--border-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.admin-sidebar-header i {
+    font-size: 48px;
+    color: white;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.admin-sidebar-header h2 {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Admin Navigation */
+.admin-nav {
+    flex: 1;
+    padding: 20px 0;
+    overflow-y: visible;
+}
+
+.admin-nav-btn {
+    width: 100%;
+    padding: 16px 25px;
+    background: transparent;
+    border: none;
+    color: var(--text-body);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.admin-nav-btn i {
+    font-size: 20px;
+    width: 24px;
+}
+
+.admin-nav-btn:hover {
+    background: rgba(74, 144, 226, 0.1);
+    color: var(--primary-accent);
+}
+
+.admin-nav-btn.active {
+    background: rgba(74, 144, 226, 0.2);
+    color: var(--primary-accent);
+    border-left-color: var(--primary-accent);
+    font-weight: 600;
+}
+
+/* Admin Sidebar Footer */
+.admin-sidebar-footer {
+    padding: 20px;
+    border-top: 2px solid var(--border-color);
+}
+
+.admin-logout-sidebar-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: rgba(255, 75, 87, 0.1);
+    border: 2px solid rgba(255, 75, 87, 0.3);
+    border-radius: 8px;
+    color: #ff4b57;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.admin-logout-sidebar-btn:hover {
+    background: rgba(255, 75, 87, 0.2);
+    border-color: #ff4b57;
+}
+
+/* Admin Main Content */
+.admin-main {
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--primary-bg);
+}
+
+/* Admin Content Header */
+.admin-content-header {
+    padding: 30px 40px;
+    background: var(--elevated-bg);
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.admin-header-left h1 {
+    color: var(--white);
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+}
+
+.admin-header-left p {
+    color: var(--text-body);
+    font-size: 14px;
+    margin: 0;
+}
+
+.admin-header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(74, 144, 226, 0.1);
+    padding: 10px 20px;
+    border-radius: 50px;
+    color: var(--primary-accent);
+    font-weight: 600;
+}
+
+.admin-user-info i {
+    font-size: 24px;
+}
+
+/* Admin Sections */
+.admin-section {
+    display: none;
+    padding: 40px;
+    animation: fadeInSection 0.3s ease;
+}
+
+.admin-section.active {
+    display: block;
+}
+
+@keyframes fadeInSection {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-section-header {
+    margin-bottom: 35px;
+    padding-bottom: 25px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.admin-section-header h1,
+.admin-section-header h2 {
+    font-size: 32px;
+    color: var(--white);
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: 700;
+}
+
+.admin-section-header h1 i,
+.admin-section-header h2 i {
+    color: var(--cta-color);
+    font-size: 28px;
+}
+
+.admin-section-header p {
+    color: var(--text-body);
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.admin-section-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.admin-search {
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 14px;
+    min-width: 250px;
+    transition: all 0.3s ease;
+}
+
+.admin-search:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-filter-btn,
+.admin-filter-select {
+    padding: 10px 16px;
+    background: var(--elevated-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-filter-btn:hover {
+    border-color: var(--primary-accent);
+    color: var(--primary-accent);
+}
+
+.admin-filter-select {
+    min-width: 180px;
+}
+
+/* Admin Products Grid */
+.admin-products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 25px 0 40px 0;
+    margin-top: 10px;
+    max-width: 900px;
+}
+
+.admin-product-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+    border: 2px solid rgba(74, 144, 226, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    max-width: 100%;
+}
+
+.admin-product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6b46c1, #4a90e2, #10b981);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.admin-product-card:hover {
+    border-color: var(--primary-accent);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(74, 144, 226, 0.4), 0 0 20px rgba(107, 70, 193, 0.2);
+}
+
+.admin-product-card:hover::before {
+    opacity: 1;
+}
+
+.admin-product-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(107, 70, 193, 0.05) 0%, rgba(74, 144, 226, 0.05) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.admin-product-image::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+    pointer-events: none;
+}
+
+.admin-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.admin-product-card:hover .admin-product-image img {
+    transform: scale(1.1);
+}
+
+.admin-product-info {
+    padding: 16px 18px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.2));
+}
+
+.admin-product-info h3 {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.admin-product-price {
+    color: #fbbf24;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+    text-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+    letter-spacing: 0.5px;
+}
+
+.admin-product-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-body);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+    background: rgba(74, 144, 226, 0.15);
+    border-radius: 20px;
+    margin: 0 0 10px 0;
+    border: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.admin-product-category i {
+    color: var(--primary-accent);
+    font-size: 12px;
+}
+
+/* Admin Stock Control */
+.admin-stock-control {
+    padding: 14px 18px 16px;
+    background: linear-gradient(135deg, rgba(107, 70, 193, 0.08), rgba(74, 144, 226, 0.08));
+    border-top: 2px solid rgba(74, 144, 226, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.admin-stock-control label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--white);
+    font-weight: 700;
+    font-size: 11px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-stock-control label i {
+    color: var(--primary-accent);
+    font-size: 12px;
+}
+
+.stock-input-group {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.admin-stock-input {
+    flex: 1;
+    padding: 10px 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid rgba(74, 144, 226, 0.3);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-stock-input:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+    background: rgba(74, 144, 226, 0.15);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-update-btn {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.admin-update-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.admin-update-btn:active {
+    transform: translateY(0);
+}
+
+.admin-update-btn i {
+    font-size: 13px;
+}
+
+/* Admin Product Image Placeholder */
+.admin-product-image .image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(107, 70, 193, 0.1) 100%);
+    color: var(--text-body);
+    text-align: center;
+    padding: 20px;
+}
+
+.admin-product-image .image-placeholder i {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: var(--primary-accent);
+    opacity: 0.5;
+}
+
+.admin-product-image .image-placeholder span {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-body);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.admin-product-stock {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.admin-product-stock label {
+    display: block;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+/* Admin Tables */
+.admin-table-container {
+    background: var(--elevated-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table thead {
+    background: rgba(74, 144, 226, 0.1);
+}
+
+.admin-table th {
+    padding: 16px 20px;
+    text-align: left;
+    color: var(--white);
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.admin-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(74, 144, 226, 0.05);
+}
+
+.admin-table td {
+    padding: 16px 20px;
+    color: var(--text-body);
+    font-size: 14px;
+}
+
+.admin-table td.amount {
+    color: var(--cta-color);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.admin-table td strong {
+    color: var(--white);
+    font-weight: 600;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-completed,
+.status-paid {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+}
+
+.status-pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.status-processing,
+.status-preparing {
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196f3;
+}
+
+.status-ready-for-pickup {
+    background: rgba(156, 39, 176, 0.2);
+    color: #9c27b0;
+}
+
+.status-failed {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+/* Status Select Dropdowns */
+.payment-status-select,
+.order-status-select {
+    padding: 8px 12px;
+    background: var(--primary-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-status-select:hover,
+.order-status-select:hover {
+    border-color: var(--primary-accent);
+}
+
+.payment-status-select:focus,
+.order-status-select:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+/* Responsive Admin Dashboard */
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        width: 240px;
+    }
+    
+    .admin-products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+    
+    .admin-section {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-dashboard {
+        flex-direction: column;
+    }
+    
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 2px solid var(--border-color);
+    }
+    
+    .admin-nav {
+        display: flex;
+        overflow-x: auto;
+        padding: 0;
+    }
+    
+    .admin-nav-btn {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 5px;
+        font-size: 12px;
+        border-left: none;
+        border-bottom: 4px solid transparent;
+    }
+    
+    .admin-nav-btn.active {
+        border-left: none;
+        border-bottom-color: var(--primary-accent);
+    }
+    
+    .admin-main {
+        height: auto;
+    }
+    
+    .admin-content-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+        padding: 20px;
+    }
+    
+    .admin-section {
+        padding: 20px;
+    }
+    
+    .admin-section-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .admin-section-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .admin-search {
+        width: 100%;
+    }
+    
+    .admin-products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-table-container {
+        overflow-x: auto;
+    }
+    
+    .admin-table {
+        min-width: 800px;
+    }
+}
+
+
+/* ============================================================================
+   ADMIN SYSTEM STYLES
+   ============================================================================ */
+
+/* Admin Login Section */
+.admin-login-section {
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.admin-credentials-display {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.credentials-box {
+    text-align: center;
+    color: white;
+}
+
+.credentials-box i {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.credentials-box code {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.admin-login-trigger-btn {
+    width: 100%;
+    padding: 12px 24px;
+    background: white;
+    color: #667eea;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.admin-login-trigger-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Admin Mode Banner */
+.admin-mode-banner {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.admin-mode-banner i {
+    font-size: 20px;
+}
+
+/* Admin Modal */
+.admin-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.admin-modal.active {
+    display: flex;
+}
+
+.admin-modal-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 450px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.close-admin-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.close-admin-modal:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: rotate(90deg);
+}
+
+.admin-header {
+    text-align: center;
+    padding: 40px 30px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px 16px 0 0;
+}
+
+.admin-header i {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.admin-header h2 {
+    margin: 0 0 10px;
+    font-size: 28px;
+}
+
+.admin-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.admin-form {
+    padding: 30px;
+}
+
+.admin-login-btn {
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.admin-login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Admin Stock Management */
+.admin-stock-management {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stock-label {
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.stock-input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.stock-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stock-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.update-stock-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.update-stock-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Stock Display (User Mode) */
+.stock-display {
+    margin-bottom: 10px;
+}
+
+.stock-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.stock-text.out-of-stock {
+    color: #ef4444;
+}
+
+.stock-text i {
+    font-size: 14px;
+}
+
+/* Payment Management */
+.payment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.payment-item {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.payment-item:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.transaction-number {
+    font-weight: 700;
+    font-size: 16px;
+    color: #1e293b;
+}
+
+.payment-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-successful {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-failed {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.payment-details {
+    margin-bottom: 15px;
+}
+
+.payment-details p {
+    margin: 5px 0;
+    color: #64748b;
+}
+
+.payment-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b !important;
+}
+
+.payment-date {
+    font-size: 12px !important;
+}
+
+.payment-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.payment-action-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.payment-action-btn.success-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.payment-action-btn.success-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.payment-action-btn.failed-btn {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+}
+
+.payment-action-btn.failed-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.empty-payments {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+}
+
+.empty-payments i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-payments p {
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.empty-payments small {
+    font-size: 14px;
+}
+
+/* Admin Logout Button */
+.admin-logout-btn {
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.admin-logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive Admin Styles */
+@media (max-width: 768px) {
+    .admin-modal-content {
+        width: 95%;
+    }
+    
+    .payment-actions {
+        flex-direction: column;
+    }
+    
+    .stock-input-group {
+        flex-direction: column;
+    }
+    
+    .update-stock-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ============================================================================
+   ADMIN DASHBOARD STYLES
+   ============================================================================ */
+
+/* Admin Dashboard Container */
+.admin-dashboard {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--primary-bg);
+    z-index: 10000;
+    display: none;
+    overflow: hidden;
+}
+
+/* Admin Sidebar */
+.admin-sidebar {
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--elevated-bg) 0%, var(--secondary-bg) 100%);
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10001;
+}
+
+.admin-sidebar-header {
+    padding: 30px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-sidebar-header i {
+    font-size: 28px;
+}
+
+.admin-sidebar-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Admin Navigation */
+.admin-nav {
+    flex: 1;
+    padding: 20px 15px;
+    overflow-y: visible;
+}
+
+.admin-nav-btn {
+    width: 100%;
+    padding: 16px 20px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: var(--text-body);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.admin-nav-btn i {
+    font-size: 18px;
+    width: 24px;
+}
+
+.admin-nav-btn:hover {
+    background: rgba(74, 144, 226, 0.15);
+    transform: translateX(5px);
+}
+
+.admin-nav-btn.active {
+    background: linear-gradient(135deg, var(--primary-accent) 0%, #667eea 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+/* Admin Sidebar Footer */
+.admin-sidebar-footer {
+    padding: 20px 15px;
+    border-top: 2px solid var(--border-color);
+}
+
+.admin-logout-btn-sidebar {
+    width: 100%;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.admin-logout-btn-sidebar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Admin Content Area */
+.admin-content {
+    margin-left: 280px;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 40px;
+    background: var(--primary-bg);
+}
+
+/* Admin Sections */
+.admin-section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.admin-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* End of Admin Sections */
+
 

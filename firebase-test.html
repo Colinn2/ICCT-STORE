@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Connection Test - ICCT Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .test-result {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .console {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .console-line {
+            margin-bottom: 4px;
+        }
+        .console-line.success { color: #4ec9b0; }
+        .console-line.error { color: #f48771; }
+        .console-line.info { color: #4fc1ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Firebase Connection Test</h1>
+        <p class="subtitle">Test your Firebase integration for ICCT Store</p>
+
+        <!-- Firebase Status -->
+        <div class="test-section">
+            <h3>1. Firebase Initialization</h3>
+            <span class="status pending" id="firebaseStatus">Checking...</span>
+            <div class="test-result" id="firebaseResult">Initializing Firebase...</div>
+        </div>
+
+        <!-- Realtime Database Test -->
+        <div class="test-section">
+            <h3>2. Realtime Database (Products & Stock)</h3>
+            <span class="status pending" id="realtimeStatus">Not Tested</span>
+            <button onclick="testRealtimeDB()">Test Connection</button>
+            <button onclick="addSampleProduct()">Add Sample Product</button>
+            <div class="test-result" id="realtimeResult">Click "Test Connection" to check Realtime Database</div>
+        </div>
+
+        <!-- Firestore Test -->
+        <div class="test-section">
+            <h3>3. Firestore (Orders, Payments, Transactions)</h3>
+            <span class="status pending" id="firestoreStatus">Not Tested</span>
+            <button onclick="testFirestore()">Test Connection</button>
+            <button onclick="addSampleOrder()">Add Sample Order</button>
+            <div class="test-result" id="firestoreResult">Click "Test Connection" to check Firestore</div>
+        </div>
+
+        <!-- Services Test -->
+        <div class="test-section">
+            <h3>4. Firebase Services</h3>
+            <span class="status pending" id="servicesStatus">Not Tested</span>
+            <button onclick="testServices()">Test All Services</button>
+            <div class="test-result" id="servicesResult">Click "Test All Services" to verify service layer</div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="console" id="console">
+            <div class="console-line info">🔍 Waiting for tests...</div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="firebase-services.js"></script>
+
+    <script>
+        const consoleEl = document.getElementById('console');
+        
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleEl.appendChild(line);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            console.log(message);
+        }
+
+        function updateStatus(id, status, message) {
+            const statusEl = document.getElementById(id + 'Status');
+            const resultEl = document.getElementById(id + 'Result');
+            
+            statusEl.className = `status ${status}`;
+            statusEl.textContent = status === 'success' ? '✅ Connected' : 
+                                  status === 'error' ? '❌ Error' : 
+                                  '⏳ Testing...';
+            resultEl.textContent = message;
+        }
+
+        // Check Firebase initialization
+        setTimeout(() => {
+            try {
+                if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+                    updateStatus('firebase', 'success', 
+                        `Firebase App: ${firebase.app().name}\n` +
+                        `Project ID: ${firebase.app().options.projectId}\n` +
+                        `Database URL: ${firebase.app().options.databaseURL || 'Not set'}`
+                    );
+                    log('✅ Firebase initialized successfully', 'success');
+                } else {
+                    updateStatus('firebase', 'error', 'Firebase not initialized');
+                    log('❌ Firebase initialization failed', 'error');
+                }
+            } catch (error) {
+                updateStatus('firebase', 'error', error.message);
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }, 1000);
+
+        // Test Realtime Database
+        async function testRealtimeDB() {
+            try {
+                log('🔄 Testing Realtime Database...', 'info');
+                updateStatus('realtime', 'pending', 'Testing connection...');
+                
+                const testRef = realtimeDB.ref('test');
+                const testData = { message: 'Hello Firebase!', timestamp: Date.now() };
+                
+                await testRef.set(testData);
+                const snapshot = await testRef.once('value');
+                const data = snapshot.val();
+                
+                if (data && data.message === testData.message) {
+                    updateStatus('realtime', 'success', 
+                        `✅ Read/Write test passed\n` +
+                        `Data: ${JSON.stringify(data, null, 2)}`
+                    );
+                    log('✅ Realtime Database: Connected and working', 'success');
+                } else {
+                    throw new Error('Data mismatch');
+                }
+            } catch (error) {
+                updateStatus('realtime', 'error', `❌ ${error.message}`);
+                log(`❌ Realtime Database Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Add sample product
+        async function addSampleProduct() {
+            try {
+                log('➕ Adding sample product...', 'info');
+                const productId = `test_${Date.now()}`;
+                
+                await realtimeDB.ref(`products/${productId}`).set({
+                    id: productId,
+                    name: "Test Product",
+                    category: "test",
+                    price: 100,
+                    stock: 50,
+                    description: "Sample test product",
+                    lastUpdated: Date.now()
+                });
+                
+                log(`✅ Sample product added: ${productId}`, 'success');
+                alert('Sample product added! Check Firebase Console.');
+            } catch (error) {
+                log(`❌ Error adding product: ${error.message}`, 'error');
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Test Firestore
+        async function testFirestore() {
+            try {
+                log('🔄 Testing Firestore...', 'info');
+                updateStatus('firestore', 'pending', 'Testing connection...');
+                
+                const testDoc = firestore.collection('test').doc();
+                const testData = { message: 'Hello Firestore!', timestamp: new Date() };
+                
+                await testDoc.set(testData);
+                const doc = await testDoc.get();
+                const data = doc.data();
+                
+                if (data && data.message === testData.message) {
+                    updateStatus('firestore', 'success', 
+                        `✅ Read/Write test passed\n` +
+                        `Document ID: ${testDoc.id}\n` +
+                        `Data: ${JSON.stringify(data, null, 2)}`
+                    );
+                    log('✅ Firestore: Connected and working', 'success');
+                } else {
+                    throw new Error('Data mismatch');
+                }
+            } catch (error) {
+                updateStatus('firestore', 'error', `❌ ${error.message}`);
+                log(`❌ Firestore Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Add sample order
+        async function addSampleOrder() {
+            try {
+                log('➕ Adding sample order...', 'info');
+                
+                const orderData = {
+                    orderId: `TEST-${Date.now()}`,
+                    studentNumber: "2024-99999",
+                    studentName: "Test Student",
+                    items: [{ productId: "test_001", name: "Test Item", price: 100, quantity: 1 }],
+                    total: 100,
+                    status: "pending",
+                    createdAt: new Date()
+                };
+                
+                const docRef = await firestore.collection('orders').add(orderData);
+                
+                log(`✅ Sample order added: ${docRef.id}`, 'success');
+                alert('Sample order added! Check Firebase Console.');
+            } catch (error) {
+                log(`❌ Error adding order: ${error.message}`, 'error');
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Test all services
+        async function testServices() {
+            try {
+                log('🔄 Testing Firebase Services...', 'info');
+                updateStatus('services', 'pending', 'Testing all services...');
+                
+                const results = [];
+                
+                // Test ProductService
+                if (typeof DB !== 'undefined' && DB.ProductService) {
+                    results.push('✅ ProductService: Available');
+                    log('✅ ProductService loaded', 'success');
+                } else {
+                    results.push('❌ ProductService: Not found');
+                    log('❌ ProductService not loaded', 'error');
+                }
+                
+                // Test UserService
+                if (DB.UserService) {
+                    results.push('✅ UserService: Available');
+                    log('✅ UserService loaded', 'success');
+                } else {
+                    results.push('❌ UserService: Not found');
+                }
+                
+                // Test OrderService
+                if (DB.OrderService) {
+                    results.push('✅ OrderService: Available');
+                    log('✅ OrderService loaded', 'success');
+                } else {
+                    results.push('❌ OrderService: Not found');
+                }
+                
+                // Test PaymentService
+                if (DB.PaymentService) {
+                    results.push('✅ PaymentService: Available');
+                    log('✅ PaymentService loaded', 'success');
+                } else {
+                    results.push('❌ PaymentService: Not found');
+                }
+                
+                // Test TransactionService
+                if (DB.TransactionService) {
+                    results.push('✅ TransactionService: Available');
+                    log('✅ TransactionService loaded', 'success');
+                } else {
+                    results.push('❌ TransactionService: Not found');
+                }
+                
+                updateStatus('services', 'success', results.join('\n'));
+                log('✅ All services checked', 'success');
+                
+            } catch (error) {
+                updateStatus('services', 'error', `❌ ${error.message}`);
+                log(`❌ Services Error: ${error.message}`, 'error');
+            }
+        }
+
+        log('✅ Test page loaded successfully', 'success');
+        log('ℹ️ Click the test buttons to verify Firebase integration', 'info');
+    </script>
+</body>
+</html>

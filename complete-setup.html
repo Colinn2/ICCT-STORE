@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Product Setup - ICCT Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #333; margin-bottom: 10px; font-size: 32px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover { background: #5568d3; transform: translateY(-2px); }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-warning:hover { background: #e0a800; }
+        .btn-info { background: #17a2b8; }
+        .btn-info:hover { background: #138496; }
+        
+        .results {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .category-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .category-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+        .product-card h4 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .product-card .info {
+            font-size: 12px;
+            color: #666;
+            margin: 4px 0;
+        }
+        .product-card code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .log-line { margin-bottom: 4px; }
+        .log-line.success { color: #4ec9b0; }
+        .log-line.error { color: #f48771; }
+        .log-line.info { color: #4fc1ff; }
+        .log-line.warning { color: #ffc66d; }
+        .summary {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .summary.success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .summary.error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .summary strong { font-size: 18px; display: block; margin-bottom: 10px; }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Complete Product Setup & Fix</h1>
+        <p class="subtitle">Analyze, categorize, and fix all products in one place</p>
+
+        <div class="button-group">
+            <button onclick="step1_analyzeProducts()" class="btn-info">📊 Step 1: Analyze Products</button>
+            <button onclick="step2_fixCategories()" class="btn-success">🏷️ Step 2: Fix Categories</button>
+            <button onclick="step3_fixImages()" class="btn-success">🖼️ Step 3: Fix Images</button>
+            <button onclick="step4_verifySetup()" class="btn-info">✅ Step 4: Verify Setup</button>
+            <button onclick="showByCategory()" class="btn-warning">📁 View by Category</button>
+            <button onclick="testNavigation()" class="btn-info">🧪 Test Navigation</button>
+        </div>
+
+        <div id="results"></div>
+        <div class="log" id="log"></div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiuB9a4SkFWgKELHlilwvo2PHRRFNsS7E",
+            authDomain: "icct-store-29ea5.firebaseapp.com",
+            databaseURL: "https://icct-store-29ea5-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "icct-store-29ea5",
+            storageBucket: "icct-store-29ea5.firebasestorage.app",
+            messagingSenderId: "1095541958931",
+            appId: "1:1095541958931:web:b1c27c99f5d8e8614592e6"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const logContainer = document.getElementById('log');
+        const resultsContainer = document.getElementById('results');
+
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(line);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Category detection rules
+        function detectCategory(productName, productId) {
+            const name = productName.toLowerCase();
+            const id = productId.toLowerCase();
+            
+            // Uniforms
+            if (name.includes('uniform') || name.includes('polo') || name.includes('necktie') || 
+                name.includes('lab gown') || name.includes('laboratory') || name.includes('nstp') ||
+                name.includes('pe ') || id.includes('uniform') || id.includes('polo') ||
+                id.includes('lab-gown') || id.includes('necktie') || id.includes('lace')) {
+                return 'uniforms';
+            }
+            
+            // Documents
+            if (name.includes('form') || name.includes('clearance') || name.includes('certificate') ||
+                name.includes('transcript') || name.includes('diploma') || name.includes('card') ||
+                name.includes('authentication') || name.includes('dismissal') || name.includes('moral') ||
+                id.includes('form') || id.includes('clearance') || id.includes('cog') ||
+                id.includes('transcript') || id.includes('diploma') || id.includes('card')) {
+                return 'documents';
+            }
+            
+            // Campus Collection
+            if (name.includes('bag') || name.includes('tumbler') || name.includes('notebook') ||
+                name.includes('pen') || name.includes('jacket') || name.includes('cap') ||
+                id.includes('bag') || id.includes('tumbler') || id.includes('notebook') ||
+                id.includes('pen') || id.includes('jacket') || id.includes('cap')) {
+                return 'supplies';
+            }
+            
+            // Fees
+            if (name.includes('fee') || name.includes('tuition') || name.includes('registration') ||
+                id.includes('fee') || id.includes('tuition') || id.includes('registration')) {
+                return 'fees';
+            }
+            
+            // Default to uniforms
+            return 'uniforms';
+        }
+
+        // Generate proper image path
+        function generateImagePath(productId, productName) {
+            // Remove special characters and convert to lowercase
+            const cleanId = productId.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+            return `images/${cleanId}.jpg`;
+        }
+
+        async function step1_analyzeProducts() {
+            resultsContainer.innerHTML = '';
+            log('📊 Step 1: Analyzing all products...', 'info');
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found in Firebase!', 'warning');
+                    resultsContainer.innerHTML = '<div class="summary error"><strong>❌ No products found!</strong><p>Your Firebase database is empty.</p></div>';
+                    return;
+                }
+                
+                const products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                log(`✅ Found ${products.length} products in Firebase`, 'success');
+                
+                // Analyze issues
+                const issues = {
+                    missingCategory: [],
+                    wrongCategory: [],
+                    missingImage: [],
+                    wrongImagePath: []
+                };
+                
+                products.forEach(product => {
+                    // Check category
+                    if (!product.category || product.category === 'undefined' || product.category === '') {
+                        issues.missingCategory.push(product);
+                    } else {
+                        const expected = detectCategory(product.name, product.id);
+                        if (product.category !== expected && 
+                            !(product.category === 'campus-collection' && expected === 'supplies')) {
+                            issues.wrongCategory.push({ product, expected });
+                        }
+                    }
+                    
+                    // Check image
+                    if (!product.image || product.image === 'undefined' || product.image === '' || product.image === 'null') {
+                        issues.missingImage.push(product);
+                    } else if (!product.image.startsWith('images/')) {
+                        issues.wrongImagePath.push(product);
+                    }
+                });
+                
+                // Display results
+                let html = `
+                    <div class="summary ${issues.missingCategory.length === 0 && issues.wrongCategory.length === 0 && issues.missingImage.length === 0 ? 'success' : 'warning'}">
+                        <strong>📊 Analysis Results</strong>
+                        <p>Total Products: ${products.length}</p>
+                        <p>Missing Category: <span class="badge ${issues.missingCategory.length > 0 ? 'badge-danger' : 'badge-success'}">${issues.missingCategory.length}</span></p>
+                        <p>Wrong Category: <span class="badge ${issues.wrongCategory.length > 0 ? 'badge-warning' : 'badge-success'}">${issues.wrongCategory.length}</span></p>
+                        <p>Missing Image: <span class="badge ${issues.missingImage.length > 0 ? 'badge-danger' : 'badge-success'}">${issues.missingImage.length}</span></p>
+                        <p>Wrong Image Path: <span class="badge ${issues.wrongImagePath.length > 0 ? 'badge-warning' : 'badge-success'}">${issues.wrongImagePath.length}</span></p>
+                    </div>
+                `;
+                
+                if (issues.missingCategory.length > 0) {
+                    html += '<div class="category-section"><h3>⚠️ Products Missing Category ('+issues.missingCategory.length+')</h3><div class="product-grid">';
+                    issues.missingCategory.slice(0, 10).forEach(p => {
+                        const suggested = detectCategory(p.name, p.id);
+                        html += `
+                            <div class="product-card">
+                                <h4>${p.name}</h4>
+                                <div class="info">ID: <code>${p.id}</code></div>
+                                <div class="info">Current: <code>${p.category || 'NONE'}</code></div>
+                                <div class="info">Suggested: <code>${suggested}</code></div>
+                            </div>
+                        `;
+                    });
+                    html += '</div></div>';
+                }
+                
+                if (issues.wrongCategory.length > 0) {
+                    html += '<div class="category-section"><h3>🔄 Products with Wrong Category ('+issues.wrongCategory.length+')</h3><div class="product-grid">';
+                    issues.wrongCategory.slice(0, 10).forEach(item => {
+                        html += `
+                            <div class="product-card">
+                                <h4>${item.product.name}</h4>
+                                <div class="info">Current: <code>${item.product.category}</code></div>
+                                <div class="info">Should be: <code>${item.expected}</code></div>
+                            </div>
+                        `;
+                    });
+                    html += '</div></div>';
+                }
+                
+                if (issues.missingImage.length > 0) {
+                    html += '<div class="category-section"><h3>🖼️ Products Missing Image ('+issues.missingImage.length+')</h3><div class="product-grid">';
+                    issues.missingImage.slice(0, 10).forEach(p => {
+                        const suggested = generateImagePath(p.id, p.name);
+                        html += `
+                            <div class="product-card">
+                                <h4>${p.name}</h4>
+                                <div class="info">ID: <code>${p.id}</code></div>
+                                <div class="info">Suggested: <code>${suggested}</code></div>
+                            </div>
+                        `;
+                    });
+                    html += '</div></div>';
+                }
+                
+                resultsContainer.innerHTML = html;
+                
+                log('✅ Analysis complete!', 'success');
+                log(`   Missing category: ${issues.missingCategory.length}`, 'info');
+                log(`   Wrong category: ${issues.wrongCategory.length}`, 'info');
+                log(`   Missing image: ${issues.missingImage.length}`, 'info');
+                log(`   Wrong image path: ${issues.wrongImagePath.length}`, 'info');
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function step2_fixCategories() {
+            if (!confirm('🏷️ This will auto-categorize all products. Continue?')) {
+                return;
+            }
+            
+            log('🏷️ Step 2: Fixing categories...', 'info');
+            resultsContainer.innerHTML = '<div class="summary"><strong>⏳ Fixing categories...</strong></div>';
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const updates = {};
+                let fixCount = 0;
+                
+                Object.keys(data).forEach(productId => {
+                    const product = data[productId];
+                    const expectedCategory = detectCategory(product.name, productId);
+                    const currentCategory = product.category || '';
+                    
+                    // Fix if missing or wrong (except campus-collection which is valid for supplies)
+                    if (!currentCategory || currentCategory === 'undefined' || currentCategory === '' ||
+                        (currentCategory !== expectedCategory && 
+                         !(currentCategory === 'campus-collection' && expectedCategory === 'supplies') &&
+                         !(currentCategory === 'supplies' && expectedCategory === 'supplies'))) {
+                        updates[`products/${productId}/category`] = expectedCategory;
+                        fixCount++;
+                        log(`📝 ${product.name}: "${currentCategory || 'NONE'}" → "${expectedCategory}"`, 'info');
+                    }
+                });
+                
+                if (fixCount > 0) {
+                    await database.ref().update(updates);
+                    log(`✅ Fixed ${fixCount} product categories!`, 'success');
+                    resultsContainer.innerHTML = `
+                        <div class="summary success">
+                            <strong>✅ Categories Fixed!</strong>
+                            <p>Updated ${fixCount} products</p>
+                            <p>Now proceed to Step 3 to fix images</p>
+                        </div>
+                    `;
+                } else {
+                    log('✅ All categories are already correct!', 'success');
+                    resultsContainer.innerHTML = `
+                        <div class="summary success">
+                            <strong>✅ All Good!</strong>
+                            <p>All categories are already correct</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function step3_fixImages() {
+            if (!confirm('🖼️ This will generate image paths for all products. Continue?')) {
+                return;
+            }
+            
+            log('🖼️ Step 3: Fixing image paths...', 'info');
+            resultsContainer.innerHTML = '<div class="summary"><strong>⏳ Fixing images...</strong></div>';
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const updates = {};
+                let fixCount = 0;
+                
+                Object.keys(data).forEach(productId => {
+                    const product = data[productId];
+                    const currentImage = product.image || '';
+                    
+                    // Fix if missing or invalid
+                    if (!currentImage || currentImage === 'undefined' || currentImage === '' || 
+                        currentImage === 'null' || !currentImage.startsWith('images/')) {
+                        const newImage = generateImagePath(productId, product.name);
+                        updates[`products/${productId}/image`] = newImage;
+                        fixCount++;
+                        log(`🖼️ ${product.name}: → "${newImage}"`, 'info');
+                    }
+                });
+                
+                if (fixCount > 0) {
+                    await database.ref().update(updates);
+                    log(`✅ Fixed ${fixCount} image paths!`, 'success');
+                    resultsContainer.innerHTML = `
+                        <div class="summary success">
+                            <strong>✅ Images Fixed!</strong>
+                            <p>Updated ${fixCount} image paths</p>
+                            <p>⚠️ Make sure the actual image files exist in /images folder</p>
+                            <p>Now proceed to Step 4 to verify everything</p>
+                        </div>
+                    `;
+                } else {
+                    log('✅ All image paths are already set!', 'success');
+                    resultsContainer.innerHTML = `
+                        <div class="summary success">
+                            <strong>✅ All Good!</strong>
+                            <p>All image paths are already correct</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function step4_verifySetup() {
+            log('✅ Step 4: Verifying complete setup...', 'info');
+            resultsContainer.innerHTML = '<div class="summary"><strong>⏳ Verifying...</strong></div>';
+            
+            try {
+                const snapshot = await database.ref('products').once('value');
+                const data = snapshot.val();
+                
+                if (!data) {
+                    log('⚠️ No products found!', 'warning');
+                    return;
+                }
+                
+                const products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                
+                // Group by category
+                const byCategory = {
+                    uniforms: [],
+                    documents: [],
+                    supplies: [],
+                    fees: [],
+                    other: []
+                };
+                
+                products.forEach(p => {
+                    const cat = p.category || 'other';
+                    if (cat === 'campus-collection') {
+                        byCategory.supplies.push(p);
+                    } else if (byCategory[cat]) {
+                        byCategory[cat].push(p);
+                    } else {
+                        byCategory.other.push(p);
+                    }
+                });
+                
+                let allGood = true;
+                let html = `
+                    <div class="summary success">
+                        <strong>✅ Setup Verification</strong>
+                        <p>Total Products: ${products.length}</p>
+                    </div>
+                `;
+                
+                ['uniforms', 'documents', 'supplies', 'fees'].forEach(cat => {
+                    const count = byCategory[cat].length;
+                    const badge = count > 0 ? 'badge-success' : 'badge-danger';
+                    html += `
+                        <div class="category-section">
+                            <h3>
+                                ${cat === 'uniforms' ? '👔' : cat === 'documents' ? '📄' : cat === 'supplies' ? '🎒' : '💰'} 
+                                ${cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                <span class="badge ${badge}">${count} products</span>
+                            </h3>
+                            ${count > 0 ? '<div class="product-grid">' : '<p style="color: #dc3545;">⚠️ No products in this category!</p>'}
+                    `;
+                    
+                    if (count > 0) {
+                        byCategory[cat].slice(0, 6).forEach(p => {
+                            html += `
+                                <div class="product-card">
+                                    <h4>${p.name}</h4>
+                                    <div class="info">Category: <code>${p.category}</code></div>
+                                    <div class="info">Image: <code>${p.image || 'MISSING'}</code></div>
+                                    <div class="info">Stock: ${p.stock || 0}</div>
+                                    <div class="info">Price: ₱${p.price}</div>
+                                </div>
+                            `;
+                        });
+                        if (byCategory[cat].length > 6) {
+                            html += `<p style="padding: 10px; color: #666;">...and ${byCategory[cat].length - 6} more</p>`;
+                        }
+                        html += '</div>';
+                    } else {
+                        allGood = false;
+                    }
+                    
+                    html += '</div>';
+                });
+                
+                if (byCategory.other.length > 0) {
+                    html += `
+                        <div class="category-section" style="border-left-color: #dc3545;">
+                            <h3>⚠️ Uncategorized <span class="badge badge-danger">${byCategory.other.length} products</span></h3>
+                            <p style="color: #dc3545;">These products have invalid categories!</p>
+                        </div>
+                    `;
+                    allGood = false;
+                }
+                
+                resultsContainer.innerHTML = html;
+                
+                if (allGood && byCategory.other.length === 0) {
+                    log('✅ Perfect! All products are properly categorized and have images!', 'success');
+                } else {
+                    log('⚠️ Some issues found. Run Step 2 and 3 again to fix.', 'warning');
+                }
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function showByCategory() {
+            await step4_verifySetup();
+        }
+
+        function testNavigation() {
+            resultsContainer.innerHTML = `
+                <div class="summary success">
+                    <strong>🧪 Navigation Test Instructions</strong>
+                    <ol style="margin-top: 15px; line-height: 2;">
+                        <li>Open your <strong>index.html</strong> in a new tab</li>
+                        <li>Press <strong>Ctrl+Shift+J</strong> (or Cmd+Option+J on Mac) to open console</li>
+                        <li>Click the <strong>"Shop"</strong> dropdown menu</li>
+                        <li>Click <strong>"Uniforms"</strong> - should show uniform products</li>
+                        <li>Click <strong>"Documents"</strong> - should show documents</li>
+                        <li>Click <strong>"Campus Collection"</strong> - should show campus items</li>
+                        <li>Click <strong>"Fees"</strong> - should show fees</li>
+                    </ol>
+                    <p style="margin-top: 15px; font-weight: bold;">✅ If all categories show products → SUCCESS!</p>
+                    <p style="color: #dc3545;">❌ If no products show → Run Steps 2 and 3 above, then refresh website</p>
+                </div>
+            `;
+            log('🧪 Follow the instructions above to test navigation', 'info');
+        }
+
+        log('🔥 Firebase initialized', 'success');
+        log('✅ Ready! Start with Step 1 to analyze your products', 'success');
+    </script>
+</body>
+</html>

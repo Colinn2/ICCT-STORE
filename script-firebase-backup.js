@@ -59,6 +59,29 @@ const confirmMessage = document.getElementById('confirmMessage');
 const confirmOkBtn = document.getElementById('confirmOkBtn');
 const confirmCancelBtn = document.getElementById('confirmCancelBtn');
 
+// Admin DOM Elements
+const adminLoginBtn = document.getElementById('adminLoginBtn');
+const adminModal = document.getElementById('adminModal');
+const closeAdminModal = document.getElementById('closeAdminModal');
+const adminForm = document.getElementById('adminForm');
+const adminUsernameDisplay = document.getElementById('adminUsername');
+const adminPasswordDisplay = document.getElementById('adminPassword');
+const adminUsernameInput = document.getElementById('adminUsernameInput');
+const adminPasswordInput = document.getElementById('adminPasswordInput');
+const toggleAdminPassword = document.getElementById('toggleAdminPassword');
+
+// Admin Dashboard Elements
+const adminDashboard = document.getElementById('adminDashboard');
+const adminNavBtns = document.querySelectorAll('.admin-nav-btn');
+const adminSections = document.querySelectorAll('.admin-section');
+const adminSectionTitle = document.getElementById('adminSectionTitle');
+const adminSectionDesc = document.getElementById('adminSectionDesc');
+const adminLogoutSidebar = document.getElementById('adminLogoutSidebar');
+const adminProductsGrid = document.getElementById('adminProductsGrid');
+const adminTransactionsTable = document.getElementById('adminTransactionsTable');
+const adminPaymentsTable = document.getElementById('adminPaymentsTable');
+const adminOrdersTable = document.getElementById('adminOrdersTable');
+
 // Cart State
 let cart = [];
 let wishlist = [];
@@ -68,6 +91,39 @@ let currentUser = null;
 let transactionHistory = [];
 let carouselPosition = 0;
 let confirmCallback = null; // Store callback for confirm modal
+
+// Admin System State
+let isAdminMode = false;
+let adminCredentials = {
+    username: '',
+    password: ''
+};
+let productStocks = {}; // Store current stock for each product
+
+// Admin Dashboard Sample Data
+let adminTransactions = [
+    { id: 'TXN-001', studentNumber: '2023-100001', studentName: 'Juan Dela Cruz', date: '2025-10-20 14:30', items: 'School Uniform (Male Set)', total: 1200.00, status: 'Completed' },
+    { id: 'TXN-002', studentNumber: '2023-100002', studentName: 'Maria Santos', date: '2025-10-20 13:15', items: 'PE Uniform, ID Lace', total: 900.00, status: 'Completed' },
+    { id: 'TXN-003', studentNumber: '2023-100003', studentName: 'Pedro Reyes', date: '2025-10-20 11:45', items: 'School Uniform (Female Set)', total: 1200.00, status: 'Completed' },
+    { id: 'TXN-004', studentNumber: '2023-100004', studentName: 'Anna Garcia', date: '2025-10-21 09:20', items: 'Notebook Set, Ballpen (Blue)', total: 180.00, status: 'Pending' },
+    { id: 'TXN-005', studentNumber: '2023-100005', studentName: 'Carlos Lopez', date: '2025-10-21 10:05', items: 'ICCT Hoodie, ICCT Cap', total: 950.00, status: 'Processing' }
+];
+
+let adminPayments = [
+    { id: 'PAY-001', studentNumber: '2023-100001', transactionId: 'TXN-001', method: 'GCash', amount: 1200.00, status: 'Paid' },
+    { id: 'PAY-002', studentNumber: '2023-100002', transactionId: 'TXN-002', method: 'Cash on Delivery', amount: 900.00, status: 'Paid' },
+    { id: 'PAY-003', studentNumber: '2023-100003', transactionId: 'TXN-003', method: 'GCash', amount: 1200.00, status: 'Paid' },
+    { id: 'PAY-004', studentNumber: '2023-100004', transactionId: 'TXN-004', method: 'PayMaya', amount: 180.00, status: 'Pending' },
+    { id: 'PAY-005', studentNumber: '2023-100005', transactionId: 'TXN-005', method: 'Bank Transfer', amount: 950.00, status: 'Pending' }
+];
+
+let adminOrders = [
+    { id: 'ORD-001', studentNumber: '2023-100001', studentName: 'Juan Dela Cruz', products: 'School Uniform (Male Set)', quantity: 1, total: 1200.00, status: 'Completed' },
+    { id: 'ORD-002', studentNumber: '2023-100002', studentName: 'Maria Santos', products: 'PE Uniform, ID Lace', quantity: 2, total: 900.00, status: 'Ready for Pickup' },
+    { id: 'ORD-003', studentNumber: '2023-100003', studentName: 'Pedro Reyes', products: 'School Uniform (Female Set)', quantity: 1, total: 1200.00, status: 'Ready for Pickup' },
+    { id: 'ORD-004', studentNumber: '2023-100004', studentName: 'Anna Garcia', products: 'Notebook Set, Ballpen (Blue)', quantity: 2, total: 180.00, status: 'Preparing' },
+    { id: 'ORD-005', studentNumber: '2023-100005', studentName: 'Carlos Lopez', products: 'ICCT Hoodie, ICCT Cap', quantity: 2, total: 950.00, status: 'Pending' }
+];
 
 // Success Modal Functions
 function showSuccessModal(title, message) {
@@ -133,30 +189,737 @@ if (confirmCancelBtn) {
     });
 }
 
+// ===== ADMIN SYSTEM FUNCTIONS =====
+
+// Generate Random 6-Character Credentials
+function generateRandomCredentials() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let username = '';
+    let password = '';
+    
+    for (let i = 0; i < 6; i++) {
+        username += chars.charAt(Math.floor(Math.random() * chars.length));
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    
+    adminCredentials.username = username;
+    adminCredentials.password = password;
+    
+    // Display credentials
+    if (adminUsernameDisplay) adminUsernameDisplay.textContent = username;
+    if (adminPasswordDisplay) adminPasswordDisplay.textContent = password;
+    
+    console.log('🔑 Admin Credentials Generated:', { username, password });
+}
+
+// Open Admin Modal
+function openAdminModal() {
+    if (adminModal) {
+        generateRandomCredentials(); // Generate new credentials each time
+        adminModal.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Clear form
+        if (adminUsernameInput) adminUsernameInput.value = '';
+        if (adminPasswordInput) adminPasswordInput.value = '';
+    }
+}
+
+// Close Admin Modal
+function closeAdminModalFunc() {
+    if (adminModal) {
+        adminModal.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Toggle Admin Mode
+function toggleAdminMode(enable) {
+    isAdminMode = enable;
+    
+    if (enable) {
+        // Enable Admin Mode - Show Dashboard
+        document.body.classList.add('admin-mode');
+        
+        // Hide main site content
+        const header = document.querySelector('.header');
+        const hero = document.querySelector('.hero');
+        const productShowcase = document.querySelector('.product-showcase');
+        const backToSchool = document.querySelector('.back-to-school');
+        const categorySections = document.querySelectorAll('.category-section');
+        const footer = document.querySelector('.footer');
+        
+        if (header) header.style.display = 'none';
+        if (hero) hero.style.display = 'none';
+        if (productShowcase) productShowcase.style.display = 'none';
+        if (backToSchool) backToSchool.style.display = 'none';
+        categorySections.forEach(section => section.style.display = 'none');
+        if (footer) footer.style.display = 'none';
+        
+        // Show Admin Dashboard
+        if (adminDashboard) {
+            adminDashboard.style.display = 'flex';
+            loadAdminDashboard();
+        }
+        
+        console.log('✅ Admin Dashboard Enabled');
+    } else {
+        // Disable Admin Mode - Show Normal Site
+        document.body.classList.remove('admin-mode');
+        
+        // Show main site content
+        const header = document.querySelector('.header');
+        const hero = document.querySelector('.hero');
+        const productShowcase = document.querySelector('.product-showcase');
+        const backToSchool = document.querySelector('.back-to-school');
+        const footer = document.querySelector('.footer');
+        
+        if (header) header.style.display = '';
+        if (hero) hero.style.display = '';
+        if (productShowcase) productShowcase.style.display = '';
+        if (backToSchool) backToSchool.style.display = '';
+        if (footer) footer.style.display = '';
+        
+        // Hide Admin Dashboard
+        if (adminDashboard) {
+            adminDashboard.style.display = 'none';
+        }
+        
+        console.log('✅ Admin Dashboard Disabled');
+    }
+}
+
+// Update Stock for a Product
+// ============================================================================
+// UPDATE PRODUCT STOCK (Firebase Write - Replaces MySQL UPDATE query)
+// ============================================================================
+// Old: UPDATE products SET stock_quantity = ? WHERE id = ?
+// New: Firebase Realtime Database update
+function updateProductStock(productId, newStock) {
+    const productCard = document.querySelector(`.admin-product-card[data-product-id="${productId}"]`);
+    if (!productCard) {
+        console.warn(`⚠️ Product card not found for ID: ${productId}`);
+        return;
+    }
+    
+    // Update Firebase (real-time sync)
+    if (typeof realtimeDB !== 'undefined') {
+        console.log(`🔥 Updating Firebase stock for product ${productId}: ${newStock}`);
+        
+        realtimeDB.ref(`products/${productId}`).update({
+            stock: parseInt(newStock)
+        })
+        .then(() => {
+            console.log(`✅ Firebase stock updated successfully for ${productId}`);
+            
+            // Update local UI
+            updateLocalStockDisplay(productId, newStock);
+            
+            // Show success message
+            showSuccessModal('Stock Updated', `✅ Stock updated to ${newStock} and synced to Firebase!`);
+        })
+        .catch(error => {
+            console.error('❌ Firebase update error:', error);
+            showSuccessModal('Update Error', `⚠️ Failed to update Firebase: ${error.message}`);
+        });
+    } else {
+        console.warn('⚠️ Firebase not available - updating local display only');
+        updateLocalStockDisplay(productId, newStock);
+        showSuccessModal('Stock Updated (Local Only)', `Stock updated to ${newStock} (Firebase not connected)`);
+    }
+}
+
+// Helper function to update local DOM display
+function updateLocalStockDisplay(productId, newStock) {
+    // Update admin card
+    const productCard = document.querySelector(`.admin-product-card[data-product-id="${productId}"]`);
+    if (productCard) {
+        productCard.setAttribute('data-stock', newStock);
+        const stockInput = productCard.querySelector('.stock-input');
+        if (stockInput) stockInput.value = newStock;
+    }
+    
+    // Update user-facing product cards (if any are displayed)
+    const userProductCard = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+    if (userProductCard) {
+        userProductCard.setAttribute('data-stock', newStock);
+        productStocks[productId] = newStock;
+        
+        const stockCount = userProductCard.querySelector('.stock-count');
+        if (stockCount) stockCount.textContent = newStock;
+        
+        const stockInput = userProductCard.querySelector('.stock-input');
+        if (stockInput) stockInput.value = newStock;
+        
+        // Update button states
+        const productActions = userProductCard.querySelector('.product-actions');
+        if (parseInt(newStock) <= 0) {
+            // Out of stock - disable buttons
+            productActions.innerHTML = '<button class="out-of-stock user-mode-only" disabled>Out of Stock</button>';
+        } else if (!productActions.querySelector('.add-to-cart')) {
+            // Had no stock, now has stock - re-enable buttons
+            productActions.innerHTML = `
+                <button class="buy-now-btn user-mode-only" title="Buy Now">
+                    <i class="fas fa-shopping-bag"></i>
+                </button>
+                <button class="add-to-cart user-mode-only" title="Add to Cart">
+                    <i class="fas fa-cart-plus"></i>
+                </button>
+                <button class="love-btn user-mode-only" title="Add to Wishlist">
+                    <i class="fas fa-heart"></i>
+                </button>
+            `;
+            
+            // Re-attach event listeners for the new buttons
+            attachProductCardListeners(userProductCard);
+        }
+        
+        // Re-apply admin mode visibility if needed
+        if (isAdminMode) {
+            userProductCard.querySelectorAll('.user-mode-only').forEach(el => el.style.display = 'none');
+        }
+    }
+    
+    console.log(`📦 Local stock display updated for product ${productId}: ${newStock}`);
+}
+
+// ============================================================================
+// ATTACH STOCK UPDATE LISTENERS (Connects UI buttons to Firebase writes)
+// ============================================================================
+function attachStockUpdateListeners() {
+    const updateButtons = document.querySelectorAll('.update-stock-btn');
+    console.log(`🔗 Attaching ${updateButtons.length} stock update listeners...`);
+    
+    updateButtons.forEach(button => {
+        // Remove old listeners to prevent duplicates
+        button.replaceWith(button.cloneNode(true));
+    });
+    
+    // Re-select buttons after cloning
+    const freshButtons = document.querySelectorAll('.update-stock-btn');
+    freshButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productCard = this.closest('.admin-product-card');
+            if (!productCard) {
+                console.error('❌ Product card not found');
+                return;
+            }
+            
+            const productId = productCard.getAttribute('data-product-id');
+            const stockInput = productCard.querySelector('.stock-input');
+            const newStock = parseInt(stockInput.value) || 0;
+            
+            console.log(`📝 Admin clicked update: Product ${productId} → Stock ${newStock}`);
+            
+            // Update Firebase and local display
+            updateProductStock(productId, newStock);
+            
+            // Visual feedback on button
+            this.style.background = '#4caf50';
+            const icon = this.querySelector('i');
+            if (icon) icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                this.style.background = '';
+                if (icon) icon.className = 'fas fa-sync-alt';
+            }, 1500);
+        });
+    });
+    
+    console.log('✅ Stock update listeners attached successfully');
+}
+
+// Load Admin Dashboard
+function loadAdminDashboard() {
+    // Load Products Section (default)
+    loadAdminProducts();
+    
+    // Load other sections
+    loadAdminTransactions();
+    loadAdminPayments();
+    loadAdminOrders();
+    
+    // Set default active section
+    switchAdminSection('products');
+}
+
+// Load Admin Products
+async function loadAdminProducts() {
+    if (!adminProductsGrid) return;
+    
+    console.log('� Loading admin products from Firebase...');
+    
+    try {
+        // Check if Firebase is available
+        if (typeof realtimeDB === 'undefined') {
+            console.warn('⚠️ Firebase not initialized, using static data');
+            loadAdminProductsFromStatic();
+            return;
+        }
+        
+        // ============================================================================
+        // FIREBASE READ: Get all products (Replaces MySQL SELECT * FROM products)
+        // ============================================================================
+        const snapshot = await realtimeDB.ref('products').once('value');
+        const data = snapshot.val();
+        
+        if (!data) {
+            console.warn('⚠️ No products in Firebase');
+            adminProductsGrid.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">No products found in Firebase</p>';
+            return;
+        }
+        
+        // Convert Firebase object to array
+        const allProducts = Object.keys(data).map(key => ({
+            id: key,
+            name: data[key].name,
+            price: data[key].price,
+            stock_quantity: data[key].stock || 0,
+            category_slug: data[key].category || 'unknown',
+            image_url: data[key].image || 'images/placeholder.png'
+        }));
+        
+        console.log(`✅ Loaded ${allProducts.length} products from Firebase for admin`);
+        
+        // Clear grid
+        adminProductsGrid.innerHTML = '';
+        
+        // Render products
+        allProducts.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'admin-product-card';
+            productCard.setAttribute('data-product-id', product.id);
+            productCard.setAttribute('data-stock', product.stock_quantity);
+            
+            productCard.innerHTML = `
+                <div class="admin-product-image">
+                    ${product.image_url ? `<img src="${product.image_url}" alt="${product.name}">` : `<div class="image-placeholder">${product.name}</div>`}
+                </div>
+                <div class="admin-product-info">
+                    <h3>${product.name}</h3>
+                    <p class="admin-product-price">₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits: 2})}</p>
+                    <p class="admin-product-category">${product.category_slug}</p>
+                    <div class="admin-product-stock">
+                        <label>Current Stock:</label>
+                        <div class="stock-control">
+                            <input type="number" class="stock-input" value="${product.stock_quantity}" min="0" max="999">
+                            <button class="update-stock-btn" data-product-id="${product.id}">
+                                <i class="fas fa-sync-alt"></i> Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            adminProductsGrid.appendChild(productCard);
+        });
+        
+        // Attach update listeners with Firebase write capability
+        attachStockUpdateListeners();
+        
+    } catch (error) {
+        console.error('❌ Firebase error loading admin products:', error);
+        loadAdminProductsFromStatic();
+    }
+}
+
+// Fallback function using static data
+function loadAdminProductsFromStatic() {
+    console.log('📦 Loading admin products from static data...');
+    
+    const allProducts = [];
+    
+    // Check if we have static products data
+    if (typeof STATIC_PRODUCTS !== 'undefined') {
+        Object.keys(STATIC_PRODUCTS).forEach(category => {
+            allProducts.push(...STATIC_PRODUCTS[category]);
+        });
+    }
+    
+    console.log(`📦 Loaded ${allProducts.length} products from static data`);
+    
+    // Clear grid
+    adminProductsGrid.innerHTML = '';
+    
+    // Render products
+    allProducts.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'admin-product-card';
+        productCard.setAttribute('data-product-id', product.id);
+        productCard.setAttribute('data-stock', product.stock_quantity);
+        
+        productCard.innerHTML = `
+            <div class="admin-product-image">
+                ${product.image_url ? `<img src="${product.image_url}" alt="${product.name}">` : `<div class="image-placeholder">${product.name}</div>`}
+            </div>
+            <div class="admin-product-info">
+                <h3>${product.name}</h3>
+                <p class="admin-product-price">₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits: 2})}</p>
+                <p class="admin-product-category">${product.category_slug}</p>
+                <div class="admin-product-stock">
+                    <label>Current Stock:</label>
+                    <div class="stock-control">
+                        <input type="number" class="stock-input" value="${product.stock_quantity}" min="0" max="999">
+                        <button class="update-stock-btn" data-product-id="${product.id}">
+                            <i class="fas fa-sync-alt"></i> Update (Static Mode)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        adminProductsGrid.appendChild(productCard);
+    });
+    
+    // Attach update listeners
+    attachAdminStockListeners();
+}
+
+// Load Admin Transactions
+function loadAdminTransactions() {
+    if (!adminTransactionsTable) return;
+    
+    adminTransactionsTable.innerHTML = '';
+    
+    adminTransactions.forEach(transaction => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${transaction.id}</strong></td>
+            <td>${transaction.studentNumber}</td>
+            <td>${transaction.date}</td>
+            <td>${transaction.items}</td>
+            <td class="amount">₱${transaction.total.toLocaleString('en-PH', {minimumFractionDigits: 2})}</td>
+            <td><span class="status-badge status-${transaction.status.toLowerCase().replace(' ', '-')}">${transaction.status}</span></td>
+        `;
+        adminTransactionsTable.appendChild(row);
+    });
+}
+
+// Load Admin Payments
+function loadAdminPayments() {
+    if (!adminPaymentsTable) return;
+    
+    adminPaymentsTable.innerHTML = '';
+    
+    adminPayments.forEach(payment => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${payment.id}</strong></td>
+            <td>${payment.studentNumber}</td>
+            <td>${payment.transactionId}</td>
+            <td>${payment.method}</td>
+            <td class="amount">₱${payment.amount.toLocaleString('en-PH', {minimumFractionDigits: 2})}</td>
+            <td><span class="status-badge status-${payment.status.toLowerCase()}">${payment.status}</span></td>
+            <td>
+                <select class="payment-status-select" data-payment-id="${payment.id}">
+                    <option value="Paid" ${payment.status === 'Paid' ? 'selected' : ''}>Paid</option>
+                    <option value="Pending" ${payment.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="Failed" ${payment.status === 'Failed' ? 'selected' : ''}>Failed</option>
+                </select>
+            </td>
+        `;
+        adminPaymentsTable.appendChild(row);
+    });
+    
+    // Attach change listeners
+    attachPaymentStatusListeners();
+}
+
+// Load Admin Orders
+function loadAdminOrders() {
+    if (!adminOrdersTable) return;
+    
+    adminOrdersTable.innerHTML = '';
+    
+    adminOrders.forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${order.id}</strong></td>
+            <td>${order.studentNumber}</td>
+            <td>${order.studentName}</td>
+            <td>${order.products}</td>
+            <td>${order.quantity}</td>
+            <td class="amount">₱${order.total.toLocaleString('en-PH', {minimumFractionDigits: 2})}</td>
+            <td><span class="status-badge status-${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
+            <td>
+                <select class="order-status-select" data-order-id="${order.id}">
+                    <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="Preparing" ${order.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
+                    <option value="Ready for Pickup" ${order.status === 'Ready for Pickup' ? 'selected' : ''}>Ready for Pickup</option>
+                    <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                </select>
+            </td>
+        `;
+        adminOrdersTable.appendChild(row);
+    });
+    
+    // Attach change listeners
+    attachOrderStatusListeners();
+}
+
+// Switch Admin Section
+function switchAdminSection(sectionName) {
+    // Update navigation
+    document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-section') === sectionName) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Update sections
+    document.querySelectorAll('.admin-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    const targetSection = document.getElementById(`admin${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}Section`);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    
+    // Update header
+    const titles = {
+        products: { title: 'Products Management', desc: 'Manage product inventory and stock levels' },
+        transactions: { title: 'Transaction History', desc: 'View all student transactions and orders' },
+        payments: { title: 'Payment Management', desc: 'Monitor and update payment statuses' },
+        orders: { title: 'Order Status Management', desc: 'Track and update order fulfillment status' }
+    };
+    
+    if (titles[sectionName]) {
+        if (adminSectionTitle) adminSectionTitle.textContent = titles[sectionName].title;
+        if (adminSectionDesc) adminSectionDesc.textContent = titles[sectionName].desc;
+    }
+}
+
+// Attach Stock Update Listeners for Admin Dashboard
+function attachAdminStockListeners() {
+    const updateButtons = document.querySelectorAll('.admin-product-card .update-stock-btn');
+    updateButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productCard = this.closest('.admin-product-card');
+            const productId = this.getAttribute('data-product-id');
+            const stockInput = productCard.querySelector('.stock-input');
+            const newStock = parseInt(stockInput.value) || 0;
+            
+            // Update stock
+            productCard.setAttribute('data-stock', newStock);
+            productStocks[productId] = newStock;
+            
+            // Visual feedback
+            this.style.background = '#4caf50';
+            const icon = this.querySelector('i');
+            icon.className = 'fas fa-check';
+            
+            setTimeout(() => {
+                this.style.background = '';
+                icon.className = 'fas fa-sync-alt';
+            }, 1000);
+            
+            showSuccessModal('Stock Updated', `Product stock has been updated to ${newStock}.`);
+        });
+    });
+}
+
+// Attach Payment Status Listeners
+function attachPaymentStatusListeners() {
+    const selects = document.querySelectorAll('.payment-status-select');
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            const paymentId = this.getAttribute('data-payment-id');
+            const newStatus = this.value;
+            
+            // Find and update payment
+            const payment = adminPayments.find(p => p.id === paymentId);
+            if (payment) {
+                payment.status = newStatus;
+                
+                // Update badge
+                const badge = this.closest('tr').querySelector('.status-badge');
+                badge.className = `status-badge status-${newStatus.toLowerCase()}`;
+                badge.textContent = newStatus;
+                
+                showSuccessModal('Status Updated', `Payment status changed to ${newStatus}`);
+            }
+        });
+    });
+}
+
+// Attach Order Status Listeners
+function attachOrderStatusListeners() {
+    const selects = document.querySelectorAll('.order-status-select');
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            const orderId = this.getAttribute('data-order-id');
+            const newStatus = this.value;
+            
+            // Find and update order
+            const order = adminOrders.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                
+                // Update badge
+                const badge = this.closest('tr').querySelector('.status-badge');
+                badge.className = `status-badge status-${newStatus.toLowerCase().replace(' ', '-')}`;
+                badge.textContent = newStatus;
+                
+                showSuccessModal('Status Updated', `Order status changed to ${newStatus}`);
+            }
+        });
+    });
+}
+
+// Admin Logout
+function adminLogout() {
+    toggleAdminMode(false);
+    showSuccessModal('Admin Logout', 'You have been logged out of Admin Mode.');
+}
+
+// Admin Form Submit
+if (adminForm) {
+    adminForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const enteredUsername = adminUsernameInput.value.trim();
+        const enteredPassword = adminPasswordInput.value.trim();
+        
+        if (enteredUsername === adminCredentials.username && enteredPassword === adminCredentials.password) {
+            // Success - Enable Admin Mode
+            closeAdminModalFunc();
+            closeAccountSidebar(); // Close account sidebar
+            toggleAdminMode(true);
+            showSuccessModal('Admin Login Success', 'You are now in Admin Mode. You can update product stock levels.');
+        } else {
+            // Failed
+            showSuccessModal('Login Failed', 'Invalid username or password. Please check the credentials displayed above.');
+        }
+    });
+}
+
+// Admin Login Button
+if (adminLoginBtn) {
+    adminLoginBtn.addEventListener('click', openAdminModal);
+}
+
+// Close Admin Modal Button
+if (closeAdminModal) {
+    closeAdminModal.addEventListener('click', closeAdminModalFunc);
+}
+
+// Toggle Admin Password Visibility
+if (toggleAdminPassword) {
+    toggleAdminPassword.addEventListener('click', () => {
+        const input = adminPasswordInput;
+        const icon = toggleAdminPassword.querySelector('i');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    });
+}
+
+// Admin Navigation Buttons
+document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const section = this.getAttribute('data-section');
+        switchAdminSection(section);
+    });
+});
+
+// Admin Sidebar Logout Button
+if (adminLogoutSidebar) {
+    adminLogoutSidebar.addEventListener('click', adminLogout);
+}
+
+// Close Account Sidebar Function
+function closeAccountSidebar() {
+    if (accountSidebar) {
+        accountSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Attach Event Listeners to Product Cards
+function attachProductCardListeners(productCard) {
+    // Add to Cart button
+    const addToCartBtn = productCard.querySelector('.add-to-cart');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            icon.className = 'fas fa-check';
+            this.style.background = '#4caf50';
+            this.title = 'Added to Cart';
+            
+            setTimeout(() => {
+                icon.className = 'fas fa-cart-plus';
+                this.style.background = '';
+                this.title = 'Add to Cart';
+            }, 2000);
+        });
+    }
+    
+    // Love button
+    const loveBtn = productCard.querySelector('.love-btn');
+    if (loveBtn) {
+        loveBtn.addEventListener('click', function() {
+            const productName = productCard.querySelector('h3').textContent;
+            const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('₱', '').replace(',', ''));
+            const added = addToWishlist(productName, productPrice);
+            
+            const icon = this.querySelector('i');
+            
+            if (added) {
+                icon.className = 'fas fa-heart';
+                icon.style.color = '#ff4757';
+                this.style.background = '#ff4757';
+                this.title = 'Remove from Favorites';
+                
+                setTimeout(() => {
+                    if (wishlistSidebar) {
+                        wishlistSidebar.classList.add('active');
+                        overlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }, 300);
+            } else {
+                icon.className = 'far fa-heart';
+                icon.style.color = '';
+                this.style.background = '';
+                this.title = 'Add to Wishlist';
+            }
+        });
+    }
+}
+
 const carouselItemWidth = 280; // Width + gap
 
+// ===== FIREBASE INTEGRATION (Replaces MySQL/API) =====
+// Comment: All MySQL queries have been replaced with Firebase Realtime Database
+// Old approach: Fetch from API endpoint -> MySQL database
+// New approach: Read directly from Firebase Realtime Database
+
+console.log('🔥 Initializing Firebase product loading...');
+
 // ===== CATEGORY NAVIGATION =====
-// API Configuration
-// Dynamically determine API URL based on current host
+// Commented out: Old MySQL API Configuration
+/*
 let API_BASE_URL;
 if (window.location.hostname === 'localhost') {
-    // Local development
     API_BASE_URL = 'http://localhost:8080';
 } else if (window.location.hostname.includes('app.github.dev')) {
-    // GitHub Codespaces - use same protocol (HTTPS) and replace port
-    const protocol = window.location.protocol; // Will be 'https:'
+    const protocol = window.location.protocol;
     const host = window.location.host.replace('-8000.', '-8080.');
     API_BASE_URL = `${protocol}//${host}`;
 } else {
-    // GitHub Pages or other - use relative path (won't work without backend)
-    API_BASE_URL = 'http://localhost:8080'; // Fallback
-    console.warn('⚠️ Running on GitHub Pages - API server not available!');
-    console.warn('⚠️ Please use GitHub Codespaces to test the full functionality');
+    API_BASE_URL = 'http://localhost:8080';
 }
-
-console.log('🔗 API URL:', API_BASE_URL);
-console.log('🌐 Current hostname:', window.location.hostname);
-console.log('🌐 Protocol:', window.location.protocol);
+*/
 
 // Initialize after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -170,49 +933,98 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('📋 Category Links found:', categoryLinks.length);
     console.log('📋 Category Sections found:', categorySections.length);
 
-    // Fetch and display products from database (with static fallback)
+    // ============================================================================
+    // LOAD PRODUCTS FROM FIREBASE (Replaces MySQL SELECT queries)
+    // ============================================================================
+    // Old: SELECT * FROM products WHERE category = ?
+    // New: Firebase Realtime Database query with category mapping
     async function loadProducts(categorySlug) {
-        const isCodespaces = window.location.hostname.includes('app.github.dev');
-        const isLocalhost = window.location.hostname === 'localhost';
+        console.log('🔥 Loading products from Firebase for category:', categorySlug);
         
-        // Try API first (if in development environment)
-        if (isCodespaces || isLocalhost) {
-            try {
-                const url = `${API_BASE_URL}/?action=products&category=${categorySlug}`;
-                console.log('🔄 Loading products from API:', url);
-                console.log('⏳ Fetching data...');
-                
-                const response = await fetch(url);
-                console.log('📡 Response received:', response.status, response.statusText);
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    
-                    console.log('✅ API Response received');
-                    console.log('📊 Response data:', result);
-                    console.log('✅ Success?', result.success);
-                    console.log('📦 Products count:', result.data ? result.data.length : 0);
-                    
-                    if (result.success && result.data) {
-                        console.log('✅ Using MySQL database - Returning', result.data.length, 'products');
-                        if (result.data.length > 0) {
-                            console.log('📋 First product:', result.data[0].name);
-                        }
-                        return result.data;
-                    }
-                }
-                
-                console.warn('⚠️ API response not OK, falling back to static data');
-            } catch (error) {
-                console.warn('⚠️ API fetch failed:', error.message);
-                console.log('📦 Falling back to static product data...');
+        try {
+            // Check if Firebase is available
+            if (typeof realtimeDB === 'undefined') {
+                console.error('❌ Firebase Realtime Database not initialized!');
+                return fallbackToStaticData(categorySlug);
             }
+            
+            const productsRef = realtimeDB.ref('products');
+            
+            // Handle 'all-products' - get everything
+            if (categorySlug === 'all-products') {
+                const snapshot = await productsRef.once('value');
+                const data = snapshot.val();
+                
+                if (data) {
+                    const products = Object.keys(data).map(key => ({
+                        id: key,
+                        name: data[key].name,
+                        price: data[key].price,
+                        stock_quantity: data[key].stock || 0,
+                        description: data[key].description || '',
+                        image_url: data[key].image || `images/${key}.jpg`,
+                        category_slug: data[key].category || categorySlug
+                    }));
+                    
+                    console.log(`✅ Loaded ${products.length} products from Firebase (all products)`);
+                    return products;
+                }
+            }
+            
+            // Map website category to Firebase categories
+            // Website uses 'supplies' but Firebase might use 'campus-collection' OR 'supplies'
+            const categoryVariants = [categorySlug];
+            if (categorySlug === 'supplies') {
+                categoryVariants.push('campus-collection', 'campus collection');
+            } else if (categorySlug === 'campus-collection') {
+                categoryVariants.push('supplies');
+            }
+            
+            console.log('🔍 Searching for categories:', categoryVariants);
+            
+            // Try each category variant
+            let allProducts = [];
+            for (const variant of categoryVariants) {
+                const query = productsRef.orderByChild('category').equalTo(variant);
+                const snapshot = await query.once('value');
+                const data = snapshot.val();
+                
+                if (data) {
+                    const products = Object.keys(data).map(key => ({
+                        id: key,
+                        name: data[key].name,
+                        price: data[key].price,
+                        stock_quantity: data[key].stock || 0,
+                        description: data[key].description || '',
+                        image_url: data[key].image || `images/${key}.jpg`,
+                        category_slug: data[key].category || categorySlug
+                    }));
+                    allProducts = allProducts.concat(products);
+                    console.log(`✅ Found ${products.length} products with category "${variant}"`);
+                }
+            }
+            
+            if (allProducts.length > 0) {
+                console.log(`✅ Total loaded: ${allProducts.length} products from Firebase`);
+                console.log('📋 First product:', allProducts[0].name);
+                return allProducts;
+            } else {
+                console.warn('⚠️ No products found in Firebase for category:', categorySlug);
+                console.warn('⚠️ Tried variants:', categoryVariants);
+                return [];
+            }
+            
+        } catch (error) {
+            console.error('❌ Firebase error:', error.message);
+            console.log('📦 Falling back to static data...');
+            return fallbackToStaticData(categorySlug);
         }
-        
-        // Fallback to static data (GitHub Pages or API unavailable)
+    }
+    
+    // Fallback to static data if Firebase fails
+    function fallbackToStaticData(categorySlug) {
         console.log('📦 Using static product data for category:', categorySlug);
         
-        // Check if STATIC_PRODUCTS is available
         if (typeof STATIC_PRODUCTS === 'undefined') {
             console.error('❌ Static product data not loaded!');
             showSuccessModal('Data Error', '⚠️ Product data not available. Please ensure products-data.js is loaded.');
@@ -221,46 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const products = STATIC_PRODUCTS[categorySlug] || [];
         console.log('✅ Loaded', products.length, 'products from static data');
-        
-        // Show info banner if on GitHub Pages
-        if (!isCodespaces && !isLocalhost) {
-            showStaticModeNotice();
-        }
-        
         return products;
-    }
-    
-    // Show notice when using static data
-    function showStaticModeNotice() {
-        // Only show once per session
-        if (sessionStorage.getItem('staticModeNoticeShown')) {
-            return;
-        }
-        
-        const notice = document.createElement('div');
-        notice.className = 'static-mode-notice';
-        notice.innerHTML = `
-            <div class="notice-content">
-                <span class="notice-icon">ℹ️</span>
-                <span class="notice-text">
-                    You're viewing the static demo. 
-                    <a href="https://github.com/Colinn2/ICCT-STORE#-how-to-run-github-codespaces" target="_blank">
-                        Open in Codespaces
-                    </a> for full database features.
-                </span>
-                <button class="notice-close" onclick="this.parentElement.parentElement.remove()">×</button>
-            </div>
-        `;
-        document.body.appendChild(notice);
-        sessionStorage.setItem('staticModeNoticeShown', 'true');
-        
-        // Auto-hide after 10 seconds
-        setTimeout(() => {
-            if (notice.parentElement) {
-                notice.style.opacity = '0';
-                setTimeout(() => notice.remove(), 300);
-            }
-        }, 10000);
     }
 
     // Render products in the grid
@@ -296,16 +1069,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('🔨 Creating product cards...');
         products.forEach((product, index) => {
             console.log(`  ${index + 1}. Creating card for: ${product.name}`);
-            
-            // Get product ID and check stock from localStorage
-            const productId = product.id || product.name.toLowerCase().replace(/\s+/g, '-');
-            const stockKey = `stock_${productId}`;
-            let currentStock = parseInt(localStorage.getItem(stockKey)) || product.stock_quantity || 50;
-            const isOutOfStock = currentStock <= 0;
-            
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
-            productCard.dataset.productId = productId;
+            productCard.setAttribute('data-product-id', product.id);
+            productCard.setAttribute('data-stock', product.stock_quantity);
             productCard.innerHTML = `
                 <div class="product-image">
                     ${product.image_url ? `<img src="${product.image_url}" alt="${product.name}">` : `<div class="image-placeholder">${product.name}</div>`}
@@ -314,26 +1081,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${product.name}</h3>
                     ${product.description ? `<p class="product-desc">${product.description}</p>` : ''}
                     <p class="price">₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                    <div class="stock-display">
-                        <i class="fas fa-box"></i>
-                        <span class="stock-text ${isOutOfStock ? 'out-of-stock-text' : ''}">
-                            Stock: ${currentStock}
-                        </span>
+                    
+                    <!-- Stock Display (User Mode) -->
+                    <div class="stock-display user-mode-only">
+                        <small class="stock-text">Stock: <span class="stock-count">${product.stock_quantity}</span></small>
                     </div>
+                    
+                    <!-- Admin Controls (Admin Mode) -->
+                    <div class="admin-controls admin-mode-only" style="display: none;">
+                        <label>Update Stock:</label>
+                        <div class="stock-control">
+                            <input type="number" class="stock-input" value="${product.stock_quantity}" min="0" max="999">
+                            <button class="update-stock-btn" title="Update Stock">
+                                <i class="fas fa-sync-alt"></i> Update
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="product-actions">
-                        ${!isOutOfStock ? 
-                            `<button class="buy-now-btn" title="Buy Now" data-product-id="${productId}">
+                        ${product.stock_quantity > 0 ? 
+                            `<button class="buy-now-btn user-mode-only" title="Buy Now">
                                 <i class="fas fa-shopping-bag"></i>
                              </button>
-                             <button class="add-to-cart" title="Add to Cart" data-product-id="${productId}" data-product-name="${product.name}" data-product-price="${product.price}">
+                             <button class="add-to-cart user-mode-only" title="Add to Cart">
                                 <i class="fas fa-cart-plus"></i>
                              </button>
-                             <button class="love-btn" title="Add to Wishlist" data-product-id="${productId}" data-product-name="${product.name}">
-                                <i class="far fa-heart"></i>
+                             <button class="love-btn user-mode-only" title="Add to Wishlist">
+                                <i class="fas fa-heart"></i>
                              </button>` : 
-                            `<button class="out-of-stock-btn" disabled>
-                                <i class="fas fa-ban"></i> Out of Stock
-                             </button>`
+                            `<button class="out-of-stock user-mode-only" disabled>Out of Stock</button>`
                         }
                     </div>
                 </div>
@@ -341,62 +1117,22 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(productCard);
         });
         
-        // Add event listeners for Add to Cart buttons
-        const addToCartButtons = container.querySelectorAll('.add-to-cart');
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Change icon to checkmark
-                const icon = this.querySelector('i');
-                icon.className = 'fas fa-check';
-                
-                // Change button color to indicate success
-                this.style.background = '#4caf50';
-                this.title = 'Added to Cart';
-                
-                // Reset after 2 seconds
-                setTimeout(() => {
-                    icon.className = 'fas fa-cart-plus';
-                    this.style.background = '';
-                    this.title = 'Add to Cart';
-                }, 2000);
-            });
+        // Add event listeners for product cards
+        const productCards = container.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            attachProductCardListeners(card);
+            
+            // Apply admin mode visibility if already in admin mode
+            if (isAdminMode) {
+                card.querySelectorAll('.user-mode-only').forEach(el => el.style.display = 'none');
+                card.querySelectorAll('.admin-mode-only').forEach(el => el.style.display = 'block');
+            }
         });
         
-        // Add event listeners for Love/Wishlist buttons
-        const loveButtons = container.querySelectorAll('.love-btn');
-        loveButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const productCard = this.closest('.product-card');
-                const productName = productCard.querySelector('h3').textContent;
-                const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('₱', '').replace(',', ''));
-                
-                // Toggle - returns true if added, false if removed
-                const added = addToWishlist(productName, productPrice);
-                
-                const icon = this.querySelector('i');
-                
-                if (added) {
-                    // Added to wishlist - show filled red heart
-                    icon.className = 'fas fa-heart';
-                    icon.style.color = '#ff4757';
-                    this.style.background = '#ff4757';
-                    this.title = 'Remove from Favorites';
-                    
-                    // Open wishlist sidebar
-                    setTimeout(() => {
-                        wishlistSidebar.classList.add('active');
-                        overlay.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                    }, 300);
-                } else {
-                    // Removed from wishlist - show outline heart
-                    icon.className = 'far fa-heart';
-                    icon.style.color = '';
-                    this.style.background = '';
-                    this.title = 'Add to Wishlist';
-                }
-            });
-        });
+        // Attach stock update listeners if in admin mode
+        if (isAdminMode) {
+            attachStockUpdateListeners();
+        }
         
         console.log('✅ Rendered', products.length, 'products to container');
         console.log('✅ Final HTML length:', container.innerHTML.length);
@@ -1197,70 +1933,44 @@ if (moveAllToCartBtn) {
     });
 }
 
-// Payment Method Selector - Show Confirm Button
+// Payment Method Selector - Show/Hide Payment Details Form
 const paymentMethodSelect = document.getElementById('paymentMethod');
-const confirmPaymentSection = document.getElementById('confirmPaymentSection');
-const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
-const paymentReferenceDisplay = document.getElementById('paymentReferenceDisplay');
-const referenceNumberElement = document.getElementById('referenceNumber');
+const paymentDetailsForm = document.getElementById('paymentDetailsForm');
+const paymentFormTitle = document.getElementById('paymentFormTitle');
 
-// Function to generate random reference number
-function generateReferenceNumber(paymentMethod) {
-    const prefix = {
-        'gcash': 'GC',
-        'ecpay': 'EP',
-        'cebuana': 'CB',
-        'mlhuillier': 'ML'
-    };
-    
-    const date = new Date();
-    const year = date.getFullYear().toString().slice(-2);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
-    
-    return `${prefix[paymentMethod]}-${year}${month}${day}-${random}`;
-}
-
-if (paymentMethodSelect) {
+if (paymentMethodSelect && paymentDetailsForm) {
     paymentMethodSelect.addEventListener('change', function() {
         const selectedMethod = this.value;
         
-        if (selectedMethod) {
-            // Show confirm button
-            confirmPaymentSection.style.display = 'block';
-            paymentReferenceDisplay.style.display = 'none';
-        } else {
-            // Hide everything if no method selected
-            confirmPaymentSection.style.display = 'none';
-            paymentReferenceDisplay.style.display = 'none';
-        }
-    });
-}
-
-// Confirm Payment Button Click
-if (confirmPaymentBtn) {
-    confirmPaymentBtn.addEventListener('click', function() {
-        const selectedMethod = paymentMethodSelect ? paymentMethodSelect.value : '';
+        // Hide all payment forms first
+        const allForms = paymentDetailsForm.querySelectorAll('.payment-form');
+        allForms.forEach(form => {
+            form.style.display = 'none';
+        });
         
         if (selectedMethod) {
-            // Generate reference number
-            const refNumber = generateReferenceNumber(selectedMethod);
+            // Show the payment details container
+            paymentDetailsForm.style.display = 'block';
             
-            // Display reference number
-            referenceNumberElement.textContent = refNumber;
-            paymentReferenceDisplay.style.display = 'block';
-            confirmPaymentSection.style.display = 'none';
-            
-            // Show success message
+            // Update the form title
             const methodNames = {
-                'gcash': 'GCash',
-                'ecpay': 'ECPay',
-                'cebuana': 'Cebuana Lhuillier',
-                'mlhuillier': 'M Lhuillier'
+                'gcash': 'GCash Payment Details',
+                'maya': 'Maya Payment Details',
+                'bank': 'Bank Transfer Details',
+                'counter': 'Over the Counter Details',
+                'card': 'Card Payment Details',
+                'installment': 'Installment Plan Details'
             };
+            paymentFormTitle.textContent = methodNames[selectedMethod] || 'Payment Details';
             
-            alert(`Payment method confirmed!\n\nMethod: ${methodNames[selectedMethod]}\nReference Number: ${refNumber}\n\nPlease save this reference number for your transaction.`);
+            // Show the corresponding form
+            const targetForm = paymentDetailsForm.querySelector(`[data-payment="${selectedMethod}"]`);
+            if (targetForm) {
+                targetForm.style.display = 'block';
+            }
+        } else {
+            // Hide the payment details container if no method selected
+            paymentDetailsForm.style.display = 'none';
         }
     });
 }
@@ -1899,710 +2609,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-// ============================================================================
-// ADMIN DASHBOARD SYSTEM
-// ============================================================================
-
-// Admin State
-let isAdminMode = false;
-
-// Dummy Data for Admin Dashboard
-const dummyTransactions = [
-    { id: 'TXN001', studentNumber: '2024-1001', date: '2025-10-20 10:30 AM', total: 1250.00, status: 'Completed' },
-    { id: 'TXN002', studentNumber: '2024-1002', date: '2025-10-20 11:15 AM', total: 850.00, status: 'Pending' },
-    { id: 'TXN003', studentNumber: '2024-1003', date: '2025-10-20 02:45 PM', total: 2100.00, status: 'Completed' },
-    { id: 'TXN004', studentNumber: '2024-1004', date: '2025-10-21 09:00 AM', total: 450.00, status: 'Processing' },
-    { id: 'TXN005', studentNumber: '2024-1005', date: '2025-10-21 10:20 AM', total: 1650.00, status: 'Completed' }
-];
-
-const dummyPayments = [
-    { id: 'PAY001', studentNumber: '2024-1001', method: 'GCash', amount: 1250.00, status: 'Paid', date: '2025-10-20 10:30 AM' },
-    { id: 'PAY002', studentNumber: '2024-1002', method: 'Cash on Delivery', amount: 850.00, status: 'Pending', date: '2025-10-20 11:15 AM' },
-    { id: 'PAY003', studentNumber: '2024-1003', method: 'Bank Transfer', amount: 2100.00, status: 'Paid', date: '2025-10-20 02:45 PM' },
-    { id: 'PAY004', studentNumber: '2024-1004', method: 'GCash', amount: 450.00, status: 'Failed', date: '2025-10-21 09:00 AM' },
-    { id: 'PAY005', studentNumber: '2024-1005', method: 'PayMaya', amount: 1650.00, status: 'Pending', date: '2025-10-21 10:20 AM' },
-    { id: 'PAY006', studentNumber: '2024-1006', method: 'Credit Card', amount: 3200.00, status: 'Paid', date: '2025-10-21 11:45 AM' },
-    { id: 'PAY007', studentNumber: '2024-1007', method: 'GCash', amount: 575.00, status: 'Paid', date: '2025-10-21 01:30 PM' },
-    { id: 'PAY008', studentNumber: '2024-1008', method: 'Cash on Delivery', amount: 920.00, status: 'Pending', date: '2025-10-21 02:15 PM' },
-    { id: 'PAY009', studentNumber: '2024-1009', method: 'Bank Transfer', amount: 1480.00, status: 'Paid', date: '2025-10-21 03:00 PM' }
-];
-
-const dummyOrders = [
-    { id: 'ORD001', studentNumber: '2024-1001', products: 'ICCT Polo Shirt (M)', quantity: 2, status: 'Completed' },
-    { id: 'ORD002', studentNumber: '2024-1002', products: 'ID Card, Clearance Form', quantity: 2, status: 'Ready for Pickup' },
-    { id: 'ORD003', studentNumber: '2024-1003', products: 'Ballpen Set, Notebook', quantity: 5, status: 'Preparing' },
-    { id: 'ORD004', studentNumber: '2024-1004', products: 'Registration Fee', quantity: 1, status: 'Pending' },
-    { id: 'ORD005', studentNumber: '2024-1005', products: 'ICCT Pants (L), Belt', quantity: 2, status: 'Preparing' }
-];
-
-// Check if admin is logged in from localStorage
-function checkAdminSession() {
-    const adminSession = localStorage.getItem('adminSession');
-    if (adminSession) {
-        const session = JSON.parse(adminSession);
-        if (session.isAdmin) {
-            isAdminMode = true;
-            showAdminDashboard();
-        }
-    }
-}
-
-// Show Admin Dashboard (replaces entire user interface)
-function showAdminDashboard() {
-    const adminDashboard = document.getElementById('adminDashboard');
-    const mainContent = document.querySelector('body');
-    
-    if (adminDashboard) {
-        adminDashboard.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        
-        // Load admin data
-        loadAdminProducts();
-        loadTransactions();
-        loadPayments();
-        loadOrders();
-    }
-}
-
-// Hide Admin Dashboard (return to user view)
-function hideAdminDashboard() {
-    const adminDashboard = document.getElementById('adminDashboard');
-    
-    if (adminDashboard) {
-        adminDashboard.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Admin Modal Elements
-const adminModal = document.getElementById('adminModal');
-const closeAdminModal = document.getElementById('closeAdminModal');
-const adminLoginTriggerBtn = document.getElementById('adminLoginTriggerBtn');
-const adminForm = document.getElementById('adminForm');
-const toggleAdminPassword = document.getElementById('toggleAdminPassword');
-const adminLogoutBtnTop = document.getElementById('adminLogoutBtnTop');
-const adminLogoutBtnSidebar = document.getElementById('adminLogoutBtnSidebar');
-
-// Open Admin Modal
-if (adminLoginTriggerBtn) {
-    adminLoginTriggerBtn.addEventListener('click', () => {
-        adminModal.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        
-        // Close account sidebar
-        const accountSidebar = document.getElementById('accountSidebar');
-        if (accountSidebar) {
-            accountSidebar.classList.remove('active');
-        }
-    });
-}
-
-// Close Admin Modal
-if (closeAdminModal) {
-    closeAdminModal.addEventListener('click', () => {
-        adminModal.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    });
-}
-
-// Toggle Admin Password Visibility
-if (toggleAdminPassword) {
-    toggleAdminPassword.addEventListener('click', () => {
-        const passwordInput = document.getElementById('adminPassword');
-        const icon = toggleAdminPassword.querySelector('i');
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    });
-}
-
-// Handle Admin Login Form
-if (adminForm) {
-    adminForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const username = document.getElementById('adminUsername').value;
-        const password = document.getElementById('adminPassword').value;
-        
-        // Accept ANY credentials for admin login
-        if (username && password) {
-            // Successful login
-            isAdminMode = true;
-            localStorage.setItem('adminSession', JSON.stringify({ isAdmin: true }));
-            
-            // Close admin modal
-            adminModal.classList.remove('active');
-            overlay.classList.remove('active');
-            
-            // Show Admin Dashboard
-            showAdminDashboard();
-            
-            // Show success message
-            showSuccessModal('Admin Login Successful', `🔐 Welcome, ${username}! Admin Dashboard is now active.`);
-            
-            // Reset form
-            adminForm.reset();
-        } else {
-            showSuccessModal('Login Failed', '❌ Please enter both username and password.');
-        }
-    });
-}
-
-// Admin Logout from Top-Right Indicator
-if (adminLogoutBtnTop) {
-    adminLogoutBtnTop.addEventListener('click', () => {
-        isAdminMode = false;
-        localStorage.removeItem('adminSession');
-        hideAdminDashboard();
-        showSuccessModal('Admin Logout', '✅ You have exited admin mode.');
-    });
-}
-
-// Admin Logout from Sidebar
-if (adminLogoutBtnSidebar) {
-    adminLogoutBtnSidebar.addEventListener('click', () => {
-        isAdminMode = false;
-        localStorage.removeItem('adminSession');
-        hideAdminDashboard();
-        showSuccessModal('Admin Logout', '✅ You have exited admin mode.');
-    });
-}
-
-// Admin Dashboard Tab Navigation
-const adminNavBtns = document.querySelectorAll('.admin-nav-btn');
-const adminSections = document.querySelectorAll('.admin-section');
-
-adminNavBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const targetSection = btn.dataset.section;
-        
-        // Remove active class from all buttons and sections
-        adminNavBtns.forEach(b => b.classList.remove('active'));
-        adminSections.forEach(s => s.classList.remove('active'));
-        
-        // Add active class to clicked button and target section
-        btn.classList.add('active');
-        const sectionMap = {
-            'products': 'adminProductsSection',
-            'transactions': 'adminTransactionsSection',
-            'payments': 'adminPaymentsSection',
-            'orders': 'adminOrdersSection'
-        };
-        
-        const targetElement = document.getElementById(sectionMap[targetSection]);
-        if (targetElement) {
-            targetElement.classList.add('active');
-        }
-    });
-});
-
-// Load Admin Products
-// Load Admin Products
-async function loadAdminProducts() {
-    const productsGrid = document.getElementById('adminProductsGrid');
-    if (!productsGrid) {
-        console.error('Admin products grid not found');
-        return;
-    }
-    
-    console.log('🔄 Loading products for admin dashboard...');
-    
-    try {
-        // Try to fetch from API - use ?action=products to get all products
-        const response = await fetch('http://localhost:8080/api/products.php?action=products&category=all-products');
-        const data = await response.json();
-        
-        console.log('API Response:', data);
-        
-        if (data.success && data.data && data.data.length > 0) {
-            console.log('✅ Loaded', data.data.length, 'products from API');
-            displayAdminProducts(data.data);
-            return;
-        } else if (data.success && data.products && data.products.length > 0) {
-            // Fallback to 'products' property
-            console.log('✅ Loaded', data.products.length, 'products from API (alt)');
-            displayAdminProducts(data.products);
-            return;
-        }
-    } catch (error) {
-        console.warn('⚠️ API fetch failed:', error.message);
-    }
-    
-    // Fallback to static data
-    if (typeof STATIC_PRODUCTS !== 'undefined') {
-        console.log('📦 Using static product data...');
-        // Get all products from all categories
-        const allProducts = [];
-        for (const category in STATIC_PRODUCTS) {
-            allProducts.push(...STATIC_PRODUCTS[category]);
-        }
-        console.log('✅ Loaded', allProducts.length, 'products from static data');
-        displayAdminProducts(allProducts);
-    } else {
-        console.error('❌ No product data available!');
-        productsGrid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-body);">
-                <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--cta-color); margin-bottom: 20px;"></i>
-                <h3 style="margin: 0 0 10px 0; color: var(--white);">No Products Available</h3>
-                <p>Unable to load product data. Please check your connection.</p>
-            </div>
-        `;
-    }
-}
-
-// Display Admin Products
-function displayAdminProducts(productList) {
-    const productsGrid = document.getElementById('adminProductsGrid');
-    if (!productsGrid) return;
-    
-    if (!productList || productList.length === 0) {
-        productsGrid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-body);">
-                <i class="fas fa-box-open" style="font-size: 48px; color: var(--text-body); margin-bottom: 20px;"></i>
-                <h3 style="margin: 0 0 10px 0; color: var(--white);">No Products Found</h3>
-                <p>No products available to display.</p>
-            </div>
-        `;
-        return;
-    }
-    
-    // Remove duplicates based on product ID or name
-    const uniqueProducts = [];
-    const seenIds = new Set();
-    
-    for (const product of productList) {
-        const productId = product.id || product.name.toLowerCase().replace(/\s+/g, '-');
-        if (!seenIds.has(productId)) {
-            seenIds.add(productId);
-            uniqueProducts.push(product);
-        }
-    }
-    
-    console.log('📦 Displaying', uniqueProducts.length, 'unique products in admin grid (removed', productList.length - uniqueProducts.length, 'duplicates)');
-    
-    productsGrid.innerHTML = uniqueProducts.map(product => {
-        const productId = product.id || product.name.toLowerCase().replace(/\s+/g, '-');
-        const stockKey = `stock_${productId}`;
-        let currentStock = localStorage.getItem(stockKey) || product.stock_quantity || 50;
-        const productName = product.name || 'Unnamed Product';
-        const productPrice = parseFloat(product.price || 0).toFixed(2);
-        const productCategory = product.category_name || product.category || 'Uncategorized';
-        const productImage = product.image_url || '';
-        
-        return `
-            <div class="admin-product-card" data-product-id="${productId}">
-                <div class="admin-product-image">
-                    ${productImage ? 
-                        `<img src="${productImage}" alt="${productName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                         <div class="image-placeholder" style="display:none;">
-                            <i class="fas fa-image"></i>
-                            <span>${productName}</span>
-                         </div>` : 
-                        `<div class="image-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>${productName}</span>
-                         </div>`
-                    }
-                </div>
-                <div class="admin-product-info">
-                    <h3>${productName}</h3>
-                    <p class="admin-product-price">₱${productPrice}</p>
-                    <p class="admin-product-category">
-                        <i class="fas fa-tag"></i> ${productCategory}
-                    </p>
-                </div>
-                <div class="admin-stock-control">
-                    <label><i class="fas fa-boxes"></i> Stock Quantity:</label>
-                    <div class="stock-input-group">
-                        <input 
-                            type="number" 
-                            class="admin-stock-input" 
-                            value="${currentStock}" 
-                            min="0"
-                            data-product-id="${productId}"
-                            data-product-name="${productName}"
-                        >
-                        <button class="admin-update-btn" data-product-id="${productId}">
-                            <i class="fas fa-check"></i> Update
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-    
-    // Attach event listeners to update buttons
-    attachAdminStockListeners();
-}
-
-// Attach Stock Update Listeners
-function attachAdminStockListeners() {
-    const updateBtns = document.querySelectorAll('.admin-update-btn');
-    
-    updateBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const productId = btn.dataset.productId;
-            const input = document.querySelector(`.admin-stock-input[data-product-id="${productId}"]`);
-            const productName = input.dataset.productName || 'Product';
-            const newStock = parseInt(input.value);
-            
-            // Save to localStorage
-            localStorage.setItem(`stock_${productId}`, newStock);
-            
-            // Update the admin card display
-            const adminCard = btn.closest('.admin-product-card');
-            if (adminCard) {
-                input.value = newStock;
-            }
-            
-            // Show success notification
-            showSuccessModal('Stock Updated', `✅ ${productName} stock updated to ${newStock}`);
-            
-            console.log(`✅ Stock updated: ${productId} = ${newStock}`);
-        });
-    });
-}
-
-// Load Transactions
-function loadTransactions() {
-    const tbody = document.getElementById('transactionsTableBody');
-    if (!tbody) return;
-    
-    tbody.innerHTML = dummyTransactions.map(txn => `
-        <tr>
-            <td><strong>${txn.id}</strong></td>
-            <td>${txn.studentNumber}</td>
-            <td>${txn.date}</td>
-            <td>₱${txn.total.toFixed(2)}</td>
-            <td><span class="status-badge status-${txn.status.toLowerCase()}">${txn.status}</span></td>
-        </tr>
-    `).join('');
-}
-
-// Load Payments
-function loadPayments() {
-    const tbody = document.getElementById('paymentsTableBody');
-    if (!tbody) return;
-    
-    tbody.innerHTML = dummyPayments.map((payment, index) => `
-        <tr>
-            <td><strong>${payment.id}</strong></td>
-            <td>${payment.studentNumber}</td>
-            <td>${payment.date}</td>
-            <td>${payment.method}</td>
-            <td class="amount">₱${payment.amount.toFixed(2)}</td>
-            <td><span class="status-badge status-${payment.status.toLowerCase()}">${payment.status}</span></td>
-            <td>
-                <select class="payment-status-dropdown" data-index="${index}">
-                    <option value="Paid" ${payment.status === 'Paid' ? 'selected' : ''}>Paid</option>
-                    <option value="Pending" ${payment.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                    <option value="Failed" ${payment.status === 'Failed' ? 'selected' : ''}>Failed</option>
-                </select>
-            </td>
-        </tr>
-    `).join('');
-    
-    // Attach event listeners
-    attachPaymentStatusListeners();
-}
-
-// Attach Payment Status Listeners
-function attachPaymentStatusListeners() {
-    const dropdowns = document.querySelectorAll('.payment-status-dropdown');
-    
-    dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('change', (e) => {
-            const index = parseInt(e.target.dataset.index);
-            const newStatus = e.target.value;
-            
-            // Update dummy data
-            dummyPayments[index].status = newStatus;
-            
-            // Reload table
-            loadPayments();
-            
-            // Show success message
-            showSuccessModal('Payment Status Updated', `✅ Payment status changed to ${newStatus}`);
-        });
-    });
-}
-
-// Load Orders
-function loadOrders() {
-    const tbody = document.getElementById('ordersTableBody');
-    if (!tbody) return;
-    
-    tbody.innerHTML = dummyOrders.map((order, index) => `
-        <tr>
-            <td><strong>${order.id}</strong></td>
-            <td>${order.studentNumber}</td>
-            <td>${order.products}</td>
-            <td>${order.quantity}</td>
-            <td><span class="order-badge order-${order.status.toLowerCase().replace(/\s+/g, '-')}">${order.status}</span></td>
-            <td>
-                <select class="order-status-dropdown" data-index="${index}">
-                    <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                    <option value="Preparing" ${order.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
-                    <option value="Ready for Pickup" ${order.status === 'Ready for Pickup' ? 'selected' : ''}>Ready for Pickup</option>
-                    <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                </select>
-            </td>
-        </tr>
-    `).join('');
-    
-    // Attach event listeners
-    attachOrderStatusListeners();
-}
-
-// Attach Order Status Listeners
-function attachOrderStatusListeners() {
-    const dropdowns = document.querySelectorAll('.order-status-dropdown');
-    
-    dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('change', (e) => {
-            const index = parseInt(e.target.dataset.index);
-            const newStatus = e.target.value;
-            
-            // Update dummy data
-            dummyOrders[index].status = newStatus;
-            
-            // Reload table
-            loadOrders();
-            
-            // Show success message
-            showSuccessModal('Order Status Updated', `✅ Order status changed to ${newStatus}`);
-        });
-    });
-}
-
-// Update product cards for admin (show stock management) - OLD FUNCTION, KEPT FOR COMPATIBILITY
-function updateProductCardsForAdmin() {
-    // This function is no longer used with the new dashboard but kept for compatibility
-    console.log('Using new admin dashboard system');
-}
-
-// Update product cards for user (show normal buttons with stock display)
-function updateProductCardsForUser() {
-    const productCards = document.querySelectorAll('.product-card');
-    
-    productCards.forEach(card => {
-        const productName = card.querySelector('.product-title')?.textContent || 'Unknown';
-        const productId = card.dataset.productId || productName.toLowerCase().replace(/\s+/g, '-');
-        
-        // Get current stock from localStorage or default to 50
-        const stockKey = `stock_${productId}`;
-        let currentStock = localStorage.getItem(stockKey);
-        if (currentStock === null) {
-            currentStock = 50;
-            localStorage.setItem(stockKey, currentStock);
-        }
-        
-        // Replace buttons with stock management interface
-        const actionsDiv = card.querySelector('.product-actions');
-        if (actionsDiv) {
-            actionsDiv.innerHTML = `
-                <div class="admin-stock-management">
-                    <label class="stock-label">
-                        <i class="fas fa-boxes"></i> Stock Quantity:
-                    </label>
-                    <div class="stock-input-group">
-                        <input 
-                            type="number" 
-                            class="stock-input" 
-                            value="${currentStock}" 
-                            min="0"
-                            data-product-id="${productId}"
-                        >
-                        <button class="update-stock-btn" data-product-id="${productId}">
-                            <i class="fas fa-check"></i> Update
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            // Add update listener
-            const updateBtn = actionsDiv.querySelector('.update-stock-btn');
-            const stockInput = actionsDiv.querySelector('.stock-input');
-            
-            if (updateBtn && stockInput) {
-                updateBtn.addEventListener('click', () => {
-                    const newStock = parseInt(stockInput.value);
-                    localStorage.setItem(stockKey, newStock);
-                    showNotification('Stock Updated', `✅ ${productName} stock updated to ${newStock}`);
-                });
-            }
-        }
-    });
-}
-
-// Update product cards for user (show normal buttons with stock display)
-function updateProductCardsForUser() {
-    const productCards = document.querySelectorAll('.product-card');
-    
-    productCards.forEach(card => {
-        const productName = card.querySelector('.product-title')?.textContent || 'Unknown';
-        const productId = card.dataset.productId || productName.toLowerCase().replace(/\s+/g, '-');
-        const price = card.querySelector('.product-price')?.textContent || '₱0.00';
-        
-        // Get current stock
-        const stockKey = `stock_${productId}`;
-        let currentStock = localStorage.getItem(stockKey) || 50;
-        currentStock = parseInt(currentStock);
-        
-        // Replace with normal user interface
-        const actionsDiv = card.querySelector('.product-actions');
-        if (actionsDiv) {
-            const isOutOfStock = currentStock === 0;
-            
-            actionsDiv.innerHTML = `
-                <div class="stock-display">
-                    <span class="stock-text ${isOutOfStock ? 'out-of-stock' : ''}">
-                        <i class="fas fa-box"></i> Stock: ${currentStock}
-                    </span>
-                </div>
-                <button class="add-to-cart-btn" ${isOutOfStock ? 'disabled' : ''} 
-                    data-product-name="${productName}" 
-                    data-product-price="${price.replace('₱', '')}"
-                    data-product-id="${productId}">
-                    <i class="fas fa-shopping-cart"></i> ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-                </button>
-                <button class="add-to-wishlist-btn" data-product-name="${productName}">
-                    <i class="far fa-heart"></i>
-                </button>
-            `;
-            
-            // Re-attach event listeners
-            attachProductButtonListeners(card);
-        }
-    });
-}
-
-// Attach event listeners to product buttons
-function attachProductButtonListeners(card) {
-    const addToCartBtn = card.querySelector('.add-to-cart-btn');
-    const addToWishlistBtn = card.querySelector('.add-to-wishlist-btn');
-    
-    if (addToCartBtn && !addToCartBtn.disabled) {
-        addToCartBtn.addEventListener('click', function() {
-            const productName = this.dataset.productName;
-            const productPrice = parseFloat(this.dataset.productPrice);
-            const productId = this.dataset.productId;
-            
-            // Add to cart logic here
-            cart.push({ name: productName, price: productPrice, id: productId });
-            updateCartCount();
-            showNotification('Added to Cart', `✅ ${productName} added to your cart!`);
-        });
-    }
-    
-    if (addToWishlistBtn) {
-        addToWishlistBtn.addEventListener('click', function() {
-            const productName = this.dataset.productName;
-            wishlist.push({ name: productName });
-            updateWishlistCount();
-            showNotification('Added to Wishlist', `❤️ ${productName} added to your wishlist!`);
-        });
-    }
-}
-
-// Show notification (small success message)
-function showNotification(title, message) {
-    // Use existing success modal for now
-    showSuccessModal(title, message);
-}
-
-// Payment Management System
-function loadPaymentList() {
-    const paymentList = document.getElementById('paymentList');
-    const paymentCount = document.getElementById('paymentCount');
-    
-    if (!paymentList || !isAdminMode) return;
-    
-    // Get all transactions from localStorage
-    const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-    
-    if (transactions.length === 0) {
-        paymentList.innerHTML = `
-            <div class="empty-payments">
-                <i class="fas fa-money-check-alt"></i>
-                <p>No payments to manage</p>
-                <small>Transaction payments will appear here</small>
-            </div>
-        `;
-        if (paymentCount) paymentCount.textContent = '0 payments';
-        return;
-    }
-    
-    if (paymentCount) paymentCount.textContent = `${transactions.length} payment${transactions.length !== 1 ? 's' : ''}`;
-    
-    paymentList.innerHTML = transactions.map(transaction => `
-        <div class="payment-item" data-transaction-id="${transaction.id}">
-            <div class="payment-header">
-                <span class="transaction-number">#${transaction.id}</span>
-                <span class="payment-status status-${transaction.paymentStatus.toLowerCase()}">
-                    ${transaction.paymentStatus}
-                </span>
-            </div>
-            <div class="payment-details">
-                <p><strong>${transaction.items.length} item(s)</strong></p>
-                <p class="payment-total">₱${transaction.total.toFixed(2)}</p>
-                <p class="payment-date">${new Date(transaction.date).toLocaleString()}</p>
-            </div>
-            <div class="payment-actions">
-                <button class="payment-action-btn success-btn" onclick="updatePaymentStatus('${transaction.id}', 'Successful')">
-                    <i class="fas fa-check"></i> Mark Successful
-                </button>
-                <button class="payment-action-btn failed-btn" onclick="updatePaymentStatus('${transaction.id}', 'Failed')">
-                    <i class="fas fa-times"></i> Mark Failed
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Update payment status
-function updatePaymentStatus(transactionId, newStatus) {
-    const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-    const transactionIndex = transactions.findIndex(t => t.id === transactionId);
-    
-    if (transactionIndex !== -1) {
-        transactions[transactionIndex].paymentStatus = newStatus;
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-        
-        loadPaymentList();
-        showNotification('Payment Updated', `✅ Payment status updated to ${newStatus}`);
-    }
-}
-
-// Make updatePaymentStatus available globally
-window.updatePaymentStatus = updatePaymentStatus;
-
-// Initialize admin system on page load
-document.addEventListener('DOMContentLoaded', () => {
-    checkAdminSession();
-});
-
-// Update cart count helper
-function updateCartCount() {
-    if (cartCount) {
-        cartCount.textContent = cart.length;
-    }
-}
-
-// Update wishlist count helper
-function updateWishlistCount() {
-    if (wishlistCount) {
-        wishlistCount.textContent = wishlist.length;
-    }
-}
 

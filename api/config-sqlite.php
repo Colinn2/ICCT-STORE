@@ -1,14 +1,13 @@
 <?php
-// Database configuration - Using SQLite for simplicity
+// SQLite Database Configuration
 define('DB_PATH', __DIR__ . '/../database/icct_store.db');
 
-// Create connection using PDO
 function getDBConnection() {
     try {
-        $conn = new PDO('sqlite:' . DB_PATH);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-        return $conn;
+        $db = new PDO('sqlite:' . DB_PATH);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        return $db;
     } catch(PDOException $e) {
         die(json_encode([
             'success' => false,
@@ -17,7 +16,6 @@ function getDBConnection() {
     }
 }
 
-// Close connection
 function closeDBConnection($conn) {
     $conn = null;
 }

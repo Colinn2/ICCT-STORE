@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Test - ICCT Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 20px; }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover { transform: scale(1.05); }
+        .output {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-height: 600px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .success { color: #10b981; font-weight: bold; }
+        .error { color: #ef4444; font-weight: bold; }
+        .product-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .category-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        .category-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗄️ MySQL Connection Test</h1>
+        <p style="margin-bottom: 20px;">Testing MySQL database connection and product loading</p>
+        
+        <div>
+            <button onclick="testConnection()">🔍 Test Connection</button>
+            <button onclick="testAllProducts()">📦 Load All Products</button>
+            <button onclick="testUniforms()">👕 Load Uniforms</button>
+            <button onclick="testDocuments()">📄 Load Documents</button>
+            <button onclick="testSupplies()">🎒 Load Supplies</button>
+            <button onclick="testFees()">💰 Load Fees</button>
+        </div>
+
+        <div id="output" class="output" style="display: none;"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api';
+        const output = document.getElementById('output');
+
+        function log(message, type = 'info') {
+            output.style.display = 'block';
+            const line = document.createElement('div');
+            line.className = type;
+            line.innerHTML = message;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            output.innerHTML = '';
+        }
+
+        async function testConnection() {
+            clearOutput();
+            log('<h3>🔍 Testing MySQL API Connection</h3>', 'info');
+            log('API URL: ' + API_BASE_URL, 'info');
+            
+            try {
+                const url = `${API_BASE_URL}/products.php?action=all`;
+                log('<br>Fetching: ' + url, 'info');
+                
+                const response = await fetch(url);
+                log('Response status: ' + response.status, 'info');
+                
+                const data = await response.json();
+                log('<br>Response data:', 'info');
+                log(JSON.stringify(data, null, 2), 'info');
+                
+                if (data.success && data.products) {
+                    log(`<br><span class="success">✅ SUCCESS! Connected to MySQL</span>`, 'success');
+                    log(`<span class="success">✅ Found ${data.products.length} products total</span>`, 'success');
+                } else {
+                    log('<br><span class="error">❌ Error: ' + (data.error || 'Unknown error') + '</span>', 'error');
+                }
+                
+            } catch (error) {
+                log('<br><span class="error">❌ Connection Error: ' + error.message + '</span>', 'error');
+                log('<br><strong>Make sure:</strong>', 'error');
+                log('1. MySQL is running', 'error');
+                log('2. PHP server is running on port 8080', 'error');
+                log('3. Run: <code>php -S localhost:8080</code>', 'error');
+            }
+        }
+
+        async function testAllProducts() {
+            clearOutput();
+            log('<h3>📦 Loading All Products</h3>', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/products.php?action=all`);
+                const data = await response.json();
+                
+                if (data.success && data.products) {
+                    log(`<span class="success">✅ Loaded ${data.products.length} products</span><br>`, 'success');
+                    
+                    // Group by category
+                    const categories = {};
+                    data.products.forEach(p => {
+                        if (!categories[p.category_slug]) {
+                            categories[p.category_slug] = [];
+                        }
+                        categories[p.category_slug].push(p);
+                    });
+                    
+                    Object.keys(categories).forEach(cat => {
+                        log(`<div class="category-section">`, 'info');
+                        log(`<h3>${cat} (${categories[cat].length} products)</h3>`, 'info');
+                        categories[cat].slice(0, 5).forEach(p => {
+                            log(`<div class="product-card">
+                                <div>
+                                    <strong>${p.name}</strong><br>
+                                    Stock: ${p.stock_quantity} | Price: ₱${p.price}
+                                </div>
+                            </div>`, 'info');
+                        });
+                        if (categories[cat].length > 5) {
+                            log(`<em>... and ${categories[cat].length - 5} more</em>`, 'info');
+                        }
+                        log(`</div>`, 'info');
+                    });
+                } else {
+                    log('<span class="error">❌ No products found</span>', 'error');
+                }
+            } catch (error) {
+                log('<span class="error">❌ Error: ' + error.message + '</span>', 'error');
+            }
+        }
+
+        async function testCategory(slug, name) {
+            clearOutput();
+            log(`<h3>Loading ${name}</h3>`, 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/products.php?action=category&slug=${slug}`);
+                const data = await response.json();
+                
+                if (data.success && data.products) {
+                    log(`<span class="success">✅ Found ${data.products.length} products in ${name}</span><br>`, 'success');
+                    
+                    if (data.products.length > 0) {
+                        data.products.forEach(p => {
+                            log(`<div class="product-card">
+                                <div>
+                                    <strong>${p.name}</strong><br>
+                                    Stock: ${p.stock_quantity} | Price: ₱${p.price}<br>
+                                    <small>${p.description || ''}</small>
+                                </div>
+                            </div>`, 'info');
+                        });
+                    } else {
+                        log(`<span class="error">⚠️ No products in this category</span>`, 'error');
+                    }
+                } else {
+                    log('<span class="error">❌ Error loading products</span>', 'error');
+                }
+            } catch (error) {
+                log('<span class="error">❌ Error: ' + error.message + '</span>', 'error');
+            }
+        }
+
+        function testUniforms() { testCategory('uniforms', 'Uniforms'); }
+        function testDocuments() { testCategory('documents', 'Documents'); }
+        function testSupplies() { testCategory('supplies', 'Supplies'); }
+        function testFees() { testCategory('fees', 'Fees'); }
+    </script>
+</body>
+</html>
