@@ -1419,24 +1419,63 @@ function proceedToCheckout(paymentMethod = 'Not Specified') {
     // Get payment method name
     const paymentMethodNames = {
         'gcash': 'GCash',
-        'maya': 'Maya (PayMaya)',
-        'bank': 'Bank Transfer',
-        'counter': 'Over the Counter',
-        'card': 'Credit/Debit Card',
-        'installment': 'Installment Plan'
+        'ecpay': 'ECPay',
+        'mlhuillier': 'M Lhuillier',
+        'cebuana': 'Cebuana Lhuillier'
     };
     
     const paymentMethodName = paymentMethodNames[paymentMethod] || paymentMethod;
+    
+    // Calculate total
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    // Create order ID
+    const orderNumber = allOrders.length + 1;
+    const orderId = `ORD${String(orderNumber).padStart(3, '0')}`;
+    
+    // Create products summary string
+    const productsSummary = cart.map(item => `${item.name} (${item.quantity}x)`).join(', ');
+    
+    // Create order object
+    const newOrder = {
+        id: orderId,
+        studentNumber: currentUser ? currentUser.studentNumber : 'Guest',
+        date: new Date().toLocaleString('en-US', { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit', 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: true 
+        }),
+        products: productsSummary,
+        total: totalAmount,
+        quantity: totalQuantity,
+        status: 'Pending',
+        paymentMethod: paymentMethodName,
+        items: [...cart] // Store full cart details
+    };
+    
+    // Add order to beginning of array
+    allOrders.unshift(newOrder);
+    
+    // Save to localStorage
+    localStorage.setItem('allOrders', JSON.stringify(allOrders));
+    
+    console.log('✅ Order created:', newOrder);
+    console.log('📦 Total orders now:', allOrders.length);
     
     // Create transaction record
     const transaction = {
         id: `TXN-${Date.now()}`,
         date: new Date().toLocaleString(),
         items: [...cart],
-        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        total: totalAmount,
         status: 'completed',
         paymentMethod: paymentMethodName,
-        studentNumber: currentUser ? currentUser.studentNumber : 'Guest'
+        studentNumber: currentUser ? currentUser.studentNumber : 'Guest',
+        orderId: orderId
     };
     
     // Add to transaction history
@@ -1451,18 +1490,13 @@ function proceedToCheckout(paymentMethod = 'Not Specified') {
         paymentMethodSelect.value = '';
     }
     
-    // Reset and hide payment details form
-    const paymentDetailsForm = document.getElementById('paymentDetailsForm');
-    if (paymentDetailsForm) {
-        paymentDetailsForm.style.display = 'none';
-        // Clear all form inputs
-        const allInputs = paymentDetailsForm.querySelectorAll('input, select, textarea');
-        allInputs.forEach(input => {
-            input.value = '';
-        });
-    }
+    // Hide confirm button and reference display
+    const confirmSection = document.getElementById('confirmPaymentSection');
+    const referenceDisplay = document.getElementById('paymentReferenceDisplay');
+    if (confirmSection) confirmSection.style.display = 'none';
+    if (referenceDisplay) referenceDisplay.style.display = 'none';
     
-    showSuccessModal('Order Placed Successfully!', `Thank you for your purchase, ${currentUser ? currentUser.studentNumber : 'valued customer'}! Your order has been placed via ${paymentMethodName} and added to your transaction history.`);
+    showSuccessModal('Order Placed Successfully!', `Thank you for your purchase! Your order #${orderId} has been placed via ${paymentMethodName}. Admin will process your order shortly.`);
     cart = [];
     updateCart();
     cartSidebar.classList.remove('active');
@@ -1934,13 +1968,22 @@ const dummyPayments = [
     { id: 'PAY012', studentNumber: '2024-1012', method: 'M Lhuillier', amount: 2350.00, status: 'Paid', date: '2025-10-21 05:30 PM' }
 ];
 
+// Orders storage in localStorage
+let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+
 const dummyOrders = [
-    { id: 'ORD001', studentNumber: '2024-1001', products: 'ICCT Polo Shirt (M)', quantity: 2, status: 'Completed' },
-    { id: 'ORD002', studentNumber: '2024-1002', products: 'ID Card, Clearance Form', quantity: 2, status: 'Ready for Pickup' },
-    { id: 'ORD003', studentNumber: '2024-1003', products: 'Ballpen Set, Notebook', quantity: 5, status: 'Preparing' },
-    { id: 'ORD004', studentNumber: '2024-1004', products: 'Registration Fee', quantity: 1, status: 'Pending' },
-    { id: 'ORD005', studentNumber: '2024-1005', products: 'ICCT Pants (L), Belt', quantity: 2, status: 'Preparing' }
+    { id: 'ORD001', studentNumber: '2024-1001', date: '2025-10-20 10:30 AM', products: 'ICCT Polo Shirt (M)', total: 1200.00, quantity: 2, status: 'Completed' },
+    { id: 'ORD002', studentNumber: '2024-1002', date: '2025-10-20 11:15 AM', products: 'ID Card, Clearance Form', total: 300.00, quantity: 2, status: 'Ready for Pickup' },
+    { id: 'ORD003', studentNumber: '2024-1003', date: '2025-10-20 02:45 PM', products: 'Ballpen Set, Notebook', total: 150.00, quantity: 5, status: 'Preparing' },
+    { id: 'ORD004', studentNumber: '2024-1004', date: '2025-10-21 09:00 AM', products: 'Registration Fee', total: 2500.00, quantity: 1, status: 'Pending' },
+    { id: 'ORD005', studentNumber: '2024-1005', date: '2025-10-21 10:20 AM', products: 'ICCT Pants (L), Belt', total: 850.00, quantity: 2, status: 'Preparing' }
 ];
+
+// Initialize orders if localStorage is empty
+if (allOrders.length === 0) {
+    allOrders = [...dummyOrders];
+    localStorage.setItem('allOrders', JSON.stringify(allOrders));
+}
 
 // Check if admin is logged in from localStorage
 function checkAdminSession() {
@@ -2426,15 +2469,38 @@ function attachPaymentStatusListeners() {
 
 // Load Orders
 function loadOrders() {
+    console.log('🔄 Loading orders...');
     const tbody = document.getElementById('ordersTableBody');
-    if (!tbody) return;
+    if (!tbody) {
+        console.error('❌ ordersTableBody element not found!');
+        return;
+    }
     
-    tbody.innerHTML = dummyOrders.map((order, index) => `
+    // Load orders from localStorage
+    allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+    console.log('📦 Orders loaded from localStorage:', allOrders.length);
+    
+    if (allOrders.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-body);">
+                    <i class="fas fa-shopping-bag" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                    <strong style="display: block; margin-bottom: 5px; color: var(--white);">No Orders Yet</strong>
+                    <span>Orders from customers will appear here</span>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = allOrders.map((order, index) => `
         <tr>
             <td><strong>${order.id}</strong></td>
             <td>${order.studentNumber}</td>
+            <td>${order.date}</td>
             <td>${order.products}</td>
             <td>${order.quantity}</td>
+            <td class="amount">₱${parseFloat(order.total).toFixed(2)}</td>
             <td><span class="order-badge order-${order.status.toLowerCase().replace(/\s+/g, '-')}">${order.status}</span></td>
             <td>
                 <select class="order-status-dropdown" data-index="${index}">
@@ -2442,6 +2508,7 @@ function loadOrders() {
                     <option value="Preparing" ${order.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
                     <option value="Ready for Pickup" ${order.status === 'Ready for Pickup' ? 'selected' : ''}>Ready for Pickup</option>
                     <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                    <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                 </select>
             </td>
         </tr>
@@ -2449,6 +2516,7 @@ function loadOrders() {
     
     // Attach event listeners
     attachOrderStatusListeners();
+    console.log('✅ Orders table rendered');
 }
 
 // Attach Order Status Listeners
@@ -2460,14 +2528,19 @@ function attachOrderStatusListeners() {
             const index = parseInt(e.target.dataset.index);
             const newStatus = e.target.value;
             
-            // Update dummy data
-            dummyOrders[index].status = newStatus;
+            // Update order in array
+            allOrders[index].status = newStatus;
+            
+            // Save to localStorage
+            localStorage.setItem('allOrders', JSON.stringify(allOrders));
+            
+            console.log(`✅ Order ${allOrders[index].id} status updated to: ${newStatus}`);
             
             // Reload table
             loadOrders();
             
             // Show success message
-            showSuccessModal('Order Status Updated', `✅ Order status changed to ${newStatus}`);
+            showSuccessModal('Order Status Updated', `✅ Order #${allOrders[index].id} status changed to ${newStatus}`);
         });
     });
 }
