@@ -1921,14 +1921,17 @@ const dummyTransactions = [
 
 const dummyPayments = [
     { id: 'PAY001', studentNumber: '2024-1001', method: 'GCash', amount: 1250.00, status: 'Paid', date: '2025-10-20 10:30 AM' },
-    { id: 'PAY002', studentNumber: '2024-1002', method: 'Cash on Delivery', amount: 850.00, status: 'Pending', date: '2025-10-20 11:15 AM' },
-    { id: 'PAY003', studentNumber: '2024-1003', method: 'Bank Transfer', amount: 2100.00, status: 'Paid', date: '2025-10-20 02:45 PM' },
-    { id: 'PAY004', studentNumber: '2024-1004', method: 'GCash', amount: 450.00, status: 'Failed', date: '2025-10-21 09:00 AM' },
-    { id: 'PAY005', studentNumber: '2024-1005', method: 'PayMaya', amount: 1650.00, status: 'Pending', date: '2025-10-21 10:20 AM' },
-    { id: 'PAY006', studentNumber: '2024-1006', method: 'Credit Card', amount: 3200.00, status: 'Paid', date: '2025-10-21 11:45 AM' },
-    { id: 'PAY007', studentNumber: '2024-1007', method: 'GCash', amount: 575.00, status: 'Paid', date: '2025-10-21 01:30 PM' },
-    { id: 'PAY008', studentNumber: '2024-1008', method: 'Cash on Delivery', amount: 920.00, status: 'Pending', date: '2025-10-21 02:15 PM' },
-    { id: 'PAY009', studentNumber: '2024-1009', method: 'Bank Transfer', amount: 1480.00, status: 'Paid', date: '2025-10-21 03:00 PM' }
+    { id: 'PAY002', studentNumber: '2024-1002', method: 'ECPay', amount: 850.00, status: 'Pending', date: '2025-10-20 11:15 AM' },
+    { id: 'PAY003', studentNumber: '2024-1003', method: 'Cebuana Lhuillier', amount: 2100.00, status: 'Paid', date: '2025-10-20 02:45 PM' },
+    { id: 'PAY004', studentNumber: '2024-1004', method: 'GCash', amount: 450.00, status: 'Paid', date: '2025-10-21 09:00 AM' },
+    { id: 'PAY005', studentNumber: '2024-1005', method: 'M Lhuillier', amount: 1650.00, status: 'Paid', date: '2025-10-21 10:20 AM' },
+    { id: 'PAY006', studentNumber: '2024-1006', method: 'GCash', amount: 3200.00, status: 'Paid', date: '2025-10-21 11:45 AM' },
+    { id: 'PAY007', studentNumber: '2024-1007', method: 'ECPay', amount: 575.00, status: 'Paid', date: '2025-10-21 01:30 PM' },
+    { id: 'PAY008', studentNumber: '2024-1008', method: 'M Lhuillier', amount: 920.00, status: 'Pending', date: '2025-10-21 02:15 PM' },
+    { id: 'PAY009', studentNumber: '2024-1009', method: 'Cebuana Lhuillier', amount: 1480.00, status: 'Paid', date: '2025-10-21 03:00 PM' },
+    { id: 'PAY010', studentNumber: '2024-1010', method: 'GCash', amount: 780.00, status: 'Paid', date: '2025-10-21 04:15 PM' },
+    { id: 'PAY011', studentNumber: '2024-1011', method: 'ECPay', amount: 1120.00, status: 'Paid', date: '2025-10-21 05:00 PM' },
+    { id: 'PAY012', studentNumber: '2024-1012', method: 'M Lhuillier', amount: 2350.00, status: 'Paid', date: '2025-10-21 05:30 PM' }
 ];
 
 const dummyOrders = [
@@ -2297,6 +2300,41 @@ function loadPayments() {
     const tbody = document.getElementById('paymentsTableBody');
     if (!tbody) return;
     
+    // Calculate ledger totals (only count 'Paid' transactions)
+    const ledger = {
+        gcash: { total: 0, count: 0 },
+        ecpay: { total: 0, count: 0 },
+        mlhuillier: { total: 0, count: 0 },
+        cebuana: { total: 0, count: 0 }
+    };
+    
+    dummyPayments.forEach(payment => {
+        if (payment.status === 'Paid') {
+            const method = payment.method.toLowerCase();
+            if (method === 'gcash') {
+                ledger.gcash.total += payment.amount;
+                ledger.gcash.count++;
+            } else if (method === 'ecpay') {
+                ledger.ecpay.total += payment.amount;
+                ledger.ecpay.count++;
+            } else if (method === 'm lhuillier' || method === 'mlhuillier') {
+                ledger.mlhuillier.total += payment.amount;
+                ledger.mlhuillier.count++;
+            } else if (method === 'cebuana lhuillier' || method === 'cebuana') {
+                ledger.cebuana.total += payment.amount;
+                ledger.cebuana.count++;
+            }
+        }
+    });
+    
+    // Calculate total revenue
+    const totalRevenue = ledger.gcash.total + ledger.ecpay.total + ledger.mlhuillier.total + ledger.cebuana.total;
+    const totalCount = ledger.gcash.count + ledger.ecpay.count + ledger.mlhuillier.count + ledger.cebuana.count;
+    
+    // Update ledger display
+    updateLedgerDisplay(ledger, totalRevenue, totalCount);
+    
+    // Render payment table
     tbody.innerHTML = dummyPayments.map((payment, index) => `
         <tr>
             <td><strong>${payment.id}</strong></td>
@@ -2317,6 +2355,39 @@ function loadPayments() {
     
     // Attach event listeners
     attachPaymentStatusListeners();
+}
+
+// Update Ledger Display
+function updateLedgerDisplay(ledger, totalRevenue, totalCount) {
+    // GCash
+    const gcashTotalEl = document.getElementById('gcashTotal');
+    const gcashCountEl = document.getElementById('gcashCount');
+    if (gcashTotalEl) gcashTotalEl.textContent = `₱${ledger.gcash.total.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    if (gcashCountEl) gcashCountEl.textContent = ledger.gcash.count;
+    
+    // ECPay
+    const ecpayTotalEl = document.getElementById('ecpayTotal');
+    const ecpayCountEl = document.getElementById('ecpayCount');
+    if (ecpayTotalEl) ecpayTotalEl.textContent = `₱${ledger.ecpay.total.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    if (ecpayCountEl) ecpayCountEl.textContent = ledger.ecpay.count;
+    
+    // M Lhuillier
+    const mlhuillierTotalEl = document.getElementById('mlhuillierTotal');
+    const mlhuillierCountEl = document.getElementById('mlhuillierCount');
+    if (mlhuillierTotalEl) mlhuillierTotalEl.textContent = `₱${ledger.mlhuillier.total.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    if (mlhuillierCountEl) mlhuillierCountEl.textContent = ledger.mlhuillier.count;
+    
+    // Cebuana Lhuillier
+    const cebuanaTotalEl = document.getElementById('cebuanaTotal');
+    const cebuanaCountEl = document.getElementById('cebuanaCount');
+    if (cebuanaTotalEl) cebuanaTotalEl.textContent = `₱${ledger.cebuana.total.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    if (cebuanaCountEl) cebuanaCountEl.textContent = ledger.cebuana.count;
+    
+    // Total
+    const totalRevenueEl = document.getElementById('totalRevenue');
+    const totalCountEl = document.getElementById('totalCount');
+    if (totalRevenueEl) totalRevenueEl.textContent = `₱${totalRevenue.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    if (totalCountEl) totalCountEl.textContent = totalCount;
 }
 
 // Attach Payment Status Listeners

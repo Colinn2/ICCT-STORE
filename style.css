@@ -5560,6 +5560,161 @@ body.admin-mode .admin-dashboard {
     line-height: 1.6;
 }
 
+/* Payment Ledger Styles */
+.payment-ledger-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.ledger-title {
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ledger-title i {
+    color: var(--cta-color);
+    font-size: 28px;
+}
+
+.ledger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.ledger-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ledger-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-accent), var(--cta-color));
+}
+
+.ledger-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-accent);
+    box-shadow: 0 8px 24px rgba(74, 144, 226, 0.3);
+}
+
+.gcash-card::before {
+    background: linear-gradient(90deg, #007aff, #0051d5);
+}
+
+.ecpay-card::before {
+    background: linear-gradient(90deg, #ff6b35, #ff4500);
+}
+
+.mlhuillier-card::before {
+    background: linear-gradient(90deg, #28a745, #1e7e34);
+}
+
+.cebuana-card::before {
+    background: linear-gradient(90deg, #ffc107, #ff9800);
+}
+
+.total-card {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.15), rgba(240, 180, 41, 0.15));
+    border: 2px solid var(--cta-color);
+}
+
+.total-card::before {
+    background: linear-gradient(90deg, var(--cta-color), var(--hover-color));
+}
+
+.ledger-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.ledger-icon i {
+    font-size: 28px;
+    color: var(--white);
+}
+
+.ledger-info {
+    flex: 1;
+}
+
+.ledger-info h3 {
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ledger-amount {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cta-color);
+    margin: 0 0 5px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.total-amount {
+    font-size: 32px;
+    color: var(--white);
+    text-shadow: 0 2px 8px rgba(240, 180, 41, 0.5);
+}
+
+.ledger-count {
+    color: var(--text-body);
+    font-size: 13px;
+    margin: 0;
+}
+
+.ledger-count span {
+    color: var(--white);
+    font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+    .ledger-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .ledger-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .total-card {
+        grid-column: 1;
+    }
+}
+
 .admin-section-actions {
     display: flex;
     gap: 15px;

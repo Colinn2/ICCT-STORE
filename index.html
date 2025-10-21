@@ -925,7 +925,78 @@
             <div class="admin-section" id="adminPaymentsSection">
                 <div class="admin-section-header">
                     <h1><i class="fas fa-credit-card"></i> Payment Management</h1>
-                    <p>Monitor and update payment statuses</p>
+                    <p>Monitor payment ledger and transaction statuses</p>
+                </div>
+                
+                <!-- Payment Ledger Summary -->
+                <div class="payment-ledger-container">
+                    <h2 class="ledger-title"><i class="fas fa-coins"></i> Payment Ledger Summary</h2>
+                    <div class="ledger-grid">
+                        <!-- GCash Card -->
+                        <div class="ledger-card gcash-card">
+                            <div class="ledger-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="ledger-info">
+                                <h3>GCash</h3>
+                                <p class="ledger-amount" id="gcashTotal">₱0.00</p>
+                                <p class="ledger-count"><span id="gcashCount">0</span> transactions</p>
+                            </div>
+                        </div>
+                        
+                        <!-- ECPay Card -->
+                        <div class="ledger-card ecpay-card">
+                            <div class="ledger-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div class="ledger-info">
+                                <h3>ECPay</h3>
+                                <p class="ledger-amount" id="ecpayTotal">₱0.00</p>
+                                <p class="ledger-count"><span id="ecpayCount">0</span> transactions</p>
+                            </div>
+                        </div>
+                        
+                        <!-- M Lhuillier Card -->
+                        <div class="ledger-card mlhuillier-card">
+                            <div class="ledger-icon">
+                                <i class="fas fa-money-check-alt"></i>
+                            </div>
+                            <div class="ledger-info">
+                                <h3>M Lhuillier</h3>
+                                <p class="ledger-amount" id="mlhuillierTotal">₱0.00</p>
+                                <p class="ledger-count"><span id="mlhuillierCount">0</span> transactions</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Cebuana Lhuillier Card -->
+                        <div class="ledger-card cebuana-card">
+                            <div class="ledger-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="ledger-info">
+                                <h3>Cebuana Lhuillier</h3>
+                                <p class="ledger-amount" id="cebuanaTotal">₱0.00</p>
+                                <p class="ledger-count"><span id="cebuanaCount">0</span> transactions</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Total Card -->
+                        <div class="ledger-card total-card">
+                            <div class="ledger-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="ledger-info">
+                                <h3>Total Revenue</h3>
+                                <p class="ledger-amount total-amount" id="totalRevenue">₱0.00</p>
+                                <p class="ledger-count"><span id="totalCount">0</span> total transactions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Transactions Table -->
+                <div class="admin-section-header" style="margin-top: 40px;">
+                    <h2><i class="fas fa-list"></i> Payment Transactions</h2>
                 </div>
                 <div class="admin-table-container">
                     <table class="admin-table">
