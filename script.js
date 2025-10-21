@@ -303,6 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentStock = parseInt(localStorage.getItem(stockKey)) || product.stock_quantity || 50;
             const isOutOfStock = currentStock <= 0;
             
+            // Check if this is a service category (documents or fees) - no stock needed
+            const isServiceCategory = containerId === 'documents' || containerId === 'fees';
+            
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             productCard.dataset.productId = productId;
@@ -314,14 +317,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${product.name}</h3>
                     ${product.description ? `<p class="product-desc">${product.description}</p>` : ''}
                     <p class="price">₱${parseFloat(product.price).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                    <div class="stock-display">
+                    ${!isServiceCategory ? `<div class="stock-display">
                         <i class="fas fa-box"></i>
                         <span class="stock-text ${isOutOfStock ? 'out-of-stock-text' : ''}">
                             Stock: ${currentStock}
                         </span>
-                    </div>
+                    </div>` : ''}
                     <div class="product-actions">
-                        ${!isOutOfStock ? 
+                        ${(!isOutOfStock || isServiceCategory) ? 
                             `<button class="buy-now-btn" title="Buy Now" data-product-id="${productId}">
                                 <i class="fas fa-shopping-bag"></i>
                              </button>
