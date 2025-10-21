@@ -2297,8 +2297,15 @@ function loadTransactions() {
 
 // Load Payments
 function loadPayments() {
+    console.log('🔄 Loading payments...');
     const tbody = document.getElementById('paymentsTableBody');
-    if (!tbody) return;
+    console.log('📋 Payment table body found:', tbody ? 'YES' : 'NO');
+    if (!tbody) {
+        console.error('❌ paymentsTableBody element not found!');
+        return;
+    }
+    
+    console.log('📊 Dummy payments count:', dummyPayments.length);
     
     // Calculate ledger totals (only count 'Paid' transactions)
     const ledger = {
@@ -2331,6 +2338,9 @@ function loadPayments() {
     const totalRevenue = ledger.gcash.total + ledger.ecpay.total + ledger.mlhuillier.total + ledger.cebuana.total;
     const totalCount = ledger.gcash.count + ledger.ecpay.count + ledger.mlhuillier.count + ledger.cebuana.count;
     
+    console.log('💰 Ledger calculated:', ledger);
+    console.log('💰 Total revenue:', totalRevenue, 'Total count:', totalCount);
+    
     // Update ledger display
     updateLedgerDisplay(ledger, totalRevenue, totalCount);
     
@@ -2359,9 +2369,12 @@ function loadPayments() {
 
 // Update Ledger Display
 function updateLedgerDisplay(ledger, totalRevenue, totalCount) {
+    console.log('📊 Updating ledger display...');
+    
     // GCash
     const gcashTotalEl = document.getElementById('gcashTotal');
     const gcashCountEl = document.getElementById('gcashCount');
+    console.log('GCash elements found:', gcashTotalEl ? 'YES' : 'NO', gcashCountEl ? 'YES' : 'NO');
     if (gcashTotalEl) gcashTotalEl.textContent = `₱${ledger.gcash.total.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     if (gcashCountEl) gcashCountEl.textContent = ledger.gcash.count;
     
