@@ -152,6 +152,135 @@ const STATIC_PRODUCTS = {
         }
     ],
     
+    merchandise: [
+        {
+            id: 4,
+            name: "ICCT Jacket",
+            description: "School-branded jacket",
+            price: 1500.00,
+            stock_quantity: 30,
+            image_url: "images/icct jacket.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 5,
+            name: "ICCT Hoodie",
+            description: "School-branded hoodie",
+            price: 1100.00,
+            stock_quantity: 40,
+            image_url: "images/icct hoodie .png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 10,
+            name: "School Bag (ICCT Logo)",
+            description: "Durable school bag with ICCT logo",
+            price: 800.00,
+            stock_quantity: 60,
+            image_url: "images/icct bag.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 11,
+            name: "Tote Bag (ICCT Logo)",
+            description: "Eco-friendly tote bag with ICCT branding",
+            price: 250.00,
+            stock_quantity: 80,
+            image_url: "images/icct totebag.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 12,
+            name: "ICCT Cap",
+            description: "School branded cap",
+            price: 200.00,
+            stock_quantity: 70,
+            image_url: "images/icct cap.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 13,
+            name: "ICCT Beanie",
+            description: "Winter beanie with ICCT logo",
+            price: 180.00,
+            stock_quantity: 50,
+            image_url: "images/icct beanie.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 14,
+            name: "ICCT Department T-Shirt",
+            description: "Department-specific event shirts",
+            price: 350.00,
+            stock_quantity: 120,
+            image_url: "images/department tshirt.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 15,
+            name: "ICCT Event Shirt",
+            description: "Special event commemorative shirts",
+            price: 350.00,
+            stock_quantity: 100,
+            image_url: "images/icct sportfest tshirt.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 16,
+            name: "ICCT Keychain",
+            description: "School logo keychain",
+            price: 40.00,
+            stock_quantity: 200,
+            image_url: "images/icct keychain.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 17,
+            name: "ICCT Lanyard",
+            description: "Official school lanyard",
+            price: 60.00,
+            stock_quantity: 150,
+            image_url: "images/id lace.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 18,
+            name: "ICCT Stickers",
+            description: "School logo sticker pack",
+            price: 20.00,
+            stock_quantity: 300,
+            image_url: "images/patches and pin icct.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 19,
+            name: "ICCT Mug",
+            description: "Coffee mug with ICCT logo",
+            price: 180.00,
+            stock_quantity: 80,
+            image_url: "images/icct mug.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 20,
+            name: "ICCT Tumbler",
+            description: "Insulated tumbler with ICCT branding",
+            price: 350.00,
+            stock_quantity: 60,
+            image_url: "images/icct thumbler.png",
+            category_slug: "merchandise"
+        },
+        {
+            id: 21,
+            name: "Customized Phone Case",
+            description: "ICCT branded phone accessories",
+            price: 250.00,
+            stock_quantity: 50,
+            image_url: "images/icct phone case.png",
+            category_slug: "merchandise"
+        }
+    ],
+    
     supplies: [
         {
             id: 4,
